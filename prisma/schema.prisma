@@ -1,0 +1,238 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  ADMIN_UTAMA
+  BENDAHARA
+  SEKRETARIS
+  KOORDINATOR_KEGIATAN
+  JAMAAH_UMUM
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  COMPLETED
+  CANCELLED
+}
+
+enum ScheduleRole {
+  IMAM
+  MUADZIN
+  KHATIB
+  PETUGAS_KEGIATAN
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum DonationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model Role {
+  id        String   @id @default(cuid())
+  name      UserRole @unique
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id               String             @id @default(cuid())
+  name             String
+  email            String             @unique
+  passwordHash     String
+  phone            String?
+  image            String?
+  isActive         Boolean            @default(true)
+  roleId           String
+  role             Role               @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  announcements    Announcement[]     @relation("AnnouncementAuthor")
+  events           Event[]            @relation("EventAuthor")
+  schedules        Schedule[]         @relation("ScheduleAuthor")
+  transactions     Transaction[]      @relation("TransactionAuthor")
+  campaigns        DonationCampaign[] @relation("CampaignAuthor")
+  donations        Donation[]         @relation("DonationRecorder")
+  managementItems  ManagementMember[] @relation("ManagementAuthor")
+  galleryItems     GalleryItem[]      @relation("GalleryAuthor")
+  homepageContents HomepageContent[]  @relation("HomepageAuthor")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model Announcement {
+  id           String        @id @default(cuid())
+  title        String
+  slug         String        @unique
+  content      String
+  category     String
+  status       PublishStatus @default(DRAFT)
+  thumbnailUrl String?
+  publishedAt  DateTime?
+  createdById  String?
+  createdBy    User?         @relation("AnnouncementAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model Event {
+  id             String      @id @default(cuid())
+  name           String
+  slug           String      @unique
+  description    String
+  date           DateTime
+  timeLabel      String
+  location       String
+  personInCharge String
+  status         EventStatus @default(DRAFT)
+  isPublic       Boolean     @default(false)
+  isFeatured     Boolean     @default(false)
+  posterUrl      String?
+  publishedAt    DateTime?
+  createdById    String?
+  createdBy      User?       @relation("EventAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@index([date, status])
+}
+
+model Schedule {
+  id          String       @id @default(cuid())
+  title       String
+  roleType    ScheduleRole
+  scheduleFor DateTime
+  timeLabel   String
+  personName  String
+  notes       String?
+  createdById String?
+  createdBy   User?        @relation("ScheduleAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([scheduleFor, roleType])
+}
+
+model Transaction {
+  id            String          @id @default(cuid())
+  type          TransactionType
+  category      String
+  amount        Decimal         @db.Decimal(18, 2)
+  transactionAt DateTime
+  description   String
+  attachmentUrl String?
+  createdById   String?
+  createdBy     User?           @relation("TransactionAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([transactionAt, type])
+}
+
+model DonationCampaign {
+  id                String    @id @default(cuid())
+  title             String
+  slug              String    @unique
+  description       String
+  targetAmount      Decimal   @db.Decimal(18, 2)
+  collectedAmount   Decimal   @default(0) @db.Decimal(18, 2)
+  bankAccountName   String?
+  bankAccountNumber String?
+  qrisImageUrl      String?
+  isActive          Boolean   @default(true)
+  createdById       String?
+  createdBy         User?     @relation("CampaignAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  donations         Donation[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([isActive])
+}
+
+model Donation {
+  id           String         @id @default(cuid())
+  donorName    String
+  donorEmail   String?
+  donorPhone   String?
+  amount       Decimal        @db.Decimal(18, 2)
+  status       DonationStatus @default(PENDING)
+  note         String?
+  donatedAt    DateTime
+  campaignId   String
+  campaign     DonationCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  recordedById String?
+  recordedBy   User?          @relation("DonationRecorder", fields: [recordedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([status, donatedAt])
+}
+
+model ManagementMember {
+  id          String        @id @default(cuid())
+  name        String
+  position    String
+  phone       String?
+  email       String?
+  termPeriod  String
+  photoUrl    String?
+  status      PublishStatus @default(PUBLISHED)
+  createdById String?
+  createdBy   User?         @relation("ManagementAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model GalleryItem {
+  id           String        @id @default(cuid())
+  title        String
+  category     String
+  imageUrl     String
+  activityDate DateTime
+  status       PublishStatus @default(PUBLISHED)
+  createdById  String?
+  createdBy    User?         @relation("GalleryAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([activityDate, status])
+}
+
+model HomepageContent {
+  id                     String        @id @default(cuid())
+  heroTitle              String
+  heroSubtitle           String
+  heroPrimaryCtaLabel    String
+  heroPrimaryCtaHref     String
+  welcomeTitle           String
+  welcomeContent         String
+  donationCtaTitle       String
+  donationCtaDescription String
+  featuredAnnouncementId String?
+  featuredEventId        String?
+  status                 PublishStatus @default(PUBLISHED)
+  createdById            String?
+  createdBy              User?         @relation("HomepageAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+}
