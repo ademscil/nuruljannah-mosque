@@ -6,7 +6,6 @@ import { useMemo, useState } from "react";
 import { DataTable } from "@/components/shared/data-table";
 import { FilterSelect } from "@/components/shared/filter-select";
 import { SearchInput } from "@/components/shared/search-input";
-import { Card, CardContent } from "@/components/ui/card";
 import { formatDateIndonesia } from "@/lib/format-date";
 import type { ScheduleListItem } from "@/features/schedules/types/schedule";
 
@@ -58,12 +57,6 @@ export function ScheduleAdminTable({ schedules }: ScheduleAdminTableProps) {
         accessorKey: "personName",
         header: "Petugas",
       },
-      {
-        accessorKey: "source",
-        header: "Sumber",
-        cell: ({ row }) =>
-          row.original.source === "database" ? "Database" : "Demo",
-      },
     ],
     [],
   );
@@ -80,29 +73,18 @@ export function ScheduleAdminTable({ schedules }: ScheduleAdminTableProps) {
   });
 
   return (
-    <Card className="rounded-[2rem] border-border/60 shadow-sm">
-      <CardContent className="space-y-5 p-6">
-        <div className="grid gap-3 md:grid-cols-[minmax(260px,1fr)_240px]">
-          <SearchInput
-            value={query}
-            placeholder="Cari kegiatan atau nama petugas..."
-            onChange={setQuery}
-          />
-          <FilterSelect
-            placeholder="Filter peran"
-            value={roleType}
-            onValueChange={setRoleType}
-            options={[
-              { label: "Semua Peran", value: "ALL" },
-              { label: "Imam", value: "IMAM" },
-              { label: "Muadzin", value: "MUADZIN" },
-              { label: "Khatib", value: "KHATIB" },
-              { label: "Petugas Kegiatan", value: "PETUGAS_KEGIATAN" },
-            ]}
-          />
-        </div>
-        <DataTable columns={columns} data={filteredData} />
-      </CardContent>
-    </Card>
+    <div className="card-elevated p-6 space-y-5">
+      <div className="grid gap-3 md:grid-cols-[1fr_220px]">
+        <SearchInput value={query} placeholder="Cari kegiatan atau nama petugas..." onChange={setQuery} />
+        <FilterSelect placeholder="Filter peran" value={roleType} onValueChange={setRoleType} options={[
+          { label: "Semua Peran", value: "ALL" },
+          { label: "Imam", value: "IMAM" },
+          { label: "Muadzin", value: "MUADZIN" },
+          { label: "Khatib", value: "KHATIB" },
+          { label: "Petugas Kegiatan", value: "PETUGAS_KEGIATAN" },
+        ]} />
+      </div>
+      <DataTable columns={columns} data={filteredData} />
+    </div>
   );
 }

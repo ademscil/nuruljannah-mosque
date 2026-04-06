@@ -1,130 +1,201 @@
-import {
-  CalendarClock,
-  HeartHandshake,
-  Landmark,
-  Megaphone,
-  Wallet,
-} from "lucide-react";
+import { CalendarClock, HeartHandshake, Landmark, Megaphone, Wallet, TrendingUp, Bell, Clock } from "lucide-react";
 
-import { ContentPreviewCard } from "@/components/shared/content-preview-card";
+import { EmptyState } from "@/components/shared/empty-state";
 import { PageHeader } from "@/components/shared/page-header";
 import { SectionHeader } from "@/components/shared/section-header";
 import { StatsCard } from "@/components/shared/stats-card";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getAnnouncements } from "@/features/announcements/services/announcement-service";
+import { getDonationCampaigns, getDonations, getDonationSummary } from "@/features/donations/services/donation-service";
+import { getEvents } from "@/features/events/services/event-service";
+import { getFinanceSummary, getTransactions } from "@/features/finance/services/transaction-service";
+import { getSchedules } from "@/features/schedules/services/schedule-service";
+import { formatDateIndonesia } from "@/lib/format-date";
+import { formatRupiah } from "@/lib/format-rupiah";
 
-const stats = [
-  {
-    title: "Total Pemasukan",
-    value: "Rp 18.450.000",
-    description: "Akumulasi transaksi masuk bulan ini.",
-    trend: "up" as const,
-    trendLabel: "+12,5% dari bulan lalu",
-    icon: Landmark,
-  },
-  {
-    title: "Total Pengeluaran",
-    value: "Rp 7.280.000",
-    description: "Belanja operasional dan program kegiatan.",
-    trend: "down" as const,
-    trendLabel: "-3,2% dari bulan lalu",
-    icon: Wallet,
-  },
-  {
-    title: "Agenda Terdekat",
-    value: "4 Agenda",
-    description: "Agenda aktif dalam 14 hari ke depan.",
-    trend: "up" as const,
-    trendLabel: "2 agenda unggulan",
-    icon: CalendarClock,
-  },
-  {
-    title: "Donatur Aktif",
-    value: "38 Orang",
-    description: "Donatur unik pada campaign aktif.",
-    trend: "up" as const,
-    trendLabel: "+9 donatur baru",
-    icon: HeartHandshake,
-  },
-];
+export async function DashboardOverview() {
+  const [transactions, announcements, events, schedules, campaigns, donations] = await Promise.all([
+    getTransactions(), getAnnouncements(), getEvents(),
+    getSchedules(), getDonationCampaigns(), getDonations(),
+  ]);
 
-export function DashboardOverview() {
+  const fin = getFinanceSummary(transactions);
+  const don = getDonationSummary(campaigns, donations);
+  const published = announcements.filter((a) => a.status === "PUBLISHED");
+  const upcoming = events.filter((e) => e.status === "PUBLISHED").slice(0, 3);
+  const todaySched = schedules.slice(0, 3);
+
+  const stats = [
+    {
+      title: "Total Pemasukan",
+      value: formatRupiah(fin.totalIncome),
+      description: "Akumulasi pemasukan dari transaksi aktif.",
+      trend: "up" as const,
+      trendLabel: `${fin.transactionCount} transaksi`,
+      icon: Landmark,
+      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-600",
+    },
+    {
+      title: "Total Pengeluaran",
+      value: formatRupiah(fin.totalExpense),
+      description: "Belanja operasional dan pengeluaran program.",
+      trend: "down" as const,
+      trendLabel: "Tercatat di modul keuangan",
+      icon: Wallet,
+      iconBg: "bg-rose-50",
+      iconColor: "text-rose-600",
+    },
+    {
+      title: "Agenda Terdekat",
+      value: `${upcoming.length} Agenda`,
+      description: "Kegiatan yang sedang atau akan dipublikasikan.",
+      trend: "up" as const,
+      trendLabel: "Sinkron dengan CMS agenda",
+      icon: CalendarClock,
+      iconBg: "bg-primary/8",
+      iconColor: "text-primary",
+    },
+    {
+      title: "Donatur Aktif",
+      value: `${don.donorCount} Orang`,
+      description: "Donatur dengan transaksi terkonfirmasi.",
+      trend: "up" as const,
+      trendLabel: `${don.activeCampaignCount} campaign aktif`,
+      icon: HeartHandshake,
+      iconBg: "bg-amber-50",
+      iconColor: "text-amber-600",
+    },
+  ];
+
   return (
     <div className="space-y-8">
       <PageHeader
         eyebrow="Dashboard"
-        title="Ringkasan operasional Masjid Nurul Jannah"
-        description="Fondasi dashboard admin sudah siap dengan struktur widget, statistik, dan placeholder data yang akan dihubungkan ke Prisma + Supabase pada tahap fitur berikutnya."
+        title="Ringkasan Operasional"
+        description="Ringkasan keuangan, aktivitas modul, jadwal petugas, dan konten publik yang sedang aktif."
       />
 
-      <div className="grid gap-4 xl:grid-cols-4">
-        {stats.map((item) => (
-          <StatsCard key={item.title} {...item} />
-        ))}
+      {/* Stats */}
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map((s) => <StatsCard key={s.title} {...s} />)}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <Card className="rounded-[2rem] border-border/60 shadow-sm">
-          <CardHeader>
-            <CardTitle>Persiapan modul dashboard</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-2">
-            <ContentPreviewCard
-              eyebrow="Tahap Berikutnya"
-              title="Grafik Pemasukan vs Pengeluaran"
-              description="Slot grafik Recharts sudah disiapkan untuk diisi data transaksi bulanan dari Prisma."
-            />
-            <ContentPreviewCard
-              eyebrow="Tahap Berikutnya"
-              title="Aktivitas Terbaru"
-              description="Panel recent activities akan menarik perubahan konten dari pengumuman, agenda, keuangan, donasi, dan galeri."
-            />
-          </CardContent>
-        </Card>
-        <Card className="rounded-[2rem] border-border/60 shadow-sm">
-          <CardHeader>
-            <CardTitle>Pengumuman aktif</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {[
-              "Santunan Ramadhan 1447 H",
-              "Kerja Bakti Akhir Pekan",
-            ].map((item) => (
-              <div
-                key={item}
-                className="rounded-2xl border border-border bg-muted/40 p-4"
-              >
-                <p className="text-sm font-semibold">{item}</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Konten ini nanti akan tersinkron dengan CMS internal.
+      {/* Middle row */}
+      <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+        {/* Modul aktif */}
+        <div className="card-hero p-7">
+          <div className="badge-primary mb-5">Modul Aktif</div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="card-base group p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition-transform duration-300 group-hover:scale-110">
+                <Landmark className="size-5" />
+              </div>
+              <p className="mt-4 text-xs font-bold uppercase tracking-[0.18em] text-primary">Keuangan</p>
+              <p className="mt-1.5 text-lg font-bold">Saldo {formatRupiah(fin.balance)}</p>
+              <p className="mt-1 text-sm text-muted-foreground">Dihitung dari seluruh transaksi pemasukan dan pengeluaran.</p>
+            </div>
+            <div className="card-base group p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 transition-transform duration-300 group-hover:scale-110">
+                <HeartHandshake className="size-5" />
+              </div>
+              <p className="mt-4 text-xs font-bold uppercase tracking-[0.18em] text-primary">Donasi</p>
+              <p className="mt-1.5 text-lg font-bold">{campaigns.length} Campaign</p>
+              <p className="mt-1 text-sm text-muted-foreground">Campaign donasi, target dana, dan verifikasi donatur.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Pengumuman aktif */}
+        <div className="card-hero p-7">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="badge-primary">
+              <Bell className="size-3" />
+              Pengumuman Aktif
+            </div>
+          </div>
+          <div className="space-y-3">
+            {published.length > 0 ? published.slice(0, 3).map((item) => (
+              <div key={item.id} className="rounded-xl border border-border bg-muted/30 p-4 transition-colors hover:bg-white">
+                <p className="text-sm font-semibold leading-snug">{item.title}</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {item.category} · {item.publishedAt ? formatDateIndonesia(item.publishedAt) : "—"}
                 </p>
               </div>
-            ))}
-          </CardContent>
-        </Card>
+            )) : (
+              <EmptyState title="Belum ada pengumuman aktif" description="Pengumuman yang dipublish akan muncul di sini." />
+            )}
+          </div>
+        </div>
       </div>
 
+      {/* Bottom row */}
+      <div className="grid gap-6 xl:grid-cols-2">
+        {/* Agenda */}
+        <div className="card-hero p-7">
+          <div className="badge-primary mb-5">
+            <CalendarClock className="size-3" />
+            Agenda Terdekat
+          </div>
+          <div className="space-y-3">
+            {upcoming.length > 0 ? upcoming.map((item) => (
+              <div key={item.id} className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-4 transition-colors hover:bg-white">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/8 text-primary">
+                  <CalendarClock className="size-4" />
+                </div>
+                <div>
+                  <p className="font-semibold">{item.name}</p>
+                  <p className="mt-0.5 text-sm text-muted-foreground">{formatDateIndonesia(item.date)} · {item.location}</p>
+                </div>
+              </div>
+            )) : (
+              <EmptyState title="Belum ada agenda terdekat" description="Agenda yang dipublish akan tampil di panel ini." />
+            )}
+          </div>
+        </div>
+
+        {/* Jadwal petugas */}
+        <div className="card-hero p-7">
+          <div className="badge-amber mb-5">
+            <Clock className="size-3" />
+            Jadwal Petugas
+          </div>
+          <div className="space-y-3">
+            {todaySched.length > 0 ? todaySched.map((item) => (
+              <div key={item.id} className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-4 transition-colors hover:bg-white">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+                  <Clock className="size-4" />
+                </div>
+                <div>
+                  <p className="font-semibold">{item.title}</p>
+                  <p className="mt-0.5 text-sm text-muted-foreground">{item.personName} · {item.timeLabel}</p>
+                </div>
+              </div>
+            )) : (
+              <EmptyState title="Belum ada jadwal petugas" description="Jadwal yang dibuat pengurus akan tampil di panel ini." />
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Activity feed */}
       <div className="space-y-4">
-        <SectionHeader
-          title="Recent activities"
-          description="Placeholder aktivitas disiapkan untuk audit log internal dan update dashboard real-time."
-        />
-        <Card className="rounded-[2rem] border-border/60 shadow-sm">
-          <CardContent className="space-y-4 p-6">
+        <SectionHeader title="Aktivitas Terbaru" description="Ringkasan pembaruan modul yang paling sering dipantau pengurus." />
+        <div className="card-hero p-7">
+          <div className="space-y-3">
             {[
-              "Sekretaris memperbarui konten hero beranda.",
-              "Bendahara menambahkan transaksi pemasukan donasi Jum'at.",
-              "Admin Utama mengubah status pengumuman menjadi publish.",
-            ].map((item) => (
-              <div
-                key={item}
-                className="flex items-center gap-3 rounded-2xl border border-border/60 bg-muted/30 px-4 py-3"
-              >
-                <Megaphone className="size-4 text-emerald-700 dark:text-emerald-300" />
-                <p className="text-sm">{item}</p>
+              { icon: Landmark, text: `Bendahara memperbarui ${transactions[0]?.description ?? "data transaksi kas"}.`, color: "bg-emerald-50 text-emerald-600" },
+              { icon: Megaphone, text: `Sekretaris mengelola ${published[0]?.title ?? "pengumuman terbaru"}.`, color: "bg-amber-50 text-amber-600" },
+              { icon: TrendingUp, text: `Koordinator menjadwalkan ${todaySched[0]?.title ?? "petugas ibadah"}.`, color: "bg-primary/8 text-primary" },
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-3 rounded-xl border border-border/60 bg-muted/20 px-4 py-3 transition-colors hover:bg-white">
+                <div className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${item.color}`}>
+                  <item.icon className="size-4" />
+                </div>
+                <p className="text-sm">{item.text}</p>
               </div>
             ))}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

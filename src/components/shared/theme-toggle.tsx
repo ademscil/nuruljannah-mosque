@@ -16,7 +16,7 @@ export function ThemeToggle() {
       size="icon"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label="Ubah tema"
-      className="rounded-full"
+      className="rounded-full border-border/70 bg-white/85 shadow-sm"
     >
       {isDark ? <SunMedium className="size-4" /> : <MoonStar className="size-4" />}
     </Button>

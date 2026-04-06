@@ -13,6 +13,7 @@ export const ROUTE_PATHS = {
 } as const;
 
 export const DASHBOARD_PATHS = {
+  overview: "/dashboard",
   cmsHome: "/dashboard/cms-beranda",
   announcements: "/dashboard/pengumuman",
   events: "/dashboard/agenda-kegiatan",
@@ -22,4 +23,17 @@ export const DASHBOARD_PATHS = {
   management: "/dashboard/data-pengurus",
   gallery: "/dashboard/galeri",
   settings: "/dashboard/pengaturan-akun",
+} as const;
+
+export const DASHBOARD_LABELS: Record<string, string> = {
+  [DASHBOARD_PATHS.overview]: "Dashboard",
+  [DASHBOARD_PATHS.cmsHome]: "CMS Beranda",
+  [DASHBOARD_PATHS.announcements]: "Pengumuman",
+  [DASHBOARD_PATHS.events]: "Agenda Kegiatan",
+  [DASHBOARD_PATHS.schedules]: "Jadwal Petugas",
+  [DASHBOARD_PATHS.finance]: "Keuangan",
+  [DASHBOARD_PATHS.donations]: "Donasi",
+  [DASHBOARD_PATHS.management]: "Data Pengurus",
+  [DASHBOARD_PATHS.gallery]: "Galeri",
+  [DASHBOARD_PATHS.settings]: "Pengaturan Akun",
 } as const;

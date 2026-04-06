@@ -8,8 +8,6 @@ import { DataTable } from "@/components/shared/data-table";
 import { FilterSelect } from "@/components/shared/filter-select";
 import { SearchInput } from "@/components/shared/search-input";
 import { StatusBadge } from "@/components/shared/status-badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { formatDateIndonesia } from "@/lib/format-date";
 import { formatRupiah } from "@/lib/format-rupiah";
 import type { TransactionListItem } from "@/features/finance/types/transaction";
@@ -61,12 +59,6 @@ export function FinanceTransactionTable({
         header: "Tanggal",
         cell: ({ row }) => formatDateIndonesia(row.original.transactionAt),
       },
-      {
-        accessorKey: "source",
-        header: "Sumber",
-        cell: ({ row }) =>
-          row.original.source === "database" ? "Database" : "Demo",
-      },
     ],
     [],
   );
@@ -83,48 +75,32 @@ export function FinanceTransactionTable({
   });
 
   return (
-    <Card className="glass-panel aurora-border rounded-[2rem] shadow-[0_30px_90px_-50px_rgba(15,23,42,0.45)]">
-      <CardContent className="space-y-5 p-6">
-        <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-          <div className="grid gap-3 xl:grid-cols-[minmax(260px,1fr)_220px_220px]">
-            <SearchInput
-              value={query}
-              placeholder="Cari deskripsi atau kategori..."
-              onChange={setQuery}
-            />
-            <FilterSelect
-              placeholder="Filter jenis"
-              value={type}
-              onValueChange={setType}
-              options={[
-                { label: "Semua Jenis", value: "ALL" },
-                { label: "Pemasukan", value: "INCOME" },
-                { label: "Pengeluaran", value: "EXPENSE" },
-              ]}
-            />
-            <FilterSelect
-              placeholder="Filter kategori"
-              value={category}
-              onValueChange={setCategory}
-              options={[
-                { label: "Semua Kategori", value: "ALL" },
-                ...categories.map((item) => ({ label: item, value: item })),
-              ]}
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="rounded-full bg-white/60">
-              <Download className="size-4" />
-              Export CSV
-            </Button>
-            <Button variant="outline" className="rounded-full bg-white/60">
-              <Download className="size-4" />
-              Export PDF
-            </Button>
-          </div>
+    <div className="card-elevated p-6 space-y-5">
+      <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+        <div className="grid gap-3 xl:grid-cols-[1fr_200px_200px]">
+          <SearchInput value={query} placeholder="Cari deskripsi atau kategori..." onChange={setQuery} />
+          <FilterSelect placeholder="Filter jenis" value={type} onValueChange={setType} options={[
+            { label: "Semua Jenis", value: "ALL" },
+            { label: "Pemasukan", value: "INCOME" },
+            { label: "Pengeluaran", value: "EXPENSE" },
+          ]} />
+          <FilterSelect placeholder="Filter kategori" value={category} onValueChange={setCategory} options={[
+            { label: "Semua Kategori", value: "ALL" },
+            ...categories.map((item) => ({ label: item, value: item })),
+          ]} />
         </div>
-        <DataTable columns={columns} data={filteredData} />
-      </CardContent>
-    </Card>
+        <div className="flex gap-2">
+          <button className="btn-outline px-4 py-2 text-xs">
+            <Download className="size-3.5" />
+            Export CSV
+          </button>
+          <button className="btn-outline px-4 py-2 text-xs">
+            <Download className="size-3.5" />
+            Export PDF
+          </button>
+        </div>
+      </div>
+      <DataTable columns={columns} data={filteredData} />
+    </div>
   );
 }

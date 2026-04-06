@@ -1,9 +1,16 @@
+import { AccessDenied } from "@/components/shared/access-denied";
 import { PageHeader } from "@/components/shared/page-header";
-import { ContentPreviewCard } from "@/components/shared/content-preview-card";
 import { AnnouncementAdminTable } from "@/features/announcements/components/announcement-admin-table";
+import { AnnouncementFormPanel } from "@/features/announcements/components/announcement-form-panel";
 import { getAnnouncements } from "@/features/announcements/services/announcement-service";
+import { hasDashboardPermission } from "@/lib/dashboard-access";
 
 export default async function DashboardPengumumanPage() {
+  const canAccess = await hasDashboardPermission("pengumuman");
+  if (!canAccess) {
+    return <AccessDenied />;
+  }
+
   const announcements = await getAnnouncements();
 
   return (
@@ -11,15 +18,11 @@ export default async function DashboardPengumumanPage() {
       <PageHeader
         eyebrow="CMS Internal"
         title="Manajemen Pengumuman"
-        description="List pengumuman admin sudah aktif dengan search, filter status, sorting, dan sumber data demo atau database."
+        description="Kelola pengumuman, status publish, isi konten, kategori, dan tanggal tampil dari dashboard admin."
       />
       <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
         <AnnouncementAdminTable announcements={announcements} />
-        <ContentPreviewCard
-          eyebrow="Tahap Lanjut"
-          title="Form CRUD Pengumuman"
-          description="Schema dan struktur modul pengumuman sudah disiapkan. Tahap berikutnya tinggal menambahkan form create, edit, delete, upload thumbnail, dan publish workflow."
-        />
+        <AnnouncementFormPanel announcements={announcements} />
       </div>
     </div>
   );

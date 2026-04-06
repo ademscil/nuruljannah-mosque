@@ -8,7 +8,6 @@ import { DataTable } from "@/components/shared/data-table";
 import { FilterSelect } from "@/components/shared/filter-select";
 import { SearchInput } from "@/components/shared/search-input";
 import { StatusBadge } from "@/components/shared/status-badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { formatDateIndonesia } from "@/lib/format-date";
 import type { EventListItem } from "@/features/events/types/event";
 
@@ -81,7 +80,7 @@ export function EventAdminTable({ events }: EventAdminTableProps) {
       },
       {
         accessorKey: "isPublic",
-        header: "Publik",
+        header: "Tampil di Website",
         cell: ({ row }) =>
           row.original.isPublic ? (
             <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-300">
@@ -116,39 +115,23 @@ export function EventAdminTable({ events }: EventAdminTableProps) {
   });
 
   return (
-    <Card className="rounded-[2rem] border-border/60 shadow-sm">
-      <CardContent className="space-y-5 p-6">
-        <div className="grid gap-3 xl:grid-cols-[minmax(260px,1fr)_220px_220px]">
-          <SearchInput
-            value={query}
-            placeholder="Cari kegiatan, lokasi, atau PIC..."
-            onChange={setQuery}
-          />
-          <FilterSelect
-            placeholder="Filter status"
-            value={status}
-            onValueChange={setStatus}
-            options={[
-              { label: "Semua Status", value: "ALL" },
-              { label: "Draft", value: "DRAFT" },
-              { label: "Publish", value: "PUBLISHED" },
-              { label: "Selesai", value: "COMPLETED" },
-              { label: "Dibatalkan", value: "CANCELLED" },
-            ]}
-          />
-          <FilterSelect
-            placeholder="Filter visibilitas"
-            value={visibility}
-            onValueChange={setVisibility}
-            options={[
-              { label: "Semua Visibilitas", value: "ALL" },
-              { label: "Publik", value: "PUBLIC" },
-              { label: "Internal", value: "INTERNAL" },
-            ]}
-          />
-        </div>
-        <DataTable columns={columns} data={filteredData} />
-      </CardContent>
-    </Card>
+    <div className="card-elevated p-6 space-y-5">
+      <div className="grid gap-3 xl:grid-cols-[1fr_200px_200px]">
+        <SearchInput value={query} placeholder="Cari kegiatan, lokasi, atau PIC..." onChange={setQuery} />
+        <FilterSelect placeholder="Filter status" value={status} onValueChange={setStatus} options={[
+          { label: "Semua Status", value: "ALL" },
+          { label: "Draft", value: "DRAFT" },
+          { label: "Publish", value: "PUBLISHED" },
+          { label: "Selesai", value: "COMPLETED" },
+          { label: "Dibatalkan", value: "CANCELLED" },
+        ]} />
+        <FilterSelect placeholder="Filter visibilitas" value={visibility} onValueChange={setVisibility} options={[
+          { label: "Semua Visibilitas", value: "ALL" },
+          { label: "Publik", value: "PUBLIC" },
+          { label: "Internal", value: "INTERNAL" },
+        ]} />
+      </div>
+      <DataTable columns={columns} data={filteredData} />
+    </div>
   );
 }

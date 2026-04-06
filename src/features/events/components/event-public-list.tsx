@@ -1,82 +1,66 @@
-import { CalendarDays, MapPin, Star, UserRound } from "lucide-react";
-
+import { CalendarDays, MapPin, Star, UserRound, Clock } from "lucide-react";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { EmptyState } from "@/components/shared/empty-state";
 import { formatDateIndonesia } from "@/lib/format-date";
 import type { EventListItem } from "@/features/events/types/event";
 
-type EventPublicListProps = {
-  events: EventListItem[];
-};
+export function EventPublicList({ events }: { events: EventListItem[] }) {
+  const list = events.filter((e) => e.isPublic && e.status === "PUBLISHED");
 
-export function EventPublicList({ events }: EventPublicListProps) {
-  const publicEvents = events.filter(
-    (event) => event.isPublic && event.status === "PUBLISHED",
-  );
+  if (list.length === 0) {
+    return <EmptyState icon={CalendarDays} title="Belum ada agenda publik" description="Agenda yang dipublish akan tampil di sini." />;
+  }
 
   return (
     <div className="grid gap-5">
-      {publicEvents.map((event) => (
+      {list.map((event, i) => (
         <article
           key={event.id}
-          className="rounded-[2rem] border border-border/70 bg-card p-6 shadow-sm"
+          style={{ animationDelay: `${i * 60}ms` }}
+          className="animate-fade-up card-elevated group overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-16px_oklch(0.18_0.018_250_/_0.14)]"
         >
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="space-y-3">
-              <div className="flex flex-wrap items-center gap-2">
-                {event.isFeatured ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
-                    <Star className="size-3.5" />
-                    Agenda Unggulan
-                  </span>
-                ) : null}
-                <StatusBadge label="Publish" value={event.status} />
-              </div>
-              <div>
-                <h2 className="text-2xl font-semibold tracking-tight">
+          {/* Top accent bar */}
+          <div className="h-1 w-full bg-gradient-to-r from-primary via-primary/60 to-transparent" />
+
+          <div className="p-7">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  {event.isFeatured && (
+                    <span className="badge-amber">
+                      <Star className="size-3" />
+                      Agenda Unggulan
+                    </span>
+                  )}
+                  <StatusBadge label="Publish" value={event.status} />
+                </div>
+                <h2 className="font-heading text-2xl font-semibold leading-snug tracking-tight">
                   {event.name}
                 </h2>
-                <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">
+                <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
                   {event.description}
                 </p>
               </div>
             </div>
-          </div>
 
-          <div className="mt-6 grid gap-3 md:grid-cols-3">
-            <div className="rounded-2xl bg-muted/40 p-4">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <CalendarDays className="size-4 text-emerald-700 dark:text-emerald-300" />
-                Jadwal
-              </div>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {formatDateIndonesia(event.date)} • {event.timeLabel}
-              </p>
-            </div>
-            <div className="rounded-2xl bg-muted/40 p-4">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <MapPin className="size-4 text-emerald-700 dark:text-emerald-300" />
-                Lokasi
-              </div>
-              <p className="mt-2 text-sm text-muted-foreground">{event.location}</p>
-            </div>
-            <div className="rounded-2xl bg-muted/40 p-4">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <UserRound className="size-4 text-emerald-700 dark:text-emerald-300" />
-                Penanggung Jawab
-              </div>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {event.personInCharge}
-              </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {[
+                { icon: CalendarDays, label: "Jadwal", value: `${formatDateIndonesia(event.date)} · ${event.timeLabel}` },
+                { icon: MapPin, label: "Lokasi", value: event.location },
+                { icon: UserRound, label: "Penanggung Jawab", value: event.personInCharge },
+              ].map((item) => (
+                <div key={item.label} className="flex items-start gap-3 rounded-xl bg-muted/40 p-4">
+                  <item.icon className="mt-0.5 size-4 shrink-0 text-primary" />
+                  <div>
+                    <p className="text-xs font-semibold text-foreground">{item.label}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{item.value}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </article>
       ))}
-
-      {publicEvents.length === 0 ? (
-        <div className="rounded-[2rem] border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
-          Belum ada agenda publik yang dipublish.
-        </div>
-      ) : null}
     </div>
   );
 }

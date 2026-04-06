@@ -99,7 +99,7 @@ export function HomepageContentForm({
   return (
     <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
       <form
-        className="space-y-6 rounded-[2rem] border border-border/70 bg-card p-6 shadow-sm"
+        className="space-y-6 card-hero p-7"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
         <div className="flex items-center justify-between gap-4">
@@ -112,52 +112,55 @@ export function HomepageContentForm({
             </p>
           </div>
           <StatusBadge
-            label={initialData.source === "database" ? "Terhubung DB" : "Mode Demo"}
+            label={initialData.source === "database" ? "Konten Aktif" : "Konten Cadangan"}
             value={initialData.status}
           />
         </div>
 
         <div className="grid gap-5 md:grid-cols-2">
           <FormFieldWrapper
-            label="Hero Title"
+            label="Judul Utama Beranda"
             error={form.formState.errors.heroTitle?.message}
             className="md:col-span-2"
           >
-            <Input {...form.register("heroTitle")} />
+            <Input placeholder="Contoh: Selamat Datang di Masjid Nurul Jannah" {...form.register("heroTitle")} />
           </FormFieldWrapper>
 
           <FormFieldWrapper
-            label="Hero Subtitle"
+            label="Kalimat Pembuka"
             error={form.formState.errors.heroSubtitle?.message}
             className="md:col-span-2"
           >
-            <Textarea rows={4} {...form.register("heroSubtitle")} />
+            <Textarea rows={4} placeholder="Kalimat singkat yang menyambut jamaah di halaman utama..." {...form.register("heroSubtitle")} />
           </FormFieldWrapper>
 
           <FormFieldWrapper
-            label="Label CTA Utama"
+            label="Teks Tombol Utama"
             error={form.formState.errors.heroPrimaryCtaLabel?.message}
+            hint="Contoh: Lihat Agenda, Donasi Sekarang"
           >
-            <Input {...form.register("heroPrimaryCtaLabel")} />
+            <Input placeholder="Contoh: Lihat Agenda" {...form.register("heroPrimaryCtaLabel")} />
           </FormFieldWrapper>
 
           <FormFieldWrapper
-            label="Link CTA Utama"
+            label="Link Tombol Utama"
             error={form.formState.errors.heroPrimaryCtaHref?.message}
+            hint="Halaman yang dibuka saat tombol diklik"
           >
-            <Input {...form.register("heroPrimaryCtaHref")} />
+            <Input placeholder="Contoh: /agenda-kegiatan" {...form.register("heroPrimaryCtaHref")} />
           </FormFieldWrapper>
 
           <FormFieldWrapper
             label="Judul Sambutan"
             error={form.formState.errors.welcomeTitle?.message}
           >
-            <Input {...form.register("welcomeTitle")} />
+            <Input placeholder="Contoh: Sambutan Takmir Masjid" {...form.register("welcomeTitle")} />
           </FormFieldWrapper>
 
           <FormFieldWrapper
             label="Status Konten"
             error={form.formState.errors.status?.message}
+            hint="Pilih 'Tampilkan' agar konten ini aktif di website"
           >
             <Select
               value={statusValue}
@@ -169,9 +172,9 @@ export function HomepageContentForm({
                 <SelectValue placeholder="Pilih status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="DRAFT">Draft</SelectItem>
-                <SelectItem value="PUBLISHED">Publish</SelectItem>
-                <SelectItem value="ARCHIVED">Archived</SelectItem>
+                <SelectItem value="DRAFT">Simpan sebagai Draf</SelectItem>
+                <SelectItem value="PUBLISHED">Tampilkan di Website</SelectItem>
+                <SelectItem value="ARCHIVED">Arsipkan</SelectItem>
               </SelectContent>
             </Select>
           </FormFieldWrapper>
@@ -181,31 +184,27 @@ export function HomepageContentForm({
             error={form.formState.errors.welcomeContent?.message}
             className="md:col-span-2"
           >
-            <Textarea rows={5} {...form.register("welcomeContent")} />
+            <Textarea rows={5} placeholder="Tulis sambutan dari takmir atau pengurus masjid..." {...form.register("welcomeContent")} />
           </FormFieldWrapper>
 
           <FormFieldWrapper
-            label="Judul CTA Donasi"
+            label="Judul Ajakan Donasi"
             error={form.formState.errors.donationCtaTitle?.message}
             className="md:col-span-2"
           >
-            <Input {...form.register("donationCtaTitle")} />
+            <Input placeholder="Contoh: Mari Bersama Membangun Masjid" {...form.register("donationCtaTitle")} />
           </FormFieldWrapper>
 
           <FormFieldWrapper
-            label="Deskripsi CTA Donasi"
+            label="Keterangan Ajakan Donasi"
             error={form.formState.errors.donationCtaDescription?.message}
             className="md:col-span-2"
           >
-            <Textarea rows={4} {...form.register("donationCtaDescription")} />
+            <Textarea rows={4} placeholder="Jelaskan mengapa jamaah perlu berdonasi..." {...form.register("donationCtaDescription")} />
           </FormFieldWrapper>
         </div>
 
-        <Button
-          type="submit"
-          disabled={isPending}
-          className="rounded-full bg-emerald-700 px-5 hover:bg-emerald-800"
-        >
+        <Button type="submit" disabled={isPending} className="btn-primary">
           {isPending ? (
             <>
               <LoaderCircle className="size-4 animate-spin" />

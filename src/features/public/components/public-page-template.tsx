@@ -1,51 +1,49 @@
-import { ContentPreviewCard } from "@/components/shared/content-preview-card";
+import { CheckCircle2 } from "lucide-react";
 import { PageHeader } from "@/components/shared/page-header";
-import { Button } from "@/components/ui/button";
 
 type PublicPageTemplateProps = {
   title: string;
   description: string;
-  previewTitle: string;
-  previewDescription: string;
+  children: React.ReactNode;
+  sidebarTitle?: string;
+  sidebarDescription?: string;
+  sidebarItems?: string[];
 };
 
 export function PublicPageTemplate({
   title,
   description,
-  previewTitle,
-  previewDescription,
+  children,
+  sidebarTitle,
+  sidebarDescription,
+  sidebarItems,
 }: PublicPageTemplateProps) {
   return (
     <div className="space-y-10">
-      <PageHeader
-        eyebrow="Halaman Publik"
-        title={title}
-        description={description}
-      />
-      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="glass-panel aurora-border rounded-[2.2rem] p-8 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.4)]">
-          <h2 className="font-heading text-3xl font-semibold tracking-tight">
-            {title}
-          </h2>
-          <p className="mt-4 max-w-2xl text-base leading-8 text-muted-foreground">
-            Tahap fondasi sudah menyiapkan route publik dan struktur modular.
-            Konten dinamis dari CMS internal akan disambungkan pada tahap fitur
-            berikutnya.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button className="gradient-emerald rounded-full border-0 px-5 text-white hover:opacity-95">
-              Lihat Demo Konten
-            </Button>
-            <Button variant="outline" className="rounded-full bg-white/60">
-              Siapkan Integrasi CMS
-            </Button>
+      <PageHeader eyebrow="Halaman Publik" title={title} description={description} />
+      <div className="grid gap-8 xl:grid-cols-[1fr_320px]">
+        <div className="space-y-6 min-w-0">{children}</div>
+        <aside className="space-y-4">
+          <div className="card-hero sticky top-24 p-7">
+            <div className="badge-primary mb-4">Informasi</div>
+            <h2 className="font-heading text-2xl leading-snug font-semibold">
+              {sidebarTitle ?? title}
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-muted-foreground">
+              {sidebarDescription ?? description}
+            </p>
+            {sidebarItems?.length ? (
+              <ul className="mt-5 space-y-2.5">
+                {sidebarItems.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </div>
-        </div>
-        <ContentPreviewCard
-          eyebrow="Preview"
-          title={previewTitle}
-          description={previewDescription}
-        />
+        </aside>
       </div>
     </div>
   );

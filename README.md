@@ -32,10 +32,13 @@ cp .env.example .env
 Isi minimal:
 
 - `DATABASE_URL`
+- `DIRECT_URL`
 - `NEXTAUTH_SECRET`
 - `NEXTAUTH_URL`
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
 ## Database
 
@@ -91,9 +94,11 @@ npm run lint
 
 1. Push project ke Git repository.
 2. Import repository ke Vercel.
-3. Tambahkan semua environment variables dari `.env.example`.
-4. Arahkan `DATABASE_URL` ke Supabase PostgreSQL.
-5. Jalankan migrasi atau `db push` sebelum dipakai.
+3. Tambahkan semua environment variables dari `.env.example` dan `DIRECT_URL`.
+4. Arahkan `DATABASE_URL` dan `DIRECT_URL` ke Supabase PostgreSQL.
+5. Pastikan hostname gambar eksternal sudah diizinkan di `next.config.ts`.
+6. Jalankan migrasi atau `db push` sebelum dipakai.
+7. Setelah deploy berhasil, baru arahkan custom domain Anda ke project Vercel.
 
 ## Integrasi Supabase
 

@@ -1,27 +1,23 @@
 import Link from "next/link";
-
+import { Building2 } from "lucide-react";
 import { ROUTE_PATHS } from "@/constants/routes";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-6">
-      <div className="max-w-xl space-y-5 text-center">
-        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-emerald-700 dark:text-emerald-300">
-          404
-        </p>
-        <h1 className="text-4xl font-semibold tracking-tight">
-          Halaman tidak ditemukan
-        </h1>
-        <p className="text-sm leading-6 text-muted-foreground">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-8 px-6 text-center">
+      <div className="flex size-20 items-center justify-center rounded-3xl bg-primary/8 text-primary animate-float">
+        <Building2 className="size-10" />
+      </div>
+      <div className="space-y-3">
+        <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">404</p>
+        <h1 className="font-heading text-4xl font-semibold tracking-tight">Halaman tidak ditemukan</h1>
+        <p className="max-w-sm text-sm leading-7 text-muted-foreground">
           Route yang Anda buka belum tersedia atau sudah dipindahkan.
         </p>
-        <Link
-          href={ROUTE_PATHS.home}
-          className="inline-flex h-10 items-center justify-center rounded-full bg-emerald-700 px-5 text-sm font-medium text-white transition hover:bg-emerald-800"
-        >
-          Kembali ke Beranda
-        </Link>
       </div>
+      <Link href={ROUTE_PATHS.home} className="btn-primary">
+        Kembali ke Beranda
+      </Link>
     </div>
   );
 }

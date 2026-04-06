@@ -14,15 +14,14 @@ export function DashboardPlaceholder({
   return (
     <div className="space-y-8">
       <PageHeader eyebrow="CMS Internal" title={title} description={description} />
-      <Card className="rounded-[2rem] border-border/60 shadow-sm">
+      <Card className="page-shell rounded-[1.8rem] border-0 shadow-none">
         <CardContent className="space-y-4 p-8">
           <p className="text-sm leading-7 text-muted-foreground">
-            Struktur route, layout dashboard, auth, role handling, schema data,
-            dan reusable components sudah disiapkan. Tahap berikutnya tinggal
-            menghubungkan CRUD, validasi, dan data Prisma.
+            Halaman ini sudah memakai shell dashboard yang sama dengan modul lain
+            dan siap diisi dengan kebutuhan operasional tambahan ketika diperlukan.
           </p>
           <Button variant="outline" className="rounded-full">
-            Lanjutkan implementasi fitur
+            Modul siap dikembangkan
           </Button>
         </CardContent>
       </Card>

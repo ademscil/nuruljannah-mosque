@@ -17,7 +17,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-muted/20">
+    <div className="flex min-h-screen bg-[#f7f8fb]">
       <AppSidebar
         userName={session.user.name ?? session.user.email ?? "Pengurus"}
         role={session.user.role}

@@ -1,11 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle, LockKeyhole, Mail } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle, LockKeyhole, Mail } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -22,6 +22,7 @@ export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
 
   const callbackUrl = searchParams.get("callbackUrl") ?? ROUTE_PATHS.dashboard;
 
@@ -79,19 +80,27 @@ export function LoginForm() {
         <div className="relative">
           <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            type="password"
+            type={showPassword ? "text" : "password"}
             autoComplete="current-password"
             placeholder="Masukkan kata sandi"
-            className="h-12 rounded-2xl pl-10"
+            className="h-12 rounded-2xl pl-10 pr-11"
             {...form.register("password")}
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+          >
+            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          </button>
         </div>
       </FormFieldWrapper>
 
       <Button
         type="submit"
         disabled={isPending}
-        className="h-12 w-full rounded-2xl bg-emerald-700 text-base hover:bg-emerald-800"
+        className="h-12 w-full rounded-2xl bg-primary text-base text-primary-foreground hover:bg-primary/95"
       >
         {isPending ? (
           <>
@@ -104,13 +113,13 @@ export function LoginForm() {
       </Button>
 
       <p className="text-sm leading-6 text-muted-foreground">
-        Belum setup database? Lanjutkan konfigurasi Prisma dan seed terlebih
-        dahulu sesuai README. Setelah itu akun demo admin siap dipakai.
+        Gunakan akun pengurus yang sudah terdaftar di database untuk masuk ke
+        dashboard admin.
       </p>
 
       <p className="text-sm text-muted-foreground">
         Kembali ke{" "}
-        <Link href={ROUTE_PATHS.home} className="font-medium text-emerald-700">
+        <Link href={ROUTE_PATHS.home} className="font-medium text-primary">
           beranda publik
         </Link>
         .
