@@ -18,14 +18,18 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-[#f7f8fb]">
-      <AppSidebar
-        userName={session.user.name ?? session.user.email ?? "Pengurus"}
-        role={session.user.role}
-      />
+      <div className="hidden lg:flex">
+        <AppSidebar
+          userName={session.user.name ?? session.user.email ?? "Pengurus"}
+          role={session.user.role}
+        />
+      </div>
       <div className="flex min-h-screen flex-1 flex-col">
         <AppTopbar
           title="Dashboard Admin"
           description="Area CMS internal pengurus Masjid Nurul Jannah."
+          userName={session.user.name ?? session.user.email ?? "Pengurus"}
+          role={session.user.role}
         />
         <main className="flex-1 px-4 py-6 sm:px-6">{children}</main>
       </div>

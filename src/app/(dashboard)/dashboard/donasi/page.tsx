@@ -33,7 +33,7 @@ export default async function DashboardDonasiPage() {
         description="Kelola campaign donasi, progres penghimpunan, daftar donatur, dan verifikasi manual oleh bendahara atau admin utama."
       />
       <DonationSummaryCards summary={summary} />
-      <div className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
+      <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
         <DonationAdminTable campaigns={campaigns} donations={donations} />
         <DonationRecentList
           donations={donations}
@@ -41,7 +41,7 @@ export default async function DashboardDonasiPage() {
           description="Panel cepat untuk melihat transaksi terbaru dan memantau status verifikasi donasi."
         />
       </div>
-      <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
+      <div className="grid gap-6 lg:grid-cols-2">
         <DonationCampaignFormPanel campaigns={campaigns} />
         <DonationStatusPanel donations={donations} />
       </div>

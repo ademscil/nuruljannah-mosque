@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   CalendarClock, CalendarDays, HeartHandshake, House,
   Image as ImageIcon, LayoutGrid, Megaphone, Settings,
-  Users, Wallet, Building2,
+  Users, Wallet, Building2, X,
 } from "lucide-react";
 
 import { DASHBOARD_PATHS } from "@/constants/routes";
@@ -27,25 +27,37 @@ const navItems = [
   { label: "Pengaturan Akun",  href: DASHBOARD_PATHS.settings,       icon: Settings },
 ];
 
-type Props = { userName: string; role: UserRole };
+type Props = { userName: string; role: UserRole; onClose?: () => void };
 
-export function AppSidebar({ userName, role }: Props) {
+export function AppSidebar({ userName, role, onClose }: Props) {
   const pathname = usePathname();
   const nav = navItems.filter((item) => item.permission ? hasPermission(role, item.permission) : true);
 
   return (
-    <aside className="hidden min-h-screen w-72 shrink-0 flex-col bg-[oklch(0.2_0.04_175)] lg:flex">
+    <aside className="flex h-full min-h-screen w-72 shrink-0 flex-col bg-[oklch(0.2_0.04_175)]">
 
       {/* Brand */}
       <div className="border-b border-[oklch(0.28_0.04_175)] px-6 py-6">
-        <div className="flex items-center gap-3">
-          <div className="flex size-9 items-center justify-center rounded-xl bg-[oklch(0.68_0.14_82)] text-[oklch(0.15_0.02_250)] shadow-md">
-            <Building2 className="size-4" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-[oklch(0.68_0.14_82)] text-[oklch(0.15_0.02_250)] shadow-md">
+              <Building2 className="size-4" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">{SITE_CONFIG.shortName}</p>
+              <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-[oklch(0.5_0.04_175)]">Admin CMS</p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-bold text-white">{SITE_CONFIG.shortName}</p>
-            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-[oklch(0.5_0.04_175)]">Admin CMS</p>
-          </div>
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex size-8 items-center justify-center rounded-lg text-[oklch(0.5_0.04_175)] hover:text-white"
+              aria-label="Tutup menu"
+            >
+              <X className="size-4" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -75,6 +87,7 @@ export function AppSidebar({ userName, role }: Props) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
               className={cn(
                 "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-150",
                 active

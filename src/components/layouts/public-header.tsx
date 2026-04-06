@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, Building2 } from "lucide-react";
 
-import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { ROUTE_PATHS } from "@/constants/routes";
 import { SITE_CONFIG } from "@/constants/site";
 
@@ -80,7 +79,6 @@ export function PublicHeader() {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            <ThemeToggle />
             <Link href={ROUTE_PATHS.login} className="btn-primary hidden px-5 py-2 text-xs sm:inline-flex">
               Login Admin
             </Link>

@@ -29,7 +29,7 @@ export default async function DashboardKeuanganPage() {
         description="Kelola transaksi pemasukan dan pengeluaran, filter kategori, ringkasan kas, dan ekspor laporan."
       />
       <FinanceSummaryCards summary={summary} />
-      <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+      <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
         <FinanceChart data={chartData} />
         <div className="card-hero p-7">
           <div className="badge-primary mb-4">Panduan Penggunaan</div>
@@ -52,7 +52,7 @@ export default async function DashboardKeuanganPage() {
           </div>
         </div>
       </div>
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
         <FinanceTransactionTable transactions={transactions} />
         <TransactionFormPanel transactions={transactions} />
       </div>
