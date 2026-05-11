@@ -39,7 +39,9 @@ export default async function DashboardKeuanganPage() {
           <div className="mt-6 space-y-3">
             <div className="rounded-xl bg-muted/40 p-4">
               <p className="text-sm font-medium">1. Tambah transaksi baru</p>
-              <p className="mt-1 text-sm text-muted-foreground">Pilih "Tambah Transaksi Baru" di form bawah, isi jenis, kategori, jumlah, dan tanggal.</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Pilih <span className="font-medium text-foreground">Tambah Transaksi Baru</span> di form bawah, isi jenis, kategori, jumlah, dan tanggal.
+              </p>
             </div>
             <div className="rounded-xl bg-muted/40 p-4">
               <p className="text-sm font-medium">2. Edit transaksi lama</p>

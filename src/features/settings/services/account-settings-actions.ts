@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getPrismaActionErrorMessage } from "@/lib/prisma-action-error";
 import {
   accountSettingsSchema,
   type AccountSettingsSchema,
@@ -47,7 +48,10 @@ export async function saveAccountSettingsAction(
 
     revalidatePath("/dashboard/pengaturan-akun");
     return { success: true, message: "Pengaturan akun berhasil disimpan." };
-  } catch {
-    return { success: false, message: "Gagal menyimpan pengaturan akun." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menyimpan pengaturan akun."),
+    };
   }
 }

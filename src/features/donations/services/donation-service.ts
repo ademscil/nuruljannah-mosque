@@ -8,62 +8,9 @@ import type {
   DonationSummary,
 } from "@/features/donations/types/donation";
 
-const fallbackCampaigns: DonationCampaignItem[] = [
-  {
-    id: "campaign-demo-1",
-    title: "Renovasi Tempat Wudhu",
-    slug: "renovasi-tempat-wudhu",
-    description:
-      "Penggalangan dana untuk renovasi area tempat wudhu agar lebih nyaman dan aman bagi jamaah.",
-    targetAmount: 50000000,
-    collectedAmount: 21500000,
-    bankAccountName: "Masjid Nurul Jannah",
-    bankAccountNumber: "1234567890",
-    qrisImageUrl: null,
-    isActive: true,
-    donationCount: 1,
-    progress: 43,
-    source: "fallback",
-  },
-];
-
-const fallbackDonations: DonationListItem[] = [
-  {
-    id: "donation-demo-1",
-    donorName: "Ibu Siti Rahmah",
-    donorEmail: null,
-    donorPhone: "081298765432",
-    amount: 1500000,
-    status: "CONFIRMED",
-    note: null,
-    donatedAt: "2026-04-02T14:00:00+07:00",
-    campaignId: "campaign-demo-1",
-    campaignTitle: "Renovasi Tempat Wudhu",
-    source: "fallback",
-  },
-  {
-    id: "donation-demo-2",
-    donorName: "Hamba Allah",
-    donorEmail: null,
-    donorPhone: null,
-    amount: 750000,
-    status: "PENDING",
-    note: "Transfer menunggu verifikasi bendahara.",
-    donatedAt: "2026-04-01T10:30:00+07:00",
-    campaignId: "campaign-demo-1",
-    campaignTitle: "Renovasi Tempat Wudhu",
-    source: "fallback",
-  },
-];
-
 export async function getDonationCampaigns(): Promise<DonationCampaignItem[]> {
   try {
     const campaigns = await findDonationCampaigns();
-
-    if (campaigns.length === 0) {
-      return fallbackCampaigns;
-    }
-
     return campaigns.map((campaign) => {
       const targetAmount = Number(campaign.targetAmount);
       const collectedAmount = Number(campaign.collectedAmount);
@@ -84,22 +31,17 @@ export async function getDonationCampaigns(): Promise<DonationCampaignItem[]> {
           targetAmount > 0
             ? Math.min(100, Math.round((collectedAmount / targetAmount) * 100))
             : 0,
-        source: "database",
       };
     });
-  } catch {
-    return fallbackCampaigns;
+  } catch (error) {
+    console.error("Failed to load donation campaigns:", error);
+    return [];
   }
 }
 
 export async function getDonations(): Promise<DonationListItem[]> {
   try {
     const donations = await findDonations();
-
-    if (donations.length === 0) {
-      return fallbackDonations;
-    }
-
     return donations.map((donation) => ({
       id: donation.id,
       donorName: donation.donorName,
@@ -111,11 +53,21 @@ export async function getDonations(): Promise<DonationListItem[]> {
       donatedAt: donation.donatedAt.toISOString(),
       campaignId: donation.campaignId,
       campaignTitle: donation.campaign.title,
-      source: "database",
     }));
-  } catch {
-    return fallbackDonations;
+  } catch (error) {
+    console.error("Failed to load donations:", error);
+    return [];
   }
+}
+
+export async function getPublicDonationCampaigns(): Promise<DonationCampaignItem[]> {
+  const campaigns = await getDonationCampaigns();
+  return campaigns.filter((item) => item.isActive);
+}
+
+export async function getPublicDonations(): Promise<DonationListItem[]> {
+  const donations = await getDonations();
+  return donations.filter((item) => item.status === "CONFIRMED");
 }
 
 export function getDonationSummary(

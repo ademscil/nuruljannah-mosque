@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { hasPermission } from "@/lib/role-guard";
 import { prisma } from "@/lib/prisma";
+import { getPrismaActionErrorMessage } from "@/lib/prisma-action-error";
 import {
   transactionFormSchema,
   type TransactionFormSchema,
@@ -54,8 +55,11 @@ export async function saveTransactionAction(
     revalidatePath("/laporan-keuangan");
     revalidatePath("/dashboard");
     return { success: true, message: "Transaksi berhasil disimpan." };
-  } catch {
-    return { success: false, message: "Gagal menyimpan transaksi." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menyimpan transaksi."),
+    };
   }
 }
 
@@ -73,7 +77,10 @@ export async function deleteTransactionAction(
     revalidatePath("/laporan-keuangan");
     revalidatePath("/dashboard");
     return { success: true, message: "Transaksi berhasil dihapus." };
-  } catch {
-    return { success: false, message: "Gagal menghapus transaksi." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menghapus transaksi."),
+    };
   }
 }

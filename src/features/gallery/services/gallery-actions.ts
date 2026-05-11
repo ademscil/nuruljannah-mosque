@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { hasPermission } from "@/lib/role-guard";
 import { prisma } from "@/lib/prisma";
+import { getPrismaActionErrorMessage } from "@/lib/prisma-action-error";
 import {
   galleryFormSchema,
   type GalleryFormSchema,
@@ -51,8 +52,11 @@ export async function saveGalleryItemAction(
     revalidatePath("/dashboard/galeri");
     revalidatePath("/galeri");
     return { success: true, message: "Galeri berhasil disimpan." };
-  } catch {
-    return { success: false, message: "Gagal menyimpan data galeri." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menyimpan data galeri."),
+    };
   }
 }
 
@@ -67,7 +71,10 @@ export async function deleteGalleryItemAction(id: string): Promise<GalleryAction
     revalidatePath("/dashboard/galeri");
     revalidatePath("/galeri");
     return { success: true, message: "Galeri berhasil dihapus." };
-  } catch {
-    return { success: false, message: "Gagal menghapus galeri." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menghapus galeri."),
+    };
   }
 }

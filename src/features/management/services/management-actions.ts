@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { hasPermission } from "@/lib/role-guard";
 import { prisma } from "@/lib/prisma";
+import { getPrismaActionErrorMessage } from "@/lib/prisma-action-error";
 import {
   managementFormSchema,
   type ManagementFormSchema,
@@ -55,8 +56,11 @@ export async function saveManagementMemberAction(
     revalidatePath("/dashboard/data-pengurus");
     revalidatePath("/profil-masjid");
     return { success: true, message: "Data pengurus berhasil disimpan." };
-  } catch {
-    return { success: false, message: "Gagal menyimpan data pengurus." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menyimpan data pengurus."),
+    };
   }
 }
 
@@ -73,7 +77,10 @@ export async function deleteManagementMemberAction(
     revalidatePath("/dashboard/data-pengurus");
     revalidatePath("/profil-masjid");
     return { success: true, message: "Data pengurus berhasil dihapus." };
-  } catch {
-    return { success: false, message: "Gagal menghapus data pengurus." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menghapus data pengurus."),
+    };
   }
 }

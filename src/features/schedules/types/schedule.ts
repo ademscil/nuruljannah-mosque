@@ -6,5 +6,4 @@ export type ScheduleListItem = {
   timeLabel: string;
   personName: string;
   notes: string | null;
-  source: "database" | "fallback";
 };

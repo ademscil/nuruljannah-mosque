@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const isValidDateString = (value: string) => !Number.isNaN(new Date(value).getTime());
+
 export const donationCampaignFormSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(5, "Judul campaign minimal 5 karakter."),
@@ -22,7 +24,10 @@ export const donationEntryFormSchema = z.object({
   donorPhone: z.string().optional(),
   amount: z.number().positive("Nominal donasi harus lebih besar dari nol."),
   status: z.enum(["PENDING", "CONFIRMED", "CANCELLED"]),
-  donatedAt: z.string().min(1, "Tanggal donasi wajib diisi."),
+  donatedAt: z
+    .string()
+    .min(1, "Tanggal donasi wajib diisi.")
+    .refine(isValidDateString, "Tanggal donasi tidak valid."),
   campaignId: z.string().min(1, "Campaign donasi wajib dipilih."),
   note: z.string().optional(),
 });

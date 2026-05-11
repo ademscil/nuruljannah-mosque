@@ -1,17 +1,19 @@
 import { PageHeader } from "@/components/shared/page-header";
+import { getCmsSettings } from "@/features/cms/services/cms-settings-service";
 import { DonationCampaignGrid } from "@/features/donations/components/donation-campaign-grid";
 import { DonationRecentList } from "@/features/donations/components/donation-recent-list";
 import { DonationSummaryCards } from "@/features/donations/components/donation-summary-cards";
 import {
-  getDonationCampaigns,
-  getDonations,
   getDonationSummary,
+  getPublicDonationCampaigns,
+  getPublicDonations,
 } from "@/features/donations/services/donation-service";
 
 export default async function DonasiPage() {
-  const [campaigns, donations] = await Promise.all([
-    getDonationCampaigns(),
-    getDonations(),
+  const [campaigns, donations, cms] = await Promise.all([
+    getPublicDonationCampaigns(),
+    getPublicDonations(),
+    getCmsSettings(),
   ]);
   const summary = getDonationSummary(campaigns, donations);
 
@@ -19,15 +21,15 @@ export default async function DonasiPage() {
     <div className="space-y-10">
       <PageHeader
         eyebrow="Halaman Publik"
-        title="Donasi dan Dukungan Jamaah"
-        description="Lihat campaign aktif, progres penghimpunan dana, serta informasi rekening yang dikelola pengurus Masjid Nurul Jannah."
+        title={cms.contentBlocks.pageCopy.donasiTitle}
+        description={cms.contentBlocks.pageCopy.donasiDescription}
       />
       <DonationSummaryCards summary={summary} />
       <DonationCampaignGrid campaigns={campaigns} />
       <DonationRecentList
         donations={donations}
-        title="Donasi Terbaru"
-        description="Daftar donasi terbaru ditampilkan untuk memberi gambaran aktivitas dukungan jamaah kepada program masjid."
+        title={cms.contentBlocks.pageCopy.donasiRecentTitle}
+        description={cms.contentBlocks.pageCopy.donasiRecentDescription}
       />
     </div>
   );

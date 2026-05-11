@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { ROLE_PERMISSIONS } from "@/constants/roles";
 import { hasPermission } from "@/lib/role-guard";
 
 export async function getCurrentDashboardUser() {
@@ -14,4 +15,14 @@ export async function hasDashboardPermission(permission: string) {
   }
 
   return hasPermission(user.role, permission);
+}
+
+export async function canAccessDashboardOverview() {
+  const user = await getCurrentDashboardUser();
+
+  if (!user) {
+    return false;
+  }
+
+  return ROLE_PERMISSIONS[user.role].length > 0;
 }

@@ -16,13 +16,15 @@ const avatarColors = [
 ];
 
 export function ManagementPublicGrid({ members }: { members: ManagementMemberItem[] }) {
-  if (members.length === 0) {
+  const publishedMembers = members.filter((member) => member.status === "PUBLISHED");
+
+  if (publishedMembers.length === 0) {
     return <EmptyState icon={Users} title="Data pengurus belum tersedia" description="Daftar pengurus akan ditampilkan setelah dipublikasikan dari dashboard admin." />;
   }
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {members.map((member, i) => (
+      {publishedMembers.map((member, i) => (
         <article
           key={member.id}
           style={{ animationDelay: `${i * 60}ms` }}

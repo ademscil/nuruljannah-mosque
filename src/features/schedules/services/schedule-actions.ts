@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { hasPermission } from "@/lib/role-guard";
 import { prisma } from "@/lib/prisma";
+import { getPrismaActionErrorMessage } from "@/lib/prisma-action-error";
 import {
   scheduleFormSchema,
   type ScheduleFormSchema,
@@ -55,8 +56,11 @@ export async function saveScheduleAction(
     revalidatePath("/dashboard/jadwal-petugas");
     revalidatePath("/jadwal-sholat");
     return { success: true, message: "Jadwal berhasil disimpan." };
-  } catch {
-    return { success: false, message: "Gagal menyimpan jadwal." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menyimpan jadwal."),
+    };
   }
 }
 
@@ -71,7 +75,10 @@ export async function deleteScheduleAction(id: string): Promise<ScheduleActionRe
     revalidatePath("/dashboard/jadwal-petugas");
     revalidatePath("/jadwal-sholat");
     return { success: true, message: "Jadwal berhasil dihapus." };
-  } catch {
-    return { success: false, message: "Gagal menghapus jadwal." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menghapus jadwal."),
+    };
   }
 }

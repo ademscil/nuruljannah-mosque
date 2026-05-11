@@ -12,5 +12,4 @@ export type EventListItem = {
   isFeatured: boolean;
   posterUrl: string | null;
   publishedAt: string | null;
-  source: "database" | "fallback";
 };

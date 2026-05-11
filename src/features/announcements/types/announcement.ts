@@ -6,5 +6,4 @@ export type AnnouncementListItem = {
   category: string;
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
   publishedAt: string | null;
-  source: "database" | "fallback";
 };

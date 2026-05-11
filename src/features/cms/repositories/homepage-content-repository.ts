@@ -8,6 +8,17 @@ export async function findLatestHomepageContent() {
   });
 }
 
+export async function findLatestPublishedHomepageContent() {
+  return prisma.homepageContent.findFirst({
+    where: {
+      status: "PUBLISHED",
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+}
+
 export async function upsertHomepageContent(data: {
   id?: string;
   heroTitle: string;
@@ -18,6 +29,8 @@ export async function upsertHomepageContent(data: {
   welcomeContent: string;
   donationCtaTitle: string;
   donationCtaDescription: string;
+  featuredAnnouncementId?: string;
+  featuredEventId?: string;
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
   userId?: string;
 }) {
@@ -30,6 +43,8 @@ export async function upsertHomepageContent(data: {
     welcomeContent: data.welcomeContent,
     donationCtaTitle: data.donationCtaTitle,
     donationCtaDescription: data.donationCtaDescription,
+    featuredAnnouncementId: data.featuredAnnouncementId || null,
+    featuredEventId: data.featuredEventId || null,
     status: data.status,
     createdById: data.userId,
   };

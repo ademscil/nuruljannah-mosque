@@ -30,10 +30,14 @@ import type { HomepageContentRecord } from "@/features/cms/types/homepage-conten
 
 type HomepageContentFormProps = {
   initialData: HomepageContentRecord;
+  announcementOptions: Array<{ id: string; label: string }>;
+  eventOptions: Array<{ id: string; label: string }>;
 };
 
 export function HomepageContentForm({
   initialData,
+  announcementOptions,
+  eventOptions,
 }: HomepageContentFormProps) {
   const [isPending, startTransition] = useTransition();
 
@@ -48,6 +52,8 @@ export function HomepageContentForm({
       welcomeContent: initialData.welcomeContent,
       donationCtaTitle: initialData.donationCtaTitle,
       donationCtaDescription: initialData.donationCtaDescription,
+      featuredAnnouncementId: initialData.featuredAnnouncementId ?? "",
+      featuredEventId: initialData.featuredEventId ?? "",
       status: initialData.status,
     },
   });
@@ -78,6 +84,14 @@ export function HomepageContentForm({
   const donationDescriptionValue = useWatch({
     control: form.control,
     name: "donationCtaDescription",
+  });
+  const featuredAnnouncementIdValue = useWatch({
+    control: form.control,
+    name: "featuredAnnouncementId",
+  });
+  const featuredEventIdValue = useWatch({
+    control: form.control,
+    name: "featuredEventId",
   });
 
   const handleSubmit = (values: HomepageContentSchema) => {
@@ -112,7 +126,7 @@ export function HomepageContentForm({
             </p>
           </div>
           <StatusBadge
-            label={initialData.source === "database" ? "Konten Aktif" : "Konten Cadangan"}
+            label="Status Konten"
             value={initialData.status}
           />
         </div>
@@ -201,6 +215,60 @@ export function HomepageContentForm({
             className="md:col-span-2"
           >
             <Textarea rows={4} placeholder="Jelaskan mengapa jamaah perlu berdonasi..." {...form.register("donationCtaDescription")} />
+          </FormFieldWrapper>
+
+          <FormFieldWrapper
+            label="Pengumuman Pilihan Beranda"
+            error={form.formState.errors.featuredAnnouncementId?.message}
+            hint="Opsional, dipakai untuk pengembangan section highlight beranda."
+          >
+            <Select
+              value={featuredAnnouncementIdValue || "none"}
+              onValueChange={(value) => {
+                const normalizedValue =
+                  !value || value === "none" ? undefined : value;
+                form.setValue("featuredAnnouncementId", normalizedValue);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih pengumuman" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Tidak dipilih</SelectItem>
+                {announcementOptions.map((item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormFieldWrapper>
+
+          <FormFieldWrapper
+            label="Agenda Pilihan Beranda"
+            error={form.formState.errors.featuredEventId?.message}
+            hint="Opsional, dipakai untuk pengembangan section highlight beranda."
+          >
+            <Select
+              value={featuredEventIdValue || "none"}
+              onValueChange={(value) => {
+                const normalizedValue =
+                  !value || value === "none" ? undefined : value;
+                form.setValue("featuredEventId", normalizedValue);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih agenda" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Tidak dipilih</SelectItem>
+                {eventOptions.map((item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FormFieldWrapper>
         </div>
 

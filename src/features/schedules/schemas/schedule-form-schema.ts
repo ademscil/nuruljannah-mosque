@@ -1,10 +1,15 @@
 import { z } from "zod";
 
+const isValidDateString = (value: string) => !Number.isNaN(new Date(value).getTime());
+
 export const scheduleFormSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, "Judul jadwal minimal 3 karakter."),
   roleType: z.enum(["IMAM", "MUADZIN", "KHATIB", "PETUGAS_KEGIATAN"]),
-  scheduleFor: z.string().min(1, "Tanggal jadwal wajib diisi."),
+  scheduleFor: z
+    .string()
+    .min(1, "Tanggal jadwal wajib diisi.")
+    .refine(isValidDateString, "Tanggal jadwal tidak valid."),
   timeLabel: z.string().min(3, "Jam/tanda waktu wajib diisi."),
   personName: z.string().min(3, "Nama petugas wajib diisi."),
   notes: z.string().optional(),

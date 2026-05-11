@@ -8,6 +8,7 @@ export type HomepageContentRecord = {
   welcomeContent: string;
   donationCtaTitle: string;
   donationCtaDescription: string;
+  featuredAnnouncementId: string | null;
+  featuredEventId: string | null;
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
-  source: "database" | "fallback";
 };

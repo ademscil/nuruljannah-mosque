@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { hasPermission } from "@/lib/role-guard";
 import { prisma } from "@/lib/prisma";
+import { getPrismaActionErrorMessage } from "@/lib/prisma-action-error";
 import { eventFormSchema, type EventFormSchema } from "@/features/events/schemas/event-form-schema";
 
 type EventActionResult = {
@@ -43,7 +44,7 @@ export async function saveEventAction(
         isPublic: parsed.data.isPublic,
         isFeatured: parsed.data.isFeatured,
         posterUrl: parsed.data.posterUrl || null,
-        publishedAt: parsed.data.status === "PUBLISHED" ? new Date() : null,
+        ...(parsed.data.status === "PUBLISHED" ? {} : { publishedAt: null }),
       },
       create: {
         name: parsed.data.name,
@@ -65,8 +66,11 @@ export async function saveEventAction(
     revalidatePath("/dashboard/agenda-kegiatan");
     revalidatePath("/agenda-kegiatan");
     return { success: true, message: "Agenda berhasil disimpan." };
-  } catch {
-    return { success: false, message: "Gagal menyimpan agenda." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menyimpan agenda."),
+    };
   }
 }
 
@@ -82,7 +86,10 @@ export async function deleteEventAction(id: string): Promise<EventActionResult> 
     revalidatePath("/dashboard/agenda-kegiatan");
     revalidatePath("/agenda-kegiatan");
     return { success: true, message: "Agenda berhasil dihapus." };
-  } catch {
-    return { success: false, message: "Gagal menghapus agenda." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menghapus agenda."),
+    };
   }
 }

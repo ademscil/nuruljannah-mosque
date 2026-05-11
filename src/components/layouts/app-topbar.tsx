@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -14,9 +14,9 @@ import { DASHBOARD_LABELS, DASHBOARD_PATHS } from "@/constants/routes";
 import { AppSidebar } from "@/components/layouts/app-sidebar";
 import type { UserRole } from "@/constants/roles";
 
-type Props = { title: string; description: string; userName: string; role: UserRole };
+type Props = { title: string; userName: string; role: UserRole };
 
-export function AppTopbar({ title, description, userName, role }: Props) {
+export function AppTopbar({ title, userName, role }: Props) {
   const pathname = usePathname();
   const pageLabel = DASHBOARD_LABELS[pathname] ?? title;
   const isRoot = pathname === DASHBOARD_PATHS.overview;
@@ -37,48 +37,50 @@ export function AppTopbar({ title, description, userName, role }: Props) {
         </div>
       )}
 
-      <div className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-border/60 bg-white/92 px-4 py-4 backdrop-blur-xl sm:px-6">
-        <div className="flex items-center gap-3 min-w-0">
-          {/* Hamburger — mobile only */}
-          <button
-            type="button"
-            className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-border/70 bg-white text-muted-foreground hover:text-foreground lg:hidden"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Buka menu"
-          >
-            <Menu className="size-4" />
-          </button>
-          <div className="space-y-0.5 min-w-0">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href={DASHBOARD_PATHS.overview} className="text-muted-foreground hover:text-foreground">
-                    Dashboard
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                {!isRoot && (
-                  <>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>{pageLabel}</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </>
-                )}
-              </BreadcrumbList>
-            </Breadcrumb>
-            <h1 className="font-heading text-lg font-semibold tracking-tight truncate sm:text-xl">{pageLabel}</h1>
+      <div className="sticky top-0 z-30 border-b border-border/60 bg-white/92 backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-[88rem] items-center justify-between gap-4 px-4 py-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-3">
+            {/* Hamburger — mobile only */}
+            <button
+              type="button"
+              className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-border/70 bg-white text-muted-foreground hover:text-foreground lg:hidden"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Buka menu"
+            >
+              <Menu className="size-4" />
+            </button>
+            <div className="min-w-0 space-y-0.5">
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href={DASHBOARD_PATHS.overview} className="text-muted-foreground hover:text-foreground">
+                      Dashboard
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  {!isRoot && (
+                    <>
+                      <BreadcrumbSeparator />
+                      <BreadcrumbItem>
+                        <BreadcrumbPage>{pageLabel}</BreadcrumbPage>
+                      </BreadcrumbItem>
+                    </>
+                  )}
+                </BreadcrumbList>
+              </Breadcrumb>
+              <h1 className="truncate font-heading text-lg font-semibold tracking-tight sm:text-xl">{pageLabel}</h1>
+            </div>
           </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="shrink-0 rounded-full border-border/70 bg-white text-sm font-medium"
+            onClick={() => signOut({ callbackUrl: "/login" })}
+          >
+            <LogOut className="size-3.5" />
+            <span className="hidden sm:inline">Keluar</span>
+          </Button>
         </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="shrink-0 rounded-full border-border/70 bg-white text-sm font-medium"
-          onClick={() => signOut({ callbackUrl: "/login" })}
-        >
-          <LogOut className="size-3.5" />
-          <span className="hidden sm:inline">Keluar</span>
-        </Button>
       </div>
     </>
   );

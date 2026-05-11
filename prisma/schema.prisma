@@ -236,3 +236,36 @@ model HomepageContent {
   createdAt              DateTime      @default(now())
   updatedAt              DateTime      @updatedAt
 }
+
+model CmsSettings {
+  id                          String   @id @default(cuid())
+  siteName                    String   @default("Masjid Nurul Jannah")
+  siteShortName               String   @default("Nurul Jannah")
+  siteTagline                 String   @default("Portal Jamaah & Pengurus")
+  contactAddress              String   @default("V3VR+W99, Taman Bunga, Kec. Gerunggang, Kota Pangkal Pinang, Kepulauan Bangka Belitung")
+  contactCity                 String   @default("Pangkal Pinang, Bangka Belitung")
+  contactEmail                String   @default("admin@nuruljannah.id")
+  contactPhone                String   @default("+62 812-3456-7890")
+  contactMapUrl               String   @default("https://www.google.com/maps")
+  homeFeatureTitle            String   @default("Portal publik yang lebih mudah dipahami")
+  homeFeatureDescription      String   @default("Dirancang terang, ringan, dan fokus pada informasi yang paling sering dibutuhkan jamaah maupun pengurus.")
+  homeServiceTitle            String   @default("Area publik dan dashboard admin terhubung dalam satu sistem.")
+  homeServiceDescription      String   @default("Jamaah melihat informasi kegiatan, pengumuman, donasi, dan laporan ringkas. Pengurus mengelola seluruh konten dari dashboard internal yang terhubung langsung ke database.")
+  homeCtaTitle                String   @default("Masjid yang lebih terhubung dengan jamaahnya.")
+  homeCtaDescription          String   @default("Akses informasi kegiatan, donasi, dan pengumuman resmi kapan saja dan di mana saja.")
+  profileTitle                String   @default("Profil Masjid")
+  profileDescription          String   @default("Sejarah singkat, visi misi, fasilitas, dan struktur pengurus Masjid Nurul Jannah.")
+  profileSidebarTitle         String   @default("Masjid Nurul Jannah")
+  profileSidebarDescription   String   @default("Masjid Nurul Jannah hadir sebagai ruang ibadah, pembinaan, dan kebersamaan jamaah di Pangkal Pinang.")
+  profileSidebarItems         Json?
+  profileFacilities           Json?
+  contactTitle                String   @default("Kontak & Lokasi")
+  contactDescription          String   @default("Informasi alamat, kontak, dan akses menuju masjid.")
+  footerDescription           String   @default("Informasi publik, jadwal kegiatan, transparansi keuangan, dan CMS internal tersusun dalam satu portal yang ringan dan mudah diakses.")
+  footerCopyright             String   @default("Hak cipta dilindungi.")
+  publicNav                   Json?
+  quickLinks                  Json?
+  contentBlocks               Json?
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+}

@@ -5,47 +5,9 @@ import type {
 } from "@/features/finance/types/transaction";
 import { findTransactions } from "@/features/finance/repositories/transaction-repository";
 
-const fallbackTransactions: TransactionListItem[] = [
-  {
-    id: "trx-demo-1",
-    type: "INCOME",
-    category: "Donasi Jum'at",
-    amount: 6250000,
-    transactionAt: "2026-04-01T09:00:00+07:00",
-    description: "Pemasukan kotak amal Jum'at pekan pertama.",
-    attachmentUrl: null,
-    source: "fallback",
-  },
-  {
-    id: "trx-demo-2",
-    type: "EXPENSE",
-    category: "Operasional Listrik",
-    amount: 1450000,
-    transactionAt: "2026-04-02T10:00:00+07:00",
-    description: "Pembayaran listrik dan air bulan April.",
-    attachmentUrl: null,
-    source: "fallback",
-  },
-  {
-    id: "trx-demo-3",
-    type: "INCOME",
-    category: "Infak Ramadhan",
-    amount: 8500000,
-    transactionAt: "2026-04-03T12:00:00+07:00",
-    description: "Infak jamaah untuk program Ramadhan.",
-    attachmentUrl: null,
-    source: "fallback",
-  },
-];
-
 export async function getTransactions(): Promise<TransactionListItem[]> {
   try {
     const transactions = await findTransactions();
-
-    if (transactions.length === 0) {
-      return fallbackTransactions;
-    }
-
     return transactions.map((transaction) => ({
       id: transaction.id,
       type: transaction.type,
@@ -54,10 +16,10 @@ export async function getTransactions(): Promise<TransactionListItem[]> {
       transactionAt: transaction.transactionAt.toISOString(),
       description: transaction.description,
       attachmentUrl: transaction.attachmentUrl ?? null,
-      source: "database",
     }));
-  } catch {
-    return fallbackTransactions;
+  } catch (error) {
+    console.error("Failed to load transactions:", error);
+    return [];
   }
 }
 

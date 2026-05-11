@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { hasPermission } from "@/lib/role-guard";
 import { prisma } from "@/lib/prisma";
+import { getPrismaActionErrorMessage } from "@/lib/prisma-action-error";
 import {
   donationCampaignFormSchema,
   donationEntryFormSchema,
@@ -59,7 +60,6 @@ export async function saveDonationCampaignAction(
         slug: parsed.data.slug,
         description: parsed.data.description,
         targetAmount: parsed.data.targetAmount,
-        collectedAmount: parsed.data.collectedAmount,
         bankAccountName: parsed.data.bankAccountName || null,
         bankAccountNumber: parsed.data.bankAccountNumber || null,
         qrisImageUrl: parsed.data.qrisImageUrl || null,
@@ -70,7 +70,7 @@ export async function saveDonationCampaignAction(
         slug: parsed.data.slug,
         description: parsed.data.description,
         targetAmount: parsed.data.targetAmount,
-        collectedAmount: parsed.data.collectedAmount,
+        collectedAmount: 0,
         bankAccountName: parsed.data.bankAccountName || null,
         bankAccountNumber: parsed.data.bankAccountNumber || null,
         qrisImageUrl: parsed.data.qrisImageUrl || null,
@@ -79,12 +79,19 @@ export async function saveDonationCampaignAction(
       },
     });
 
+    if (parsed.data.id) {
+      await syncCampaignCollectedAmount(parsed.data.id);
+    }
+
     revalidatePath("/dashboard/donasi");
     revalidatePath("/donasi");
     revalidatePath("/dashboard");
     return { success: true, message: "Campaign donasi berhasil disimpan." };
-  } catch {
-    return { success: false, message: "Gagal menyimpan campaign donasi." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menyimpan campaign donasi."),
+    };
   }
 }
 
@@ -103,8 +110,11 @@ export async function deleteDonationCampaignAction(
     revalidatePath("/donasi");
     revalidatePath("/dashboard");
     return { success: true, message: "Campaign donasi berhasil dihapus." };
-  } catch {
-    return { success: false, message: "Gagal menghapus campaign donasi." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menghapus campaign donasi."),
+    };
   }
 }
 
@@ -154,8 +164,11 @@ export async function saveDonationEntryAction(
     revalidatePath("/donasi");
     revalidatePath("/dashboard");
     return { success: true, message: "Data donasi berhasil disimpan." };
-  } catch {
-    return { success: false, message: "Gagal menyimpan data donasi." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menyimpan data donasi."),
+    };
   }
 }
 
@@ -179,8 +192,11 @@ export async function deleteDonationEntryAction(
     revalidatePath("/donasi");
     revalidatePath("/dashboard");
     return { success: true, message: "Data donasi berhasil dihapus." };
-  } catch {
-    return { success: false, message: "Gagal menghapus data donasi." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menghapus data donasi."),
+    };
   }
 }
 
@@ -220,7 +236,10 @@ export async function updateDonationStatusAction(
     revalidatePath("/donasi");
     revalidatePath("/dashboard");
     return { success: true, message: "Status donasi berhasil diperbarui." };
-  } catch {
-    return { success: false, message: "Gagal memperbarui status donasi." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal memperbarui status donasi."),
+    };
   }
 }

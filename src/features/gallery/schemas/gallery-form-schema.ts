@@ -1,11 +1,16 @@
 import { z } from "zod";
 
+const isValidDateString = (value: string) => !Number.isNaN(new Date(value).getTime());
+
 export const galleryFormSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, "Judul minimal 3 karakter."),
   category: z.string().min(3, "Kategori minimal 3 karakter."),
   imageUrl: z.string().url("Foto harus berupa URL valid."),
-  activityDate: z.string().min(1, "Tanggal kegiatan wajib diisi."),
+  activityDate: z
+    .string()
+    .min(1, "Tanggal kegiatan wajib diisi.")
+    .refine(isValidDateString, "Tanggal kegiatan tidak valid."),
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
 });
 

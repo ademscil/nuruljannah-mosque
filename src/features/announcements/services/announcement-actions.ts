@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { hasPermission } from "@/lib/role-guard";
 import { prisma } from "@/lib/prisma";
+import { getPrismaActionErrorMessage } from "@/lib/prisma-action-error";
 import {
   announcementFormSchema,
   type AnnouncementFormSchema,
@@ -70,8 +71,11 @@ export async function saveAnnouncementAction(
     revalidatePath("/pengumuman");
 
     return { success: true, message: "Pengumuman berhasil disimpan." };
-  } catch {
-    return { success: false, message: "Gagal menyimpan pengumuman." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menyimpan pengumuman."),
+    };
   }
 }
 
@@ -91,7 +95,10 @@ export async function deleteAnnouncementAction(
     revalidatePath("/pengumuman");
 
     return { success: true, message: "Pengumuman berhasil dihapus." };
-  } catch {
-    return { success: false, message: "Gagal menghapus pengumuman." };
+  } catch (error) {
+    return {
+      success: false,
+      message: getPrismaActionErrorMessage(error, "Gagal menghapus pengumuman."),
+    };
   }
 }

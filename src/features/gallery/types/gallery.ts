@@ -5,5 +5,4 @@ export type GalleryItemRecord = {
   imageUrl: string;
   activityDate: string;
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
-  source: "database" | "fallback";
 };

@@ -7,5 +7,4 @@ export type ManagementMemberItem = {
   termPeriod: string;
   photoUrl: string | null;
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
-  source: "database" | "fallback";
 };

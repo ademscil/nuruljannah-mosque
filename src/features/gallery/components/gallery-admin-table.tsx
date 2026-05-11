@@ -38,12 +38,6 @@ export function GalleryAdminTable({ items }: GalleryAdminTableProps) {
         header: "Status",
         cell: ({ row }) => <StatusBadge label="Publish" value={row.original.status} />,
       },
-      {
-        accessorKey: "source",
-        header: "Sumber",
-        cell: ({ row }) =>
-          row.original.source === "database" ? "Database" : "Demo",
-      },
     ],
     [],
   );

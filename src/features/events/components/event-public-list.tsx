@@ -1,4 +1,4 @@
-import { CalendarDays, MapPin, Star, UserRound, Clock } from "lucide-react";
+import { CalendarDays, MapPin, Star, UserRound } from "lucide-react";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { EmptyState } from "@/components/shared/empty-state";
 import { formatDateIndonesia } from "@/lib/format-date";

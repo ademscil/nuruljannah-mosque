@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
 import { ROUTE_PATHS } from "@/constants/routes";
+import { getPrismaActionErrorMessage } from "@/lib/prisma-action-error";
+import { hasPermission } from "@/lib/role-guard";
 import {
   homepageContentSchema,
   type HomepageContentSchema,
@@ -19,6 +21,14 @@ export async function saveHomepageContentAction(
   input: HomepageContentSchema & { id?: string },
 ): Promise<HomepageActionState> {
   const session = await auth();
+
+  if (!session?.user || !hasPermission(session.user.role, "cms")) {
+    return {
+      success: false,
+      message: "Anda tidak memiliki akses untuk mengubah CMS Beranda.",
+    };
+  }
+
   const parsed = homepageContentSchema.safeParse(input);
 
   if (!parsed.success) {
@@ -32,7 +42,7 @@ export async function saveHomepageContentAction(
     await saveHomepageContent({
       id: input.id,
       ...parsed.data,
-      userId: session?.user.id,
+      userId: session.user.id,
     });
 
     revalidatePath(ROUTE_PATHS.home);
@@ -42,11 +52,13 @@ export async function saveHomepageContentAction(
       success: true,
       message: "Konten beranda berhasil disimpan.",
     };
-  } catch {
+  } catch (error) {
     return {
       success: false,
-      message:
+      message: getPrismaActionErrorMessage(
+        error,
         "Gagal menyimpan ke database. Pastikan PostgreSQL atau Supabase sudah terhubung.",
+      ),
     };
   }
 }

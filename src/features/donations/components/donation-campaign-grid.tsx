@@ -1,4 +1,4 @@
-import { Landmark, QrCode, WalletCards, Target } from "lucide-react";
+import { Landmark, QrCode, WalletCards } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { formatRupiah } from "@/lib/format-rupiah";
 import type { DonationCampaignItem } from "@/features/donations/types/donation";

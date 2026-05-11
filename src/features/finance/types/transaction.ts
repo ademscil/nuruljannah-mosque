@@ -6,7 +6,6 @@ export type TransactionListItem = {
   transactionAt: string;
   description: string;
   attachmentUrl: string | null;
-  source: "database" | "fallback";
 };
 
 export type FinanceSummary = {

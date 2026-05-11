@@ -5,13 +5,15 @@ import { formatDateIndonesia } from "@/lib/format-date";
 import type { GalleryItemRecord } from "@/features/gallery/types/gallery";
 
 export function GalleryPublicGrid({ items }: { items: GalleryItemRecord[] }) {
-  if (items.length === 0) {
+  const publishedItems = items.filter((item) => item.status === "PUBLISHED");
+
+  if (publishedItems.length === 0) {
     return <EmptyState icon={ImageIcon} title="Belum ada galeri kegiatan" description="Dokumentasi kegiatan akan tampil setelah dipublikasikan pengurus." />;
   }
 
   return (
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {items.map((item, i) => (
+      {publishedItems.map((item, i) => (
         <article
           key={item.id}
           style={{ animationDelay: `${i * 60}ms` }}

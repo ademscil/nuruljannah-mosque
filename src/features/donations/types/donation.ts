@@ -11,7 +11,6 @@ export type DonationCampaignItem = {
   isActive: boolean;
   donationCount: number;
   progress: number;
-  source: "database" | "fallback";
 };
 
 export type DonationListItem = {
@@ -25,7 +24,6 @@ export type DonationListItem = {
   donatedAt: string;
   campaignId: string;
   campaignTitle: string;
-  source: "database" | "fallback";
 };
 
 export type DonationSummary = {

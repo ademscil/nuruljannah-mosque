@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const isValidDateString = (value: string) => !Number.isNaN(new Date(value).getTime());
+
 export const announcementFormSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(5, "Judul minimal 5 karakter."),
@@ -7,7 +9,10 @@ export const announcementFormSchema = z.object({
   content: z.string().min(20, "Isi pengumuman minimal 20 karakter."),
   category: z.string().min(3, "Kategori minimal 3 karakter."),
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
-  publishedAt: z.string().optional(),
+  publishedAt: z
+    .string()
+    .optional()
+    .refine((value) => !value || isValidDateString(value), "Tanggal publish tidak valid."),
   thumbnailUrl: z.string().url("Thumbnail harus berupa URL valid.").or(z.literal("")),
 });
 
