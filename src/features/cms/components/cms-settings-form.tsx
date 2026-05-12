@@ -1,15 +1,20 @@
 "use client";
 
 import { useTransition } from "react";
+import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { type CmsSettingsSchema } from "@/features/cms/schemas/cms-settings-schema";
-import { saveCmsSettingsAction } from "@/features/cms/services/cms-settings-actions";
+import {
+  saveCmsSettingsAction,
+  uploadHeroVideoAction,
+} from "@/features/cms/services/cms-settings-actions";
 import type { CmsSettingsRecord } from "@/features/cms/types/cms-settings";
 
 type CmsSettingsFormProps = {
@@ -37,6 +42,8 @@ function splitLines(value: string): string[] {
 
 export function CmsSettingsForm({ initialData }: CmsSettingsFormProps) {
   const [isPending, startTransition] = useTransition();
+  const [isUploadingVideo, startVideoUploadTransition] = useTransition();
+  const [selectedVideoFile, setSelectedVideoFile] = useState<File | null>(null);
 
   const form = useForm<CmsSettingsFormValues>({
     defaultValues: {
@@ -69,6 +76,30 @@ export function CmsSettingsForm({ initialData }: CmsSettingsFormProps) {
 
   const heroVideoType =
     heroVideoUrl?.toLowerCase().includes(".mp4") ? "video/mp4" : "video/webm";
+
+  const handleVideoUpload = (file: File | null) => {
+    if (!file) {
+      toast.error("Pilih file video dulu.");
+      return;
+    }
+
+    startVideoUploadTransition(async () => {
+      const uploadData = new FormData();
+      uploadData.append("video", file);
+
+      const result = await uploadHeroVideoAction(uploadData);
+      if (!result.success || !result.url) {
+        toast.error(result.message);
+        return;
+      }
+
+      form.setValue("heroVideoUrlText", result.url, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+      toast.success("Upload berhasil. Jangan lupa klik Simpan CMS Global.");
+    });
+  };
 
   const handleSubmit = (values: CmsSettingsFormValues) => {
     let parsedContentBlocks: CmsSettingsSchema["contentBlocks"];
@@ -192,7 +223,38 @@ export function CmsSettingsForm({ initialData }: CmsSettingsFormProps) {
           label="Hero Video URL"
           hint="Gunakan URL video publik langsung (mp4/webm)."
         >
-          <Input placeholder="https://..." {...form.register("heroVideoUrlText")} />
+          <div className="space-y-3">
+            <Input placeholder="https://..." {...form.register("heroVideoUrlText")} />
+            <div className="rounded-xl border border-border/80 bg-muted/25 p-3">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                Upload Video Hero
+              </p>
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
+                <Input
+                  type="file"
+                  accept="video/mp4,video/webm"
+                  onChange={(event) => {
+                    const selectedFile = event.target.files?.[0] ?? null;
+                    setSelectedVideoFile(selectedFile);
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isUploadingVideo || !selectedVideoFile}
+                  onClick={() => {
+                    handleVideoUpload(selectedVideoFile);
+                    setSelectedVideoFile(null);
+                  }}
+                >
+                  {isUploadingVideo ? "Mengupload..." : "Upload Otomatis"}
+                </Button>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Format: MP4/WEBM, maksimal 80MB.
+              </p>
+            </div>
+          </div>
         </FormFieldWrapper>
         <div className="md:col-span-2 rounded-2xl border border-border bg-muted/30 p-4">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
