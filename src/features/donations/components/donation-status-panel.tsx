@@ -1,14 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { HandCoins, LoaderCircle } from "lucide-react";
+import { HandCoins } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { EmptyState } from "@/components/shared/empty-state";
+import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -126,16 +126,14 @@ export function DonationStatusPanel({ donations }: DonationStatusPanelProps) {
             <Textarea rows={3} placeholder="Catatan verifikasi dari bendahara..." {...form.register("note")} />
           </FormFieldWrapper>
 
-          <Button type="submit" disabled={isPending} className="button-brand">
-            {isPending ? (
-              <>
-                <LoaderCircle className="size-4 animate-spin" />
-                Menyimpan...
-              </>
-            ) : (
-              "Simpan Status Donasi"
-            )}
-          </Button>
+          <ConfirmSubmitButton
+            title="Simpan status donasi?"
+            description="Status donasi ini akan memengaruhi laporan dan progres campaign."
+            label="Simpan Status Donasi"
+            pendingLabel="Menyimpan..."
+            isPending={isPending}
+            onConfirm={() => form.handleSubmit(handleSubmit)()}
+          />
         </form>
       ) : (
         <div className="mt-6">

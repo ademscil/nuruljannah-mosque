@@ -9,12 +9,12 @@ type FormPanelProps = {
 
 export function FormPanel({ title, description, children, className }: FormPanelProps) {
   return (
-    <div className={cn("card-elevated p-6 space-y-5", className)}>
-      <div>
-        <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+    <div className={cn("card-hero islamic-grid space-y-5 overflow-hidden p-6", className)}>
+      <div className="relative z-10">
+        <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{description}</p>
       </div>
-      {children}
+      <div className="relative z-10">{children}</div>
     </div>
   );
 }

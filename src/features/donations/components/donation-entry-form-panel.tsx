@@ -1,12 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { HandCoins, LoaderCircle, Trash2 } from "lucide-react";
+import { HandCoins, Trash2 } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
 import { Button } from "@/components/ui/button";
@@ -236,16 +237,14 @@ export function DonationEntryFormPanel({
           </FormFieldWrapper>
 
           <div className="flex flex-wrap gap-3">
-            <Button type="submit" disabled={isPending} className="button-brand">
-              {isPending ? (
-                <>
-                  <LoaderCircle className="size-4 animate-spin" />
-                  Menyimpan...
-                </>
-              ) : (
-                "Simpan Donasi"
-              )}
-            </Button>
+            <ConfirmSubmitButton
+              title="Simpan data donasi?"
+              description="Perubahan akan memperbarui ringkasan donasi pada dashboard."
+              label="Simpan Donasi"
+              pendingLabel="Menyimpan..."
+              isPending={isPending}
+              onConfirm={() => form.handleSubmit(handleSubmit)()}
+            />
             {selectedDonation ? (
               <ConfirmDialog
                 title="Hapus data donasi?"

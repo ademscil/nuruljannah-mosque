@@ -1,12 +1,11 @@
 "use client";
 
-import { LoaderCircle } from "lucide-react";
 import { useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
+import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { type CmsSettingsSchema } from "@/features/cms/schemas/cms-settings-schema";
@@ -304,16 +303,14 @@ export function CmsSettingsForm({ initialData }: CmsSettingsFormProps) {
         </FormFieldWrapper>
       </div>
 
-      <Button type="submit" disabled={isPending} className="btn-primary">
-        {isPending ? (
-          <>
-            <LoaderCircle className="size-4 animate-spin" />
-            Menyimpan...
-          </>
-        ) : (
-          "Simpan CMS Global"
-        )}
-      </Button>
+      <ConfirmSubmitButton
+        title="Simpan pengaturan CMS global?"
+        description="Perubahan ini dipakai di banyak komponen publik dan admin."
+        label="Simpan CMS Global"
+        pendingLabel="Menyimpan..."
+        isPending={isPending}
+        onConfirm={() => form.handleSubmit(handleSubmit)()}
+      />
     </form>
   );
 }

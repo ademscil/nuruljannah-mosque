@@ -1,12 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -180,16 +181,14 @@ export function ManagementFormPanel({ members }: ManagementFormPanelProps) {
           <Input placeholder="https://drive.google.com/..." {...form.register("photoUrl")} />
         </FormFieldWrapper>
         <div className="flex flex-wrap gap-3">
-          <Button type="submit" disabled={isPending} className="button-brand">
-            {isPending ? (
-              <>
-                <LoaderCircle className="size-4 animate-spin" />
-                Menyimpan...
-              </>
-            ) : (
-              "Simpan Pengurus"
-            )}
-          </Button>
+          <ConfirmSubmitButton
+            title="Simpan data pengurus?"
+            description="Perubahan ini akan digunakan di halaman profil pengurus."
+            label="Simpan Pengurus"
+            pendingLabel="Menyimpan..."
+            isPending={isPending}
+            onConfirm={() => form.handleSubmit(handleSubmit)()}
+          />
           {selectedMember ? (
             <ConfirmDialog
               title="Hapus data pengurus?"

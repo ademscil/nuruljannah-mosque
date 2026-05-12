@@ -45,13 +45,13 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-[1.5rem] border border-border bg-white shadow-sm">
+      <div className="overflow-hidden rounded-[1.25rem] border border-border/80 bg-white shadow-[0_18px_40px_-24px_oklch(0.18_0.018_250_/_0.35)]">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="bg-muted/40 hover:bg-muted/40">
+              <TableRow key={headerGroup.id} className="bg-muted/35 hover:bg-muted/35">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="h-12 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                  <TableHead key={header.id} className="h-12 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/90">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows.length > 0 ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} className="hover:bg-muted/20">
+                <TableRow key={row.id} className="hover:bg-primary/[0.04]">
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="py-4">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -1,15 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle } from "lucide-react";
 import { useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
+import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { ContentPreviewCard } from "@/components/shared/content-preview-card";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
 import { StatusBadge } from "@/components/shared/status-badge";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -272,16 +271,14 @@ export function HomepageContentForm({
           </FormFieldWrapper>
         </div>
 
-        <Button type="submit" disabled={isPending} className="btn-primary">
-          {isPending ? (
-            <>
-              <LoaderCircle className="size-4 animate-spin" />
-              Menyimpan...
-            </>
-          ) : (
-            "Simpan CMS Beranda"
-          )}
-        </Button>
+        <ConfirmSubmitButton
+          title="Simpan perubahan CMS beranda?"
+          description="Perubahan ini akan langsung memengaruhi tampilan halaman utama website."
+          label="Simpan CMS Beranda"
+          pendingLabel="Menyimpan..."
+          isPending={isPending}
+          onConfirm={() => form.handleSubmit(handleSubmit)()}
+        />
       </form>
 
       <div className="space-y-4">

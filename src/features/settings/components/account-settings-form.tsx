@@ -1,13 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle } from "lucide-react";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   saveAccountSettingsAction,
@@ -91,16 +90,14 @@ export function AccountSettingsForm({
         </div>
 
         <div className="mt-6">
-          <Button type="submit" disabled={isPending} className="button-brand">
-            {isPending ? (
-              <>
-                <LoaderCircle className="size-4 animate-spin" />
-                Menyimpan...
-              </>
-            ) : (
-              "Simpan Pengaturan Akun"
-            )}
-          </Button>
+          <ConfirmSubmitButton
+            title="Simpan pengaturan akun?"
+            description="Pastikan email dan kata sandi baru sudah benar sebelum disimpan."
+            label="Simpan Pengaturan Akun"
+            pendingLabel="Menyimpan..."
+            isPending={isPending}
+            onConfirm={() => form.handleSubmit(handleSubmit)()}
+          />
         </div>
       </form>
 
