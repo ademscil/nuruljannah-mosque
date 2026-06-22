@@ -47,7 +47,7 @@ export function AnnouncementAdminTable({ announcements }: { announcements: Annou
   });
 
   return (
-    <div className="card-elevated p-6 space-y-5">
+    <div className="card-3d-depth p-6 space-y-5">
       <div className="grid gap-3 md:grid-cols-[1fr_200px]">
         <SearchInput value={query} placeholder="Cari judul atau kategori..." onChange={setQuery} />
         <FilterSelect placeholder="Filter status" value={status} onValueChange={setStatus} options={[

@@ -19,21 +19,21 @@ export default async function ProfilMasjidPage() {
       sidebarDescription={cmsSettings.profileSidebarDescription}
       sidebarItems={cmsSettings.profileSidebarItems}
     >
-      <div className="card-hero p-8">
+      <div className="card-3d-depth p-8">
         <div className="badge-primary mb-4">{cmsSettings.contentBlocks.profileAboutTitle}</div>
         <h2 className="font-heading text-3xl font-semibold leading-snug">{cmsSettings.contentBlocks.profileAboutHeading}</h2>
         <p className="mt-4 text-base leading-8 text-muted-foreground">{cmsSettings.contentBlocks.profileAboutContent}</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="card-elevated group p-6 transition-all duration-300 hover:-translate-y-0.5">
+      <div className="grid gap-4 md:grid-cols-2 perspective-normal">
+        <div className="card-3d animate-card-entry group p-6">
           <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/8 text-primary transition-transform duration-300 group-hover:scale-110">
             <Target className="size-5" />
           </div>
           <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-primary">{cmsSettings.contentBlocks.profileVisionTitle}</p>
           <p className="mt-3 text-sm leading-7 text-muted-foreground">{cmsSettings.contentBlocks.profileVisionContent}</p>
         </div>
-        <div className="card-elevated group p-6 transition-all duration-300 hover:-translate-y-0.5">
+        <div className="card-3d animate-card-entry delay-100 group p-6">
           <div className="flex size-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 transition-transform duration-300 group-hover:scale-110">
             <Heart className="size-5" />
           </div>
@@ -42,7 +42,7 @@ export default async function ProfilMasjidPage() {
         </div>
       </div>
 
-      <div className="card-elevated p-7">
+      <div className="card-3d p-7">
         <div className="mb-5 flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-teal-50 text-teal-600">
             <Building2 className="size-5" />
@@ -54,7 +54,7 @@ export default async function ProfilMasjidPage() {
         </div>
         <div className="grid gap-2.5 md:grid-cols-2">
           {cmsSettings.profileFacilities.map((item) => (
-            <div key={item} className="flex items-center gap-3 rounded-xl border border-border bg-muted/30 px-4 py-3 text-sm transition-colors hover:bg-white">
+            <div key={item} className="interactive-3d flex items-center gap-3 rounded-xl border border-border bg-muted/30 px-4 py-3 text-sm transition-colors hover:bg-white">
               <CheckCircle2 className="size-4 shrink-0 text-primary" />
               <span>{item}</span>
             </div>

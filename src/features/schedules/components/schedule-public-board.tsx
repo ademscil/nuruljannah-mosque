@@ -1,6 +1,7 @@
 import { Clock3, UserRound, CalendarClock } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { formatDateIndonesia } from "@/lib/format-date";
+import { Card3D } from "@/components/shared/card-3d";
 import type { ScheduleListItem } from "@/features/schedules/types/schedule";
 
 const roleConfig = {
@@ -16,18 +17,22 @@ export function SchedulePublicBoard({ schedules }: { schedules: ScheduleListItem
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
+    <div className="grid gap-5 perspective-normal lg:grid-cols-2">
       {schedules.map((item, i) => {
         const role = roleConfig[item.roleType];
+        const roleIconBg = {
+          IMAM: "bg-primary/10",
+          MUADZIN: "bg-amber-100",
+          KHATIB: "bg-teal-100",
+          PETUGAS_KEGIATAN: "bg-violet-100",
+        }[item.roleType];
+
         return (
-          <article
-            key={item.id}
-            style={{ animationDelay: `${i * 60}ms` }}
-            className="animate-fade-up card-elevated group p-6 transition-all duration-300 hover:-translate-y-0.5"
-          >
+          <Card3D key={item.id} variant="magnetic" delay={i * 0.06} className="group p-6">
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1.5">
-                <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${role.color}`}>
+                <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${role.color} transition-all duration-300 group-hover:scale-105`}>
+                  <span className={`size-1.5 rounded-full ${roleIconBg} transition-transform duration-300 group-hover:scale-125`} />
                   {role.label}
                 </span>
                 <h2 className="text-xl font-semibold tracking-tight">{item.title}</h2>
@@ -35,22 +40,26 @@ export function SchedulePublicBoard({ schedules }: { schedules: ScheduleListItem
             </div>
 
             <div className="mt-5 space-y-2.5">
-              <div className="flex items-center gap-3 rounded-xl bg-muted/40 px-4 py-3">
-                <Clock3 className="size-4 shrink-0 text-primary" />
+              <div className="interactive-3d flex items-center gap-3 rounded-xl bg-muted/40 px-4 py-3">
+                <div className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${roleIconBg} transition-transform duration-300 group-hover:scale-110`}>
+                  <Clock3 className="size-4 text-primary" />
+                </div>
                 <div className="text-sm">
                   <p className="font-medium">{formatDateIndonesia(item.scheduleFor)}</p>
                   <p className="text-muted-foreground">{item.timeLabel}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 rounded-xl bg-muted/40 px-4 py-3">
-                <UserRound className="size-4 shrink-0 text-primary" />
+              <div className="interactive-3d flex items-center gap-3 rounded-xl bg-muted/40 px-4 py-3">
+                <div className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${roleIconBg} transition-transform duration-300 group-hover:scale-110`}>
+                  <UserRound className="size-4 text-primary" />
+                </div>
                 <div className="text-sm">
                   <p className="font-medium">{item.personName}</p>
                   <p className="text-muted-foreground">{item.notes ?? "Tanpa catatan tambahan"}</p>
                 </div>
               </div>
             </div>
-          </article>
+          </Card3D>
         );
       })}
     </div>

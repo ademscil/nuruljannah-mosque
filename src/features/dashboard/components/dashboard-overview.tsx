@@ -76,17 +76,17 @@ export async function DashboardOverview() {
       />
 
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map((s) => <StatsCard key={s.title} {...s} />)}
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 perspective-normal">
+        {stats.map((s, i) => <StatsCard key={s.title} {...s} />)}
       </div>
 
       {/* Middle row */}
-      <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+      <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr] perspective-normal">
         {/* Modul aktif */}
-        <div className="card-hero p-7">
+        <div className="card-3d-depth p-7">
           <div className="badge-primary mb-5">Modul Aktif</div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="card-base group p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="grid gap-4 sm:grid-cols-2 perspective-normal">
+            <div className="card-3d animate-card-entry group p-5">
               <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition-transform duration-300 group-hover:scale-110">
                 <Landmark className="size-5" />
               </div>
@@ -94,7 +94,7 @@ export async function DashboardOverview() {
               <p className="mt-1.5 text-lg font-bold">Saldo {formatRupiah(fin.balance)}</p>
               <p className="mt-1 text-sm text-muted-foreground">Dihitung dari seluruh transaksi pemasukan dan pengeluaran.</p>
             </div>
-            <div className="card-base group p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+            <div className="card-3d animate-card-entry delay-100 group p-5">
               <div className="flex size-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 transition-transform duration-300 group-hover:scale-110">
                 <HeartHandshake className="size-5" />
               </div>
@@ -106,7 +106,7 @@ export async function DashboardOverview() {
         </div>
 
         {/* Pengumuman aktif */}
-        <div className="card-hero p-7">
+        <div className="card-3d-depth p-7">
           <div className="flex items-center gap-2 mb-5">
             <div className="badge-primary">
               <Bell className="size-3" />
@@ -115,7 +115,7 @@ export async function DashboardOverview() {
           </div>
           <div className="space-y-3">
             {published.length > 0 ? published.slice(0, 3).map((item) => (
-              <div key={item.id} className="rounded-xl border border-border bg-muted/30 p-4 transition-colors hover:bg-white">
+              <div key={item.id} className="interactive-3d rounded-xl border border-border bg-muted/30 p-4 transition-colors hover:bg-white">
                 <p className="text-sm font-semibold leading-snug">{item.title}</p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {item.category} · {item.publishedAt ? formatDateIndonesia(item.publishedAt) : "—"}
@@ -129,16 +129,16 @@ export async function DashboardOverview() {
       </div>
 
       {/* Bottom row */}
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid gap-6 xl:grid-cols-2 perspective-normal">
         {/* Agenda */}
-        <div className="card-hero p-7">
+        <div className="card-3d-depth p-7">
           <div className="badge-primary mb-5">
             <CalendarClock className="size-3" />
             Agenda Terdekat
           </div>
           <div className="space-y-3">
             {upcoming.length > 0 ? upcoming.map((item) => (
-              <div key={item.id} className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-4 transition-colors hover:bg-white">
+              <div key={item.id} className="interactive-3d flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-4 transition-colors hover:bg-white">
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/8 text-primary">
                   <CalendarClock className="size-4" />
                 </div>
@@ -154,14 +154,14 @@ export async function DashboardOverview() {
         </div>
 
         {/* Jadwal petugas */}
-        <div className="card-hero p-7">
+        <div className="card-3d-depth p-7">
           <div className="badge-amber mb-5">
             <Clock className="size-3" />
             Jadwal Petugas
           </div>
           <div className="space-y-3">
             {todaySched.length > 0 ? todaySched.map((item) => (
-              <div key={item.id} className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-4 transition-colors hover:bg-white">
+              <div key={item.id} className="interactive-3d flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-4 transition-colors hover:bg-white">
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
                   <Clock className="size-4" />
                 </div>
@@ -180,14 +180,14 @@ export async function DashboardOverview() {
       {/* Activity feed */}
       <div className="space-y-4">
         <SectionHeader title="Aktivitas Terbaru" description="Ringkasan pembaruan modul yang paling sering dipantau pengurus." />
-        <div className="card-hero p-7">
+        <div className="card-3d-depth p-7">
           <div className="space-y-3">
             {[
               { icon: Landmark, text: `Bendahara memperbarui ${transactions[0]?.description ?? "data transaksi kas"}.`, color: "bg-emerald-50 text-emerald-600" },
               { icon: Megaphone, text: `Sekretaris mengelola ${published[0]?.title ?? "pengumuman terbaru"}.`, color: "bg-amber-50 text-amber-600" },
               { icon: TrendingUp, text: `Koordinator menjadwalkan ${todaySched[0]?.title ?? "petugas ibadah"}.`, color: "bg-primary/8 text-primary" },
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 rounded-xl border border-border/60 bg-muted/20 px-4 py-3 transition-colors hover:bg-white">
+              <div key={i} className="interactive-3d flex items-center gap-3 rounded-xl border border-border/60 bg-muted/20 px-4 py-3 transition-colors hover:bg-white">
                 <div className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${item.color}`}>
                   <item.icon className="size-4" />
                 </div>

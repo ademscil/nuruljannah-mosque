@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "./3d-advanced.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -168,6 +169,45 @@
   50%       { opacity: 0.5; transform: scale(0.8); }
 }
 
+/* ── 3D Keyframes ───────────────────────────────────────── */
+@keyframes rotate-3d {
+  from { transform: perspective(1200px) rotateY(0deg); }
+  to   { transform: perspective(1200px) rotateY(360deg); }
+}
+
+@keyframes tilt-3d {
+  0%, 100% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg); }
+  25%      { transform: perspective(1000px) rotateX(5deg) rotateY(-5deg); }
+  50%      { transform: perspective(1000px) rotateX(-5deg) rotateY(5deg); }
+  75%      { transform: perspective(1000px) rotateX(5deg) rotateY(5deg); }
+}
+
+@keyframes float-3d {
+  0%, 100% { transform: perspective(1000px) translateY(0) translateZ(0); }
+  50%      { transform: perspective(1000px) translateY(-20px) translateZ(20px); }
+}
+
+@keyframes depth-pulse {
+  0%, 100% { transform: perspective(1000px) translateZ(0); }
+  50%      { transform: perspective(1000px) translateZ(50px); }
+}
+
+@keyframes card-entry {
+  from { 
+    opacity: 0; 
+    transform: perspective(1000px) translateY(30px) rotateX(-15deg) scale(0.95);
+  }
+  to { 
+    opacity: 1; 
+    transform: perspective(1000px) translateY(0) rotateX(0) scale(1);
+  }
+}
+
+@keyframes parallax-float {
+  0%, 100% { transform: perspective(1200px) translateZ(0) translateY(0); }
+  50%      { transform: perspective(1200px) translateZ(30px) translateY(-10px); }
+}
+
 /* ── Utilities ──────────────────────────────────────────── */
 @layer utilities {
 
@@ -331,5 +371,260 @@
   /* ── Nav ── */
   .nav-active {
     @apply bg-primary/10 font-semibold text-primary;
+  }
+
+  /* ── 3D Cards ──────────────────────────────────────────── */
+  .card-3d {
+    @apply rounded-3xl border border-border bg-card;
+    transform-style: preserve-3d;
+    box-shadow: 
+      0 10px 40px -10px oklch(0.18 0.018 250 / 0.12),
+      0 0 0 1px oklch(0.18 0.018 250 / 0.05),
+      inset 0 1px 0 0 oklch(1 0 0 / 0.5);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .card-3d:hover {
+    transform: translateY(-8px) translateZ(20px);
+    box-shadow: 
+      0 24px 60px -12px oklch(0.18 0.018 250 / 0.18),
+      0 0 0 1px oklch(0.18 0.018 250 / 0.08),
+      inset 0 1px 0 0 oklch(1 0 0 / 0.7);
+  }
+
+  .card-3d-tilt {
+    @apply rounded-3xl border border-border bg-card;
+    transform-style: preserve-3d;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 
+      0 12px 40px -8px oklch(0.18 0.018 250 / 0.14),
+      inset 0 1px 0 0 oklch(1 0 0 / 0.5);
+  }
+
+  .card-3d-tilt:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(10px);
+    box-shadow: 
+      0 20px 60px -10px oklch(0.18 0.018 250 / 0.2),
+      inset 0 1px 0 0 oklch(1 0 0 / 0.8);
+  }
+
+  .card-3d-float {
+    @apply rounded-3xl border border-border bg-card;
+    transform-style: preserve-3d;
+    animation: float-3d 6s ease-in-out infinite;
+    box-shadow: 
+      0 15px 45px -12px oklch(0.18 0.018 250 / 0.15),
+      inset 0 1px 0 0 oklch(1 0 0 / 0.6);
+  }
+
+  .card-3d-depth {
+    @apply rounded-3xl border border-border bg-card;
+    transform-style: preserve-3d;
+    position: relative;
+    box-shadow: 
+      0 8px 32px -8px oklch(0.18 0.018 250 / 0.12),
+      0 0 0 1px oklch(0.18 0.018 250 / 0.05);
+  }
+
+  .card-3d-depth::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.8) 0%,
+      oklch(0.98 0.004 80 / 0.4) 100%
+    );
+    transform: translateZ(-1px);
+    z-index: -1;
+  }
+
+  .card-3d-depth:hover {
+    transform: translateZ(20px);
+    box-shadow: 
+      0 20px 60px -10px oklch(0.18 0.018 250 / 0.2),
+      0 0 0 1px oklch(0.18 0.018 250 / 0.08);
+  }
+
+  .glass-3d {
+    @apply rounded-3xl border border-white/30;
+    background: linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.7) 0%,
+      oklch(0.98 0.004 80 / 0.5) 100%
+    );
+    backdrop-filter: blur(20px);
+    transform-style: preserve-3d;
+    box-shadow: 
+      0 15px 45px -10px oklch(0.18 0.018 250 / 0.1),
+      inset 0 1px 0 0 oklch(1 0 0 / 0.8),
+      inset 0 -1px 0 0 oklch(0.18 0.018 250 / 0.05);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .glass-3d:hover {
+    transform: translateY(-6px) translateZ(15px);
+    background: linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.85) 0%,
+      oklch(0.98 0.004 80 / 0.65) 100%
+    );
+    box-shadow: 
+      0 25px 65px -12px oklch(0.18 0.018 250 / 0.15),
+      inset 0 1px 0 0 oklch(1 0 0 / 0.95),
+      inset 0 -1px 0 0 oklch(0.18 0.018 250 / 0.08);
+  }
+
+  /* ── 3D Perspectives ────────────────────────────────────── */
+  .perspective-far {
+    perspective: 2000px;
+    transform-style: preserve-3d;
+  }
+
+  .perspective-normal {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  .perspective-close {
+    perspective: 500px;
+    transform-style: preserve-3d;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  /* ── 3D Transforms ──────────────────────────────────────── */
+  .lift-3d {
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .lift-3d:hover {
+    transform: perspective(1000px) translateZ(40px) translateY(-5px);
+  }
+
+  .tilt-left-3d:hover {
+    transform: perspective(1000px) rotateY(-8deg) translateZ(20px);
+  }
+
+  .tilt-right-3d:hover {
+    transform: perspective(1000px) rotateY(8deg) translateZ(20px);
+  }
+
+  .tilt-up-3d:hover {
+    transform: perspective(1000px) rotateX(8deg) translateZ(20px);
+  }
+
+  .tilt-down-3d:hover {
+    transform: perspective(1000px) rotateX(-8deg) translateZ(20px);
+  }
+
+  /* ── 3D Layers ──────────────────────────────────────────── */
+  .layer-1 {
+    transform: translateZ(10px);
+  }
+
+  .layer-2 {
+    transform: translateZ(20px);
+  }
+
+  .layer-3 {
+    transform: translateZ(30px);
+  }
+
+  .layer-4 {
+    transform: translateZ(40px);
+  }
+
+  .layer-back {
+    transform: translateZ(-10px);
+  }
+
+  /* ── 3D Buttons ─────────────────────────────────────────── */
+  .btn-3d {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground;
+    transform-style: preserve-3d;
+    position: relative;
+    box-shadow: 
+      0 8px 24px -8px oklch(0.38 0.1 175 / 0.5),
+      inset 0 1px 0 0 oklch(1 0 0 / 0.3);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-3d::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      oklch(0.42 0.11 175) 0%,
+      oklch(0.35 0.09 175) 100%
+    );
+    transform: translateZ(-4px);
+    z-index: -1;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-3d:hover {
+    transform: translateY(-4px) translateZ(10px);
+    box-shadow: 
+      0 16px 40px -10px oklch(0.38 0.1 175 / 0.6),
+      inset 0 1px 0 0 oklch(1 0 0 / 0.4);
+  }
+
+  .btn-3d:hover::before {
+    transform: translateZ(-8px);
+  }
+
+  .btn-3d:active {
+    transform: translateY(-1px) translateZ(5px);
+  }
+
+  /* ── 3D Animations ──────────────────────────────────────── */
+  .animate-rotate-3d { animation: rotate-3d 20s linear infinite; }
+  .animate-tilt-3d { animation: tilt-3d 8s ease-in-out infinite; }
+  .animate-float-3d { animation: float-3d 6s ease-in-out infinite; }
+  .animate-depth-pulse { animation: depth-pulse 4s ease-in-out infinite; }
+  .animate-card-entry { animation: card-entry 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .animate-parallax-float { animation: parallax-float 8s ease-in-out infinite; }
+
+  /* ── 3D Interactive ─────────────────────────────────────── */
+  .interactive-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .interactive-3d:hover {
+    transform: perspective(1000px) translateZ(30px) scale(1.02);
+  }
+
+  /* ── Parallax Layers ────────────────────────────────────── */
+  .parallax-scene {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+    position: relative;
+  }
+
+  .parallax-layer-base {
+    transform: translateZ(0);
+  }
+
+  .parallax-layer-1 {
+    transform: translateZ(50px);
+  }
+
+  .parallax-layer-2 {
+    transform: translateZ(100px);
+  }
+
+  .parallax-layer-3 {
+    transform: translateZ(150px);
+  }
+
+  .parallax-layer-back {
+    transform: translateZ(-50px);
   }
 }

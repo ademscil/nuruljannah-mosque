@@ -1,6 +1,7 @@
 import { TrendingUp, TrendingDown, Wallet, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { formatDateIndonesia } from "@/lib/format-date";
 import { formatRupiah } from "@/lib/format-rupiah";
+import { Card3D } from "@/components/shared/card-3d";
 import type { FinanceSummary, TransactionListItem } from "@/features/finance/types/transaction";
 
 type Props = { summary: FinanceSummary; transactions: TransactionListItem[] };
@@ -36,32 +37,32 @@ export function FinancePublicSummary({ summary, transactions }: Props) {
   return (
     <div className="space-y-8">
       {/* Summary cards */}
-      <div className="grid gap-4 md:grid-cols-3">
-        {summaryCards.map((card) => (
-          <div key={card.label} className="card-elevated group p-6 transition-all duration-300 hover:-translate-y-0.5">
+      <div className="grid gap-4 perspective-normal md:grid-cols-3">
+        {summaryCards.map((card, idx) => (
+          <Card3D key={card.label} variant="elevated" delay={idx * 0.08} className="group p-6">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-muted-foreground">{card.label}</p>
-              <div className={`flex size-10 items-center justify-center rounded-xl ${card.iconBg} transition-transform duration-300 group-hover:scale-110`}>
+              <div className={`flex size-10 items-center justify-center rounded-xl ${card.iconBg} transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
                 <card.icon className={`size-4 ${card.iconColor}`} />
               </div>
             </div>
             <p className={`mt-4 text-2xl font-bold tracking-tight ${card.valueColor}`}>{card.value}</p>
-          </div>
+          </Card3D>
         ))}
       </div>
 
       {/* Transaction list */}
-      <div className="card-hero p-8">
+      <Card3D variant="glass" className="p-8">
         <div className="badge-primary mb-6">Transaksi Terbaru</div>
         <div className="space-y-3">
           {transactions.slice(0, 8).map((item, i) => (
             <div
               key={item.id}
               style={{ animationDelay: `${i * 40}ms` }}
-              className="animate-fade-up flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-muted/30 px-5 py-4 transition-colors hover:bg-white"
+              className="animate-fade-up interactive-3d flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-muted/30 px-5 py-4 transition-all duration-300 hover:bg-white hover:shadow-md"
             >
               <div className="flex items-center gap-3">
-                <div className={`flex size-8 items-center justify-center rounded-full ${item.type === "INCOME" ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-rose-600"}`}>
+                <div className={`flex size-9 items-center justify-center rounded-full transition-transform duration-300 hover:scale-110 ${item.type === "INCOME" ? "bg-emerald-50 text-emerald-600 shadow-glow-primary/20" : "bg-rose-50 text-rose-600"}`}>
                   {item.type === "INCOME"
                     ? <ArrowUpRight className="size-4" />
                     : <ArrowDownRight className="size-4" />
@@ -80,7 +81,7 @@ export function FinancePublicSummary({ summary, transactions }: Props) {
             </div>
           ))}
         </div>
-      </div>
+      </Card3D>
     </div>
   );
 }

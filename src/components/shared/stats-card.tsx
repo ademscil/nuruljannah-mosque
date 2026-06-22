@@ -23,7 +23,7 @@ export function StatsCard({
   iconBg = "bg-primary/8",
 }: StatsCardProps) {
   return (
-    <div className="card-elevated group flex flex-col gap-4 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-16px_oklch(0.18_0.018_250_/_0.14)]">
+    <div className="card-3d animate-card-entry group flex flex-col gap-4 p-6">
       <div className="flex items-start justify-between">
         <p className="text-sm font-medium text-muted-foreground">{title}</p>
         <div className={cn("flex size-10 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110", iconBg)}>

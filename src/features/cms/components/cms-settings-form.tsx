@@ -74,8 +74,6 @@ export function CmsSettingsForm({ initialData }: CmsSettingsFormProps) {
     name: "heroVideoUrlText",
   });
 
-  const heroVideoType =
-    heroVideoUrl?.toLowerCase().includes(".mp4") ? "video/mp4" : "video/webm";
 
   const handleVideoUpload = (file: File | null) => {
     if (!file) {
@@ -102,14 +100,6 @@ export function CmsSettingsForm({ initialData }: CmsSettingsFormProps) {
   };
 
   const handleSubmit = (values: CmsSettingsFormValues) => {
-    let parsedContentBlocks: CmsSettingsSchema["contentBlocks"];
-    try {
-      parsedContentBlocks = JSON.parse(values.contentBlocksJson);
-    } catch {
-      toast.error("Format JSON Konten Publik tidak valid.");
-      return;
-    }
-
     const payload: CmsSettingsSchema & { id?: string } = {
       id: initialData.id,
       siteName: values.siteName,
@@ -152,7 +142,7 @@ export function CmsSettingsForm({ initialData }: CmsSettingsFormProps) {
         };
       }),
       contentBlocks: {
-        ...parsedContentBlocks,
+        ...initialData.contentBlocks, // Preserve all other contentBlocks properties
         heroVideoUrl: values.heroVideoUrlText.trim(),
         stats: splitLines(values.homeStatsText).map((line) => {
           const [label, value] = line.split("|");
@@ -262,15 +252,14 @@ export function CmsSettingsForm({ initialData }: CmsSettingsFormProps) {
           </p>
           {heroVideoUrl ? (
             <video
+              src={heroVideoUrl}
               autoPlay
               loop
               muted
               playsInline
               controls
               className="h-56 w-full rounded-xl object-cover"
-            >
-              <source src={heroVideoUrl} type={heroVideoType} />
-            </video>
+            />
           ) : (
             <p className="text-sm text-muted-foreground">
               Isi URL video untuk melihat preview.
@@ -354,14 +343,6 @@ export function CmsSettingsForm({ initialData }: CmsSettingsFormProps) {
 
         <FormFieldWrapper label="Card Layanan Beranda (Judul|Deskripsi)" className="md:col-span-2">
           <Textarea rows={6} {...form.register("homeServicesText")} />
-        </FormFieldWrapper>
-
-        <FormFieldWrapper
-          label="JSON Konten Publik Lengkap (Advanced)"
-          hint="Semua teks komponen publik bisa diubah dari JSON ini."
-          className="md:col-span-2"
-        >
-          <Textarea rows={16} {...form.register("contentBlocksJson")} />
         </FormFieldWrapper>
       </div>
 

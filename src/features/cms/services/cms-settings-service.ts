@@ -74,7 +74,7 @@ const defaultCmsSettings: CmsSettingsRecord = {
     },
   ],
   contentBlocks: {
-    heroVideoUrl: "https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f4/Great_Mosque_of_Mecca_%284k_video%29_-_May_27%2C_2014.webm/Great_Mosque_of_Mecca_%284k_video%29_-_May_27%2C_2014.webm.720p.vp9.webm",
+    heroVideoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     heroBadge: "Website Resmi Masjid Nurul Jannah",
     heroEyebrow: "Pusat Informasi Jamaah dan Pengurus",
     heroSecondaryButtonLabel: "Lihat Lokasi",

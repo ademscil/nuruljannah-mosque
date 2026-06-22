@@ -73,7 +73,7 @@ export function ScheduleAdminTable({ schedules }: ScheduleAdminTableProps) {
   });
 
   return (
-    <div className="card-elevated p-6 space-y-5">
+    <div className="card-3d-depth p-6 space-y-5">
       <div className="grid gap-3 md:grid-cols-[1fr_220px]">
         <SearchInput value={query} placeholder="Cari kegiatan atau nama petugas..." onChange={setQuery} />
         <FilterSelect placeholder="Filter peran" value={roleType} onValueChange={setRoleType} options={[

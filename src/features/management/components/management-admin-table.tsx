@@ -58,7 +58,7 @@ export function ManagementAdminTable({
   });
 
   return (
-    <div className="card-elevated p-6 space-y-5">
+    <div className="card-3d-depth p-6 space-y-5">
       <SearchInput value={query} placeholder="Cari nama, jabatan, atau periode..." onChange={setQuery} />
       <DataTable columns={columns} data={filtered} />
     </div>

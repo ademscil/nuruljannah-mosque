@@ -2,14 +2,15 @@ import { Heart } from "lucide-react";
 import { formatDateIndonesia } from "@/lib/format-date";
 import { formatRupiah } from "@/lib/format-rupiah";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Card3D } from "@/components/shared/card-3d";
 import type { DonationListItem } from "@/features/donations/types/donation";
 
 type Props = { donations: DonationListItem[]; title: string; description: string };
 
 export function DonationRecentList({ donations, title, description }: Props) {
   return (
-    <div className="card-hero p-8">
-      <div className="badge-amber mb-4">
+    <Card3D variant="glass" className="p-8">
+      <div className="badge-amber mb-4 transition-transform duration-300 hover:scale-105">
         <Heart className="size-3" />
         {title}
       </div>
@@ -25,7 +26,7 @@ export function DonationRecentList({ donations, title, description }: Props) {
             <div
               key={item.id}
               style={{ animationDelay: `${i * 50}ms` }}
-              className="animate-fade-up flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-muted/30 px-5 py-4 transition-colors hover:bg-white"
+              className="animate-fade-up interactive-3d flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-muted/30 px-5 py-4 transition-all duration-300 hover:bg-white hover:shadow-md"
             >
               <div>
                 <p className="font-semibold">{item.donorName}</p>
@@ -41,6 +42,6 @@ export function DonationRecentList({ donations, title, description }: Props) {
           ))}
         </div>
       )}
-    </div>
+    </Card3D>
   );
 }

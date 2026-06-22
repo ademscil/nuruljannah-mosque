@@ -232,6 +232,138 @@ async function main() {
       createdById: admin.id,
     },
   });
+
+  await prisma.cmsSettings.upsert({
+    where: { id: "default-cms-settings" },
+    update: {},
+    create: {
+      id: "default-cms-settings",
+      siteName: "Masjid Nurul Jannah",
+      siteShortName: "Nurul Jannah",
+      siteTagline: "Portal Jamaah & Pengurus",
+      contactAddress:
+        "V3VR+W99, Taman Bunga, Kec. Gerunggang, Kota Pangkal Pinang, Kepulauan Bangka Belitung",
+      contactCity: "Pangkal Pinang, Bangka Belitung",
+      contactEmail: "admin@nuruljannah.id",
+      contactPhone: "+62 812-3456-7890",
+      contactMapUrl: "https://www.google.com/maps",
+      homeFeatureTitle: "Portal publik yang lebih mudah dipahami",
+      homeFeatureDescription:
+        "Dirancang terang, ringan, dan fokus pada informasi yang paling sering dibutuhkan jamaah maupun pengurus.",
+      homeServiceTitle: "Area publik dan dashboard admin terhubung dalam satu sistem.",
+      homeServiceDescription:
+        "Jamaah melihat informasi kegiatan, pengumuman, donasi, dan laporan ringkas. Pengurus mengelola seluruh konten dari dashboard internal yang terhubung langsung ke database.",
+      homeCtaTitle: "Masjid yang lebih terhubung dengan jamaahnya.",
+      homeCtaDescription:
+        "Akses informasi kegiatan, donasi, dan pengumuman resmi kapan saja dan di mana saja.",
+      profileTitle: "Profil Masjid",
+      profileDescription:
+        "Sejarah singkat, visi misi, fasilitas, dan struktur pengurus Masjid Nurul Jannah.",
+      profileSidebarTitle: "Masjid Nurul Jannah",
+      profileSidebarDescription:
+        "Masjid Nurul Jannah hadir sebagai ruang ibadah, pembinaan, dan kebersamaan jamaah di Pangkal Pinang.",
+      profileSidebarItems: [
+        "Alamat resmi terhubung ke Google Maps",
+        "Pengurus dan informasi publik dikelola dari CMS internal",
+        "Konten profil dapat diperbarui langsung dari dashboard admin",
+      ],
+      profileFacilities: [
+        "Ruang utama sholat berjamaah berkapasitas besar",
+        "Area tempat wudhu jamaah putra dan putri",
+        "Ruang kegiatan pembinaan dan kajian",
+        "Area koordinasi pengurus dan kegiatan sosial",
+        "Perpustakaan mini koleksi buku Islam",
+        "Area parkir kendaraan jamaah",
+      ],
+      contactTitle: "Kontak & Lokasi",
+      contactDescription:
+        "Informasi alamat, kontak, dan akses menuju Masjid Nurul Jannah untuk jamaah umum.",
+      footerDescription:
+        "Informasi publik, jadwal kegiatan, transparansi keuangan, dan CMS internal tersusun dalam satu portal yang ringan dan mudah diakses.",
+      footerCopyright: "Hak cipta dilindungi.",
+      publicNav: [
+        { label: "Profil", href: "/profil" },
+        { label: "Jadwal Sholat", href: "/jadwal-sholat" },
+        { label: "Agenda", href: "/agenda-kegiatan" },
+        { label: "Pengumuman", href: "/pengumuman" },
+        { label: "Donasi", href: "/donasi" },
+        { label: "Laporan Keuangan", href: "/laporan-keuangan" },
+        { label: "Galeri", href: "/galeri" },
+        { label: "Kontak", href: "/kontak" },
+      ],
+      quickLinks: [
+        {
+          title: "Lihat Agenda Kegiatan",
+          description: "Tampilkan jadwal kegiatan masjid yang akan datang.",
+          href: "/agenda-kegiatan",
+        },
+        {
+          title: "Buka Pengumuman",
+          description: "Baca informasi terbaru yang dipublikasikan pengurus.",
+          href: "/pengumuman",
+        },
+        {
+          title: "Masuk Dashboard Admin",
+          description: "Kelola konten publik dan data operasional dari CMS internal.",
+          href: "/cms",
+        },
+      ],
+      contentBlocks: {
+        heroVideoUrl:
+          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        heroBadge: "Website Resmi Masjid Nurul Jannah",
+        heroEyebrow: "Pusat Informasi Jamaah dan Pengurus",
+        heroSecondaryButtonLabel: "Lihat Lokasi",
+        stats: [
+          { label: "Agenda Aktif", value: "4+" },
+          { label: "Informasi Publik", value: "Terpusat" },
+          { label: "CMS Pengurus", value: "Siap Pakai" },
+        ],
+        features: [
+          {
+            title: "Agenda dan Kajian",
+            description:
+              "Jamaah dapat melihat agenda kegiatan, kajian, dan program masjid dengan tampilan yang jelas dan mudah dipahami.",
+          },
+          {
+            title: "Pengumuman Resmi",
+            description:
+              "Pengurus mempublikasikan informasi penting secara tertata langsung dari dashboard internal.",
+          },
+          {
+            title: "Donasi dan Keuangan",
+            description:
+              "Area donasi dan ringkasan keuangan tersedia untuk transparansi penuh kepada seluruh jamaah.",
+          },
+          {
+            title: "Operasional Pengurus",
+            description:
+              "Role pengurus, jadwal petugas, dan CMS internal terkelola dari dashboard yang rapi dan efisien.",
+          },
+        ],
+        services: [
+          {
+            title: "Jadwal Terpusat",
+            description: "Jadwal ibadah dan petugas lebih cepat diakses dari satu tempat.",
+          },
+          {
+            title: "Donasi Transparan",
+            description:
+              "Campaign, donatur, dan progres penghimpunan dana dipantau dari satu modul.",
+          },
+          {
+            title: "Alamat Resmi",
+            description: "Lokasi masjid di Pangkal Pinang terhubung langsung ke Google Maps.",
+          },
+        ],
+        quickLinksSectionTitle: "Akses Cepat",
+        quickLinksSectionBadge: "Akses Cepat",
+        ctaBadge: "Bergabung Bersama Kami",
+        ctaPrimaryButtonLabel: "Lihat Agenda",
+        ctaSecondaryButtonLabel: "Donasi Sekarang",
+      },
+    },
+  });
 }
 
 main()

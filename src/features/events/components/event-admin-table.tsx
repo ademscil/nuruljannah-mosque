@@ -115,7 +115,7 @@ export function EventAdminTable({ events }: EventAdminTableProps) {
   });
 
   return (
-    <div className="card-elevated p-6 space-y-5">
+    <div className="card-3d-depth p-6 space-y-5">
       <div className="grid gap-3 xl:grid-cols-[1fr_200px_200px]">
         <SearchInput value={query} placeholder="Cari kegiatan, lokasi, atau PIC..." onChange={setQuery} />
         <FilterSelect placeholder="Filter status" value={status} onValueChange={setStatus} options={[
