@@ -20,30 +20,38 @@ export function EventSummaryCards({ events }: EventSummaryCardsProps) {
   ).length;
 
   return (
-    <div className="grid gap-4 perspective-normal sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
       <StatsCard
         title="Agenda Publish"
         value={`${publishedCount}`}
-        description="Jumlah agenda yang tampil."
+        description="Jumlah agenda yang tampil di website"
         icon={CalendarCheck2}
+        iconColor="text-blue-600"
+        iconBg="bg-blue-50"
       />
       <StatsCard
         title="Agenda Terdekat"
         value={`${upcomingCount}`}
-        description="Agenda yang akan datang."
+        description="Agenda yang akan datang segera"
         icon={Clock3}
+        iconColor="text-purple-600"
+        iconBg="bg-purple-50"
       />
       <StatsCard
         title="Agenda Publik"
         value={`${publicCount}`}
-        description="Bisa dilihat oleh jamaah."
+        description="Bisa dilihat oleh jamaah"
         icon={Eye}
+        iconColor="text-emerald-600"
+        iconBg="bg-emerald-50"
       />
       <StatsCard
         title="Agenda Unggulan"
         value={`${featuredCount}`}
-        description="Diprioritaskan di beranda."
+        description="Diprioritaskan di beranda"
         icon={Star}
+        iconColor="text-amber-600"
+        iconBg="bg-amber-50"
       />
     </div>
   );

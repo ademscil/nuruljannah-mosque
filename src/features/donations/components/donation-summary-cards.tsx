@@ -21,28 +21,36 @@ export function DonationSummaryCards({
       <StatsCard
         title="Total Terkumpul"
         value={formatRupiah(summary.totalCollected)}
-        description="Akumulasi dana dari seluruh campaign donasi."
+        description="Akumulasi dana dari seluruh campaign donasi"
         icon={HandCoins}
         trend="up"
         trendLabel={`${progress}% dari target`}
+        iconColor="text-emerald-600"
+        iconBg="bg-emerald-50"
       />
       <StatsCard
         title="Total Target"
         value={formatRupiah(summary.totalTarget)}
-        description="Total target dana dari campaign aktif dan nonaktif."
+        description="Total target dana dari campaign aktif dan selesai"
         icon={Goal}
+        iconColor="text-blue-600"
+        iconBg="bg-blue-50"
       />
       <StatsCard
         title="Donatur Terkonfirmasi"
         value={`${summary.donorCount} orang`}
-        description="Donatur dengan status donasi yang sudah terverifikasi."
+        description="Donatur dengan status donasi terverifikasi"
         icon={BadgeCheck}
+        iconColor="text-purple-600"
+        iconBg="bg-purple-50"
       />
       <StatsCard
         title="Campaign Aktif"
         value={`${summary.activeCampaignCount} program`}
-        description="Program donasi yang masih dibuka untuk jamaah."
+        description="Program donasi yang masih dibuka untuk jamaah"
         icon={HeartHandshake}
+        iconColor="text-amber-600"
+        iconBg="bg-amber-50"
       />
     </div>
   );

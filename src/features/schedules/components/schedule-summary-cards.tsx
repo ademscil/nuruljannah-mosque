@@ -14,7 +14,9 @@ export function ScheduleSummaryCards({
   const muadzinCount = schedules.filter(
     (item) => item.roleType === "MUADZIN",
   ).length;
-  const khatibCount = schedules.filter((item) => item.roleType === "KHATIB").length;
+  const khatibCount = schedules.filter(
+    (item) => item.roleType === "KHATIB",
+  ).length;
   const activityCount = schedules.filter(
     (item) => item.roleType === "PETUGAS_KEGIATAN",
   ).length;
@@ -24,26 +26,34 @@ export function ScheduleSummaryCards({
       <StatsCard
         title="Jadwal Imam"
         value={`${imamCount}`}
-        description="Petugas imam terjadwal."
+        description="Petugas imam terjadwal untuk sholat berjamaah"
         icon={UserRoundCheck}
+        iconColor="text-blue-600"
+        iconBg="bg-blue-50"
       />
       <StatsCard
         title="Jadwal Muadzin"
         value={`${muadzinCount}`}
-        description="Petugas adzan terjadwal."
+        description="Petugas adzan dan iqomah terjadwal"
         icon={Mic}
+        iconColor="text-purple-600"
+        iconBg="bg-purple-50"
       />
       <StatsCard
         title="Jadwal Khatib"
         value={`${khatibCount}`}
-        description="Khutbah Jum'at dan momen khusus."
+        description="Khutbah Jum'at dan momen istimewa lainnya"
         icon={NotebookPen}
+        iconColor="text-emerald-600"
+        iconBg="bg-emerald-50"
       />
       <StatsCard
         title="Petugas Kegiatan"
         value={`${activityCount}`}
-        description="Operasional acara dan kajian."
+        description="Koordinator operasional acara dan kajian"
         icon={BellRing}
+        iconColor="text-amber-600"
+        iconBg="bg-amber-50"
       />
     </div>
   );

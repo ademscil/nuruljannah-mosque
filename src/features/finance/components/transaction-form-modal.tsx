@@ -1,15 +1,23 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar, FileText, Link2, Sparkles, Tag, Trash2, Wallet } from "lucide-react";
-import { useMemo, useState, useTransition } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { Calendar, FileText, Link2, Tag, Wallet } from "lucide-react";
+import React, { useEffect, useTransition } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { ConfirmDialog } from "@/components/shared/confirm-dialog";
-import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -19,18 +27,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  deleteTransactionAction,
-  saveTransactionAction,
-} from "@/features/finance/services/transaction-actions";
+import { saveTransactionAction } from "@/features/finance/services/transaction-actions";
 import {
   transactionFormSchema,
   type TransactionFormSchema,
 } from "@/features/finance/schemas/transaction-form-schema";
 import type { TransactionListItem } from "@/features/finance/types/transaction";
 
-type TransactionFormPanelProps = {
-  transactions: TransactionListItem[];
+type TransactionFormModalProps = {
+  transaction?: TransactionListItem;
+  trigger: React.ReactElement;
 };
 
 function getDefaultValues(
@@ -49,35 +55,23 @@ function getDefaultValues(
   };
 }
 
-export function TransactionFormPanel({
-  transactions,
-}: TransactionFormPanelProps) {
-  const [selectedId, setSelectedId] = useState("new");
+export function TransactionFormModal({
+  transaction,
+  trigger,
+}: TransactionFormModalProps) {
   const [isPending, startTransition] = useTransition();
-
-  const selectedTransaction = useMemo(
-    () => transactions.find((item) => item.id === selectedId),
-    [transactions, selectedId],
-  );
+  const [open, setOpen] = React.useState(false);
 
   const form = useForm<TransactionFormSchema>({
     resolver: zodResolver(transactionFormSchema),
-    defaultValues: getDefaultValues(),
-  });
-  const selectedType = useWatch({
-    control: form.control,
-    name: "type",
+    defaultValues: getDefaultValues(transaction),
   });
 
-  const resetSelection = (id: string | null) => {
-    if (!id) {
-      return;
+  useEffect(() => {
+    if (open) {
+      form.reset(getDefaultValues(transaction));
     }
-
-    setSelectedId(id);
-    const transaction = transactions.find((item) => item.id === id);
-    form.reset(getDefaultValues(transaction));
-  };
+  }, [open, transaction, form]);
 
   const handleSubmit = (values: TransactionFormSchema) => {
     startTransition(async () => {
@@ -87,67 +81,29 @@ export function TransactionFormPanel({
         return;
       }
       toast.success(result.message);
-      if (selectedId === "new") resetSelection("new");
+      setOpen(false);
+      form.reset(getDefaultValues());
     });
   };
 
-  const handleDelete = () => {
-    if (!selectedTransaction) return;
-    startTransition(async () => {
-      const result = await deleteTransactionAction(selectedTransaction.id);
-      if (!result.success) {
-        toast.error(result.message);
-        return;
-      }
-      toast.success(result.message);
-      resetSelection("new");
-    });
-  };
+  const selectedType = form.watch("type");
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-muted/20 shadow-depth-lg backdrop-blur-sm">
-      {/* Decorative gradient overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-amber-500/5" />
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger render={(props) => trigger && React.cloneElement(trigger, props)} />
+      <DialogContent size="xl" className="max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>
+            {transaction ? "Edit Transaksi" : "Tambah Transaksi Baru"}
+          </DialogTitle>
+          <DialogDescription>
+            {transaction
+              ? "Perbarui informasi transaksi keuangan masjid"
+              : "Catat transaksi pemasukan atau pengeluaran baru"}
+          </DialogDescription>
+        </DialogHeader>
 
-      <div className="relative space-y-6 p-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
-            <Sparkles className="size-5 text-emerald-600 dark:text-emerald-400" />
-          </div>
-          <div>
-            <h2 className="text-lg font-bold tracking-tight text-foreground">
-              Tambah / Edit Transaksi
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Pilih transaksi yang ingin diedit, atau catat transaksi baru
-            </p>
-          </div>
-        </div>
-
-        {/* Selection Section */}
-        <div className="rounded-2xl border border-border/50 bg-card/30 p-5 backdrop-blur-sm">
-          <FormFieldWrapper
-            label="Pilih Transaksi"
-            hint="Pilih 'Tambah Baru' untuk mencatat transaksi baru"
-          >
-            <Select value={selectedId} onValueChange={resetSelection}>
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih transaksi" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="new">+ Tambah Transaksi Baru</SelectItem>
-                {transactions.map((item) => (
-                  <SelectItem key={item.id} value={item.id}>
-                    {item.description}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormFieldWrapper>
-        </div>
-
-        <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           {/* Transaction Info Section */}
           <div className="space-y-4 rounded-2xl border border-border/50 bg-card/30 p-5 backdrop-blur-sm">
             <div className="flex items-center gap-2.5">
@@ -280,33 +236,20 @@ export function TransactionFormPanel({
             </FormFieldWrapper>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-wrap gap-3">
-            <ConfirmSubmitButton
-              title="Simpan transaksi ini?"
-              description="Perubahan transaksi akan memengaruhi laporan keuangan dan total kas."
-              label="Simpan Transaksi"
-              pendingLabel="Menyimpan..."
-              isPending={isPending}
-              onConfirm={() => form.handleSubmit(handleSubmit)()}
+          <DialogFooter>
+            <DialogClose
+              render={(props) => (
+                <Button {...props} type="button" variant="outline" disabled={isPending}>
+                  Batal
+                </Button>
+              )}
             />
-            {selectedTransaction ? (
-              <ConfirmDialog
-                title="Hapus transaksi?"
-                description="Transaksi yang dihapus akan memengaruhi saldo kas dan ringkasan laporan."
-                confirmLabel="Hapus Transaksi"
-                onConfirm={handleDelete}
-                trigger={
-                  <Button type="button" variant="outline" disabled={isPending}>
-                    <Trash2 className="size-4" />
-                    Hapus
-                  </Button>
-                }
-              />
-            ) : null}
-          </div>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Menyimpan..." : "Simpan Transaksi"}
+            </Button>
+          </DialogFooter>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

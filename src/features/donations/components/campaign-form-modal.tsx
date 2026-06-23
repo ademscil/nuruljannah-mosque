@@ -1,15 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2, Sparkles, FileText, Target, Landmark, QrCode, ToggleLeft } from "lucide-react";
-import { useMemo, useState, useTransition } from "react";
+import { Plus, Pencil, FileText, Target, Landmark, QrCode, ToggleLeft } from "lucide-react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
-import { ConfirmDialog } from "@/components/shared/confirm-dialog";
-import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogOverlay, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { DialogClose, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,22 +17,13 @@ import {
   donationCampaignFormSchema,
   type DonationCampaignFormSchema,
 } from "@/features/donations/schemas/donation-campaign-form-schema";
-import {
-  deleteDonationCampaignAction,
-  saveDonationCampaignAction,
-} from "@/features/donations/services/donation-actions";
+import { saveDonationCampaignAction } from "@/features/donations/services/donation-actions";
 import type { DonationCampaignItem } from "@/features/donations/types/donation";
 import { slugify } from "@/lib/slugify";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-type DonationCampaignFormPanelProps = {
-  campaigns: DonationCampaignItem[];
+type CampaignFormModalProps = {
+  campaign?: DonationCampaignItem;
+  trigger?: React.ReactElement;
 };
 
 function getDefaultValues(campaign?: DonationCampaignItem): DonationCampaignFormSchema {
@@ -50,34 +41,22 @@ function getDefaultValues(campaign?: DonationCampaignItem): DonationCampaignForm
   };
 }
 
-export function DonationCampaignFormPanel({
-  campaigns,
-}: DonationCampaignFormPanelProps) {
-  const [selectedId, setSelectedId] = useState("new");
+export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps) {
   const [isPending, startTransition] = useTransition();
-  const selectedCampaign = useMemo(
-    () => campaigns.find((item) => item.id === selectedId),
-    [campaigns, selectedId],
-  );
+  const [open, setOpen] = useState(false);
 
   const form = useForm<DonationCampaignFormSchema>({
     resolver: zodResolver(donationCampaignFormSchema),
-    defaultValues: getDefaultValues(),
-  });
-  const selectedActive = useWatch({
-    control: form.control,
-    name: "isActive",
+    defaultValues: getDefaultValues(campaign),
   });
 
-  const resetSelection = (id: string | null) => {
-    if (!id) {
-      return;
+  const selectedActive = useWatch({ control: form.control, name: "isActive" });
+
+  useEffect(() => {
+    if (open) {
+      form.reset(getDefaultValues(campaign));
     }
-
-    setSelectedId(id);
-    const campaign = campaigns.find((item) => item.id === id);
-    form.reset(getDefaultValues(campaign));
-  };
+  }, [open, campaign, form]);
 
   const handleSubmit = (values: DonationCampaignFormSchema) => {
     startTransition(async () => {
@@ -90,69 +69,41 @@ export function DonationCampaignFormPanel({
         return;
       }
       toast.success(result.message);
-      if (selectedId === "new") resetSelection("new");
-    });
-  };
-
-  const handleDelete = () => {
-    if (!selectedCampaign) {
-      return;
-    }
-
-    startTransition(async () => {
-      const result = await deleteDonationCampaignAction(selectedCampaign.id);
-      if (!result.success) {
-        toast.error(result.message);
-        return;
-      }
-
-      toast.success(result.message);
-      resetSelection("new");
+      setOpen(false);
+      form.reset(getDefaultValues());
     });
   };
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-card/50 p-6 shadow-depth-lg backdrop-blur-sm">
-      {/* Decorative Gradient Overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/5 via-rose-500/5 to-purple-500/5" />
-
-      <div className="relative space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500/20 to-rose-500/10 shadow-sm">
-            <Sparkles className="size-5 text-amber-600" />
-          </div>
-          <div>
-            <h2 className="font-heading text-lg font-semibold">Tambah / Edit Program Donasi</h2>
-            <p className="text-sm text-muted-foreground">
-              Pilih program yang ingin diedit, atau buat program donasi baru
-            </p>
-          </div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
+        render={(props) =>
+          trigger ? (
+            <button {...props} onClick={() => setOpen(true)}>
+              {trigger}
+            </button>
+          ) : (
+            <Button {...props} onClick={() => setOpen(true)}>
+              <Plus className="size-4" />
+              Tambah Campaign
+            </Button>
+          )
+        }
+      />
+      <DialogOverlay className="backdrop-blur-sm" />
+      <DialogContent className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-background/95 p-0 shadow-depth-xl">
+        <div className="sticky top-0 z-10 border-b border-border/50 bg-gradient-to-br from-card/95 via-card/90 to-card/95 px-6 py-5 backdrop-blur-md">
+          <DialogTitle className="font-heading text-xl font-bold">
+            {campaign ? "Edit Program Donasi" : "Tambah Program Donasi Baru"}
+          </DialogTitle>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {campaign
+              ? "Perbarui informasi program donasi yang sudah ada"
+              : "Buat program donasi baru untuk ditampilkan di website"}
+          </p>
         </div>
 
-        {/* Selection Section */}
-        <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-muted/30 to-muted/10 p-5 backdrop-blur-sm">
-          <FormFieldWrapper 
-            label="Pilih Program Donasi" 
-            hint="Pilih 'Tambah Baru' untuk membuat program baru"
-          >
-            <Select value={selectedId} onValueChange={resetSelection}>
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih program donasi" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="new">+ Tambah Program Donasi Baru</SelectItem>
-                {campaigns.map((item) => (
-                  <SelectItem key={item.id} value={item.id}>
-                    {item.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormFieldWrapper>
-        </div>
-
-        <form className="space-y-5" onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-5 p-6">
           {/* Basic Info Section */}
           <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-muted/30 to-muted/10 p-5 backdrop-blur-sm">
             <div className="mb-4 flex items-center gap-2">
@@ -167,7 +118,11 @@ export function DonationCampaignFormPanel({
                 label="Deskripsi Program"
                 error={form.formState.errors.description?.message}
               >
-                <Textarea rows={4} placeholder="Jelaskan tujuan dan manfaat program donasi ini..." {...form.register("description")} />
+                <Textarea
+                  rows={4}
+                  placeholder="Jelaskan tujuan dan manfaat program donasi ini..."
+                  {...form.register("description")}
+                />
               </FormFieldWrapper>
             </div>
           </div>
@@ -183,7 +138,11 @@ export function DonationCampaignFormPanel({
                 label="Target Dana (Rp)"
                 error={form.formState.errors.targetAmount?.message}
               >
-                <Input type="number" placeholder="Contoh: 50000000" {...form.register("targetAmount", { valueAsNumber: true })} />
+                <Input
+                  type="number"
+                  placeholder="Contoh: 50000000"
+                  {...form.register("targetAmount", { valueAsNumber: true })}
+                />
               </FormFieldWrapper>
               <FormFieldWrapper
                 label="Dana Terkumpul (Rp)"
@@ -206,7 +165,10 @@ export function DonationCampaignFormPanel({
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <FormFieldWrapper label="Nama Rekening Bank">
-                <Input placeholder="Contoh: BRI a.n. Masjid Nurul Jannah" {...form.register("bankAccountName")} />
+                <Input
+                  placeholder="Contoh: BRI a.n. Masjid Nurul Jannah"
+                  {...form.register("bankAccountName")}
+                />
               </FormFieldWrapper>
               <FormFieldWrapper label="Nomor Rekening">
                 <Input placeholder="Contoh: 1234-5678-9012" {...form.register("bankAccountNumber")} />
@@ -251,32 +213,21 @@ export function DonationCampaignFormPanel({
             </FormFieldWrapper>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            <ConfirmSubmitButton
-              title="Simpan campaign donasi?"
-              description="Campaign yang disimpan akan digunakan untuk halaman donasi publik."
-              label="Simpan Campaign"
-              pendingLabel="Menyimpan..."
-              isPending={isPending}
-              onConfirm={() => form.handleSubmit(handleSubmit)()}
+          {/* Action Buttons */}
+          <div className="flex justify-end gap-3 border-t border-border/50 pt-5">
+            <DialogClose
+              render={(props) => (
+                <Button {...props} type="button" variant="outline" disabled={isPending}>
+                  Batal
+                </Button>
+              )}
             />
-            {selectedCampaign ? (
-              <ConfirmDialog
-                title="Hapus campaign donasi?"
-                description="Campaign yang dihapus juga akan menghapus riwayat donasi yang terhubung dengannya."
-                confirmLabel="Hapus Campaign"
-                onConfirm={handleDelete}
-                trigger={
-                  <Button type="button" variant="outline" disabled={isPending}>
-                    <Trash2 className="size-4" />
-                    Hapus
-                  </Button>
-                }
-              />
-            ) : null}
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Menyimpan..." : campaign ? "Simpan Perubahan" : "Tambah Campaign"}
+            </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

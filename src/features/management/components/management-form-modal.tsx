@@ -1,15 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2, Sparkles, User, Briefcase, Phone, Mail, Calendar, Image as ImageIcon, ToggleLeft } from "lucide-react";
-import { useMemo, useState, useTransition } from "react";
+import { User, Briefcase, Phone, Calendar } from "lucide-react";
+import { useTransition, useState, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
-import { ConfirmDialog } from "@/components/shared/confirm-dialog";
-import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -18,18 +17,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  deleteManagementMemberAction,
-  saveManagementMemberAction,
-} from "@/features/management/services/management-actions";
+import { saveManagementMemberAction } from "@/features/management/services/management-actions";
 import {
   managementFormSchema,
   type ManagementFormSchema,
 } from "@/features/management/schemas/management-form-schema";
 import type { ManagementMemberItem } from "@/features/management/types/management";
 
-type ManagementFormPanelProps = {
-  members: ManagementMemberItem[];
+type ManagementFormModalProps = {
+  member?: ManagementMemberItem;
+  trigger: React.ReactElement;
+  onSuccess?: () => void;
 };
 
 function getDefaultValues(member?: ManagementMemberItem): ManagementFormSchema {
@@ -45,33 +43,25 @@ function getDefaultValues(member?: ManagementMemberItem): ManagementFormSchema {
   };
 }
 
-export function ManagementFormPanel({ members }: ManagementFormPanelProps) {
-  const [selectedId, setSelectedId] = useState("new");
+export function ManagementFormModal({ member, trigger, onSuccess }: ManagementFormModalProps) {
   const [isPending, startTransition] = useTransition();
-
-  const selectedMember = useMemo(
-    () => members.find((item) => item.id === selectedId),
-    [members, selectedId],
-  );
+  const [open, setOpen] = useState(false);
 
   const form = useForm<ManagementFormSchema>({
     resolver: zodResolver(managementFormSchema),
-    defaultValues: getDefaultValues(),
+    defaultValues: getDefaultValues(member),
   });
+
   const selectedStatus = useWatch({
     control: form.control,
     name: "status",
   });
 
-  const resetSelection = (id: string | null) => {
-    if (!id) {
-      return;
+  useEffect(() => {
+    if (open) {
+      form.reset(getDefaultValues(member));
     }
-
-    setSelectedId(id);
-    const member = members.find((item) => item.id === id);
-    form.reset(getDefaultValues(member));
-  };
+  }, [open, member, form]);
 
   const handleSubmit = (values: ManagementFormSchema) => {
     startTransition(async () => {
@@ -81,63 +71,21 @@ export function ManagementFormPanel({ members }: ManagementFormPanelProps) {
         return;
       }
       toast.success(result.message);
-      if (selectedId === "new") resetSelection("new");
-    });
-  };
-
-  const handleDelete = () => {
-    if (!selectedMember) return;
-    startTransition(async () => {
-      const result = await deleteManagementMemberAction(selectedMember.id);
-      if (!result.success) {
-        toast.error(result.message);
-        return;
-      }
-      toast.success(result.message);
-      resetSelection("new");
+      setOpen(false);
+      onSuccess?.();
     });
   };
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-card/50 p-6 shadow-depth-lg backdrop-blur-sm">
-      {/* Decorative Gradient Overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-blue-500/5" />
-
-      <div className="relative space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/10 shadow-sm">
-            <Sparkles className="size-5 text-indigo-600" />
-          </div>
-          <div>
-            <h2 className="font-heading text-lg font-semibold">Tambah / Edit Data Pengurus</h2>
-            <p className="text-sm text-muted-foreground">
-              Pilih pengurus yang ingin diedit, atau tambahkan data pengurus baru
-            </p>
-          </div>
-        </div>
-
-        {/* Selection Section */}
-        <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-muted/30 to-muted/10 p-5 backdrop-blur-sm">
-          <FormFieldWrapper 
-            label="Pilih Pengurus" 
-            hint="Pilih 'Tambah Baru' untuk menambah data pengurus baru"
-          >
-            <Select value={selectedId} onValueChange={resetSelection}>
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih pengurus" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="new">+ Tambah Pengurus Baru</SelectItem>
-                {members.map((item) => (
-                  <SelectItem key={item.id} value={item.id}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormFieldWrapper>
-        </div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger render={trigger} />
+      <DialogContent size="xl" className="max-h-[90vh] overflow-y-auto">
+        <DialogTitle>{member ? "Edit Data Pengurus" : "Tambah Pengurus Baru"}</DialogTitle>
+        <DialogDescription>
+          {member
+            ? "Perbarui informasi pengurus yang ada."
+            : "Tambahkan data pengurus baru untuk organisasi masjid."}
+        </DialogDescription>
 
         <form className="space-y-5" onSubmit={form.handleSubmit(handleSubmit)}>
           {/* Personal Info Section */}
@@ -151,7 +99,10 @@ export function ManagementFormPanel({ members }: ManagementFormPanelProps) {
                 <Input placeholder="Nama lengkap pengurus" {...form.register("name")} />
               </FormFieldWrapper>
               <FormFieldWrapper label="Jabatan" error={form.formState.errors.position?.message}>
-                <Input placeholder="Contoh: Ketua, Sekretaris, Bendahara" {...form.register("position")} />
+                <Input
+                  placeholder="Contoh: Ketua, Sekretaris, Bendahara"
+                  {...form.register("position")}
+                />
               </FormFieldWrapper>
             </div>
           </div>
@@ -222,32 +173,17 @@ export function ManagementFormPanel({ members }: ManagementFormPanelProps) {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            <ConfirmSubmitButton
-              title="Simpan data pengurus?"
-              description="Perubahan ini akan digunakan di halaman profil pengurus."
-              label="Simpan Pengurus"
-              pendingLabel="Menyimpan..."
-              isPending={isPending}
-              onConfirm={() => form.handleSubmit(handleSubmit)()}
-            />
-            {selectedMember ? (
-              <ConfirmDialog
-                title="Hapus data pengurus?"
-                description="Data pengurus yang dihapus tidak akan lagi tampil di halaman profil masjid."
-                confirmLabel="Hapus Pengurus"
-                onConfirm={handleDelete}
-                trigger={
-                  <Button type="button" variant="outline" disabled={isPending}>
-                    <Trash2 className="size-4" />
-                    Hapus
-                  </Button>
-                }
-              />
-            ) : null}
+          {/* Actions */}
+          <div className="flex justify-end gap-3">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
+              Batal
+            </Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Menyimpan..." : member ? "Simpan Perubahan" : "Tambah Pengurus"}
+            </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

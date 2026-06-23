@@ -1,15 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2, Sparkles, Image as ImageIcon, Tag, Calendar, Link2, ToggleLeft } from "lucide-react";
-import { useMemo, useState, useTransition } from "react";
+import { Image as ImageIcon, Tag, Link2, ToggleLeft } from "lucide-react";
+import { useTransition, useState, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
-import { ConfirmDialog } from "@/components/shared/confirm-dialog";
-import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -18,18 +17,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  deleteGalleryItemAction,
-  saveGalleryItemAction,
-} from "@/features/gallery/services/gallery-actions";
+import { saveGalleryItemAction } from "@/features/gallery/services/gallery-actions";
 import {
   galleryFormSchema,
   type GalleryFormSchema,
 } from "@/features/gallery/schemas/gallery-form-schema";
 import type { GalleryItemRecord } from "@/features/gallery/types/gallery";
 
-type GalleryFormPanelProps = {
-  items: GalleryItemRecord[];
+type GalleryFormModalProps = {
+  item?: GalleryItemRecord;
+  trigger: React.ReactElement;
+  onSuccess?: () => void;
 };
 
 function getDefaultValues(item?: GalleryItemRecord): GalleryFormSchema {
@@ -43,33 +41,25 @@ function getDefaultValues(item?: GalleryItemRecord): GalleryFormSchema {
   };
 }
 
-export function GalleryFormPanel({ items }: GalleryFormPanelProps) {
-  const [selectedId, setSelectedId] = useState("new");
+export function GalleryFormModal({ item, trigger, onSuccess }: GalleryFormModalProps) {
   const [isPending, startTransition] = useTransition();
-
-  const selectedItem = useMemo(
-    () => items.find((item) => item.id === selectedId),
-    [items, selectedId],
-  );
+  const [open, setOpen] = useState(false);
 
   const form = useForm<GalleryFormSchema>({
     resolver: zodResolver(galleryFormSchema),
-    defaultValues: getDefaultValues(),
+    defaultValues: getDefaultValues(item),
   });
+
   const selectedStatus = useWatch({
     control: form.control,
     name: "status",
   });
 
-  const resetSelection = (id: string | null) => {
-    if (!id) {
-      return;
+  useEffect(() => {
+    if (open) {
+      form.reset(getDefaultValues(item));
     }
-
-    setSelectedId(id);
-    const item = items.find((galleryItem) => galleryItem.id === id);
-    form.reset(getDefaultValues(item));
-  };
+  }, [open, item, form]);
 
   const handleSubmit = (values: GalleryFormSchema) => {
     startTransition(async () => {
@@ -79,63 +69,21 @@ export function GalleryFormPanel({ items }: GalleryFormPanelProps) {
         return;
       }
       toast.success(result.message);
-      if (selectedId === "new") resetSelection("new");
-    });
-  };
-
-  const handleDelete = () => {
-    if (!selectedItem) return;
-    startTransition(async () => {
-      const result = await deleteGalleryItemAction(selectedItem.id);
-      if (!result.success) {
-        toast.error(result.message);
-        return;
-      }
-      toast.success(result.message);
-      resetSelection("new");
+      setOpen(false);
+      onSuccess?.();
     });
   };
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-card/50 p-6 shadow-depth-lg backdrop-blur-sm">
-      {/* Decorative Gradient Overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-pink-500/5 via-purple-500/5 to-indigo-500/5" />
-
-      <div className="relative space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/10 shadow-sm">
-            <Sparkles className="size-5 text-pink-600" />
-          </div>
-          <div>
-            <h2 className="font-heading text-lg font-semibold">Tambah / Edit Foto Galeri</h2>
-            <p className="text-sm text-muted-foreground">
-              Pilih foto yang ingin diedit, atau tambahkan dokumentasi kegiatan baru
-            </p>
-          </div>
-        </div>
-
-        {/* Selection Section */}
-        <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-muted/30 to-muted/10 p-5 backdrop-blur-sm">
-          <FormFieldWrapper 
-            label="Pilih Foto" 
-            hint="Pilih 'Tambah Baru' untuk menambah foto baru"
-          >
-            <Select value={selectedId} onValueChange={resetSelection}>
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih galeri" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="new">+ Tambah Foto Baru</SelectItem>
-                {items.map((item) => (
-                  <SelectItem key={item.id} value={item.id}>
-                    {item.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormFieldWrapper>
-        </div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger render={trigger} />
+      <DialogContent size="xl" className="max-h-[90vh] overflow-y-auto">
+        <DialogTitle>{item ? "Edit Foto Galeri" : "Tambah Foto Baru"}</DialogTitle>
+        <DialogDescription>
+          {item
+            ? "Perbarui informasi foto galeri yang ada."
+            : "Tambahkan dokumentasi kegiatan baru ke galeri."}
+        </DialogDescription>
 
         <form className="space-y-5" onSubmit={form.handleSubmit(handleSubmit)}>
           {/* Basic Info Section */}
@@ -213,32 +161,17 @@ export function GalleryFormPanel({ items }: GalleryFormPanelProps) {
             </FormFieldWrapper>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            <ConfirmSubmitButton
-              title="Simpan data galeri?"
-              description="Perubahan foto galeri akan langsung memengaruhi konten dokumentasi."
-              label="Simpan Galeri"
-              pendingLabel="Menyimpan..."
-              isPending={isPending}
-              onConfirm={() => form.handleSubmit(handleSubmit)()}
-            />
-            {selectedItem ? (
-              <ConfirmDialog
-                title="Hapus item galeri?"
-                description="Item galeri yang dihapus akan hilang dari dashboard dan halaman galeri publik."
-                confirmLabel="Hapus Galeri"
-                onConfirm={handleDelete}
-                trigger={
-                  <Button type="button" variant="outline" disabled={isPending}>
-                    <Trash2 className="size-4" />
-                    Hapus
-                  </Button>
-                }
-              />
-            ) : null}
+          {/* Actions */}
+          <div className="flex justify-end gap-3">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
+              Batal
+            </Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Menyimpan..." : item ? "Simpan Perubahan" : "Tambah Foto"}
+            </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -9,6 +10,7 @@ import {
 type FilterOption = {
   label: string;
   value: string;
+  icon?: LucideIcon;
 };
 
 type FilterSelectProps = {
@@ -16,6 +18,9 @@ type FilterSelectProps = {
   value?: string;
   options: FilterOption[];
   onValueChange?: (value: string) => void;
+  icon?: LucideIcon;
+  size?: "sm" | "default";
+  className?: string;
 };
 
 export function FilterSelect({
@@ -23,6 +28,9 @@ export function FilterSelect({
   value,
   options,
   onValueChange,
+  icon: Icon,
+  size = "default",
+  className,
 }: FilterSelectProps) {
   return (
     <Select
@@ -33,15 +41,35 @@ export function FilterSelect({
         }
       }}
     >
-      <SelectTrigger className="w-full md:w-56">
-        <SelectValue placeholder={placeholder} />
+      <SelectTrigger 
+        size={size}
+        className={className || "w-full sm:w-[220px] md:w-[240px]"}
+      >
+        <SelectValue placeholder={
+          Icon ? (
+            <span className="flex items-center gap-2">
+              <Icon className="size-4 text-muted-foreground/70" />
+              <span>{placeholder}</span>
+            </span>
+          ) : placeholder
+        } />
       </SelectTrigger>
-      <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.label}
-          </SelectItem>
-        ))}
+      <SelectContent align="start">
+        {options.map((option) => {
+          const OptionIcon = option.icon;
+          return (
+            <SelectItem key={option.value} value={option.value}>
+              {OptionIcon ? (
+                <span className="flex items-center gap-2">
+                  <OptionIcon className="size-4 text-muted-foreground/70" />
+                  <span>{option.label}</span>
+                </span>
+              ) : (
+                option.label
+              )}
+            </SelectItem>
+          );
+        })}
       </SelectContent>
     </Select>
   );

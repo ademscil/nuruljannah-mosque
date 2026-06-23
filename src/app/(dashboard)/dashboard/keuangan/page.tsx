@@ -3,7 +3,6 @@ import { PageHeader } from "@/components/shared/page-header";
 import { FinanceChart } from "@/features/finance/components/finance-chart";
 import { FinanceSummaryCards } from "@/features/finance/components/finance-summary-cards";
 import { FinanceTransactionTable } from "@/features/finance/components/finance-transaction-table";
-import { TransactionFormPanel } from "@/features/finance/components/transaction-form-panel";
 import { Card3D } from "@/components/shared/card-3d";
 import {
   getFinanceChartData,
@@ -55,10 +54,7 @@ export default async function DashboardKeuanganPage() {
           </div>
         </Card3D>
       </div>
-      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <FinanceTransactionTable transactions={transactions} />
-        <TransactionFormPanel transactions={transactions} />
-      </div>
+      <FinanceTransactionTable transactions={transactions} />
     </div>
   );
 }

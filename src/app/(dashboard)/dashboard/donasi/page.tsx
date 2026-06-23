@@ -1,10 +1,8 @@
 import { AccessDenied } from "@/components/shared/access-denied";
 import { PageHeader } from "@/components/shared/page-header";
 import { DonationAdminTable } from "@/features/donations/components/donation-admin-table";
-import { DonationCampaignFormPanel } from "@/features/donations/components/donation-campaign-form-panel";
-import { DonationEntryFormPanel } from "@/features/donations/components/donation-entry-form-panel";
+import { DonationCampaignsSection } from "@/features/donations/components/donation-campaigns-section";
 import { DonationRecentList } from "@/features/donations/components/donation-recent-list";
-import { DonationStatusPanel } from "@/features/donations/components/donation-status-panel";
 import { DonationSummaryCards } from "@/features/donations/components/donation-summary-cards";
 import {
   getDonationCampaigns,
@@ -33,6 +31,7 @@ export default async function DashboardDonasiPage() {
         description="Kelola campaign donasi, progres penghimpunan, daftar donatur, dan verifikasi manual oleh bendahara atau admin utama."
       />
       <DonationSummaryCards summary={summary} />
+      <DonationCampaignsSection campaigns={campaigns} />
       <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
         <DonationAdminTable campaigns={campaigns} donations={donations} />
         <DonationRecentList
@@ -41,11 +40,6 @@ export default async function DashboardDonasiPage() {
           description="Panel cepat untuk melihat transaksi terbaru dan memantau status verifikasi donasi."
         />
       </div>
-      <div className="grid gap-6 lg:grid-cols-2">
-        <DonationCampaignFormPanel campaigns={campaigns} />
-        <DonationStatusPanel donations={donations} />
-      </div>
-      <DonationEntryFormPanel campaigns={campaigns} donations={donations} />
     </div>
   );
 }

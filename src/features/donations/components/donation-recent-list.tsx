@@ -1,47 +1,86 @@
-import { Heart } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
+
+import { EmptyState } from "@/components/shared/empty-state";
 import { formatDateIndonesia } from "@/lib/format-date";
 import { formatRupiah } from "@/lib/format-rupiah";
-import { EmptyState } from "@/components/shared/empty-state";
-import { Card3D } from "@/components/shared/card-3d";
 import type { DonationListItem } from "@/features/donations/types/donation";
 
-type Props = { donations: DonationListItem[]; title: string; description: string };
+type DonationRecentListProps = {
+  donations: DonationListItem[];
+  title: string;
+  description: string;
+};
 
-export function DonationRecentList({ donations, title, description }: Props) {
+export function DonationRecentList({
+  donations,
+  title,
+  description,
+}: DonationRecentListProps) {
   return (
-    <Card3D variant="glass" className="p-8">
-      <div className="badge-amber mb-4 transition-transform duration-300 hover:scale-105">
-        <Heart className="size-3" />
-        {title}
-      </div>
-      <p className="max-w-2xl text-sm leading-7 text-muted-foreground">{description}</p>
+    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-muted/20 shadow-depth-lg backdrop-blur-sm">
+      {/* Decorative gradient overlay */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-rose-500/5" />
 
-      {donations.length === 0 ? (
-        <div className="mt-6">
-          <EmptyState title="Belum ada donasi" description="Donasi yang masuk akan tampil di sini." />
+      <div className="relative space-y-6 p-6">
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500/20 to-rose-500/20">
+            <Sparkles className="size-5 text-amber-600 dark:text-amber-400" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold tracking-tight text-foreground">
+              {title}
+            </h3>
+            <p className="text-sm text-muted-foreground">{description}</p>
+          </div>
         </div>
-      ) : (
-        <div className="mt-6 space-y-3">
-          {donations.slice(0, 5).map((item, i) => (
-            <div
-              key={item.id}
-              style={{ animationDelay: `${i * 50}ms` }}
-              className="animate-fade-up interactive-3d flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-muted/30 px-5 py-4 transition-all duration-300 hover:bg-white hover:shadow-md"
-            >
-              <div>
-                <p className="font-semibold">{item.donorName}</p>
-                <p className="mt-0.5 text-sm text-muted-foreground">
-                  {item.campaignTitle} · {formatDateIndonesia(item.donatedAt)}
-                </p>
+
+        {/* Content */}
+        {donations.length === 0 ? (
+          <div className="rounded-2xl border border-border/50 bg-card/30 p-8 backdrop-blur-sm">
+            <EmptyState
+              icon={Heart}
+              title="Belum ada donasi"
+              description="Donasi yang masuk akan tampil di sini"
+            />
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {donations.slice(0, 5).map((item) => (
+              <div
+                key={item.id}
+                className="group flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border/50 bg-card/30 px-5 py-4 backdrop-blur-sm transition-all duration-300 hover:border-amber-500/30 hover:bg-card/50 hover:shadow-md"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500/20 to-rose-500/20 transition-transform duration-300 group-hover:scale-110">
+                    <Heart className="size-4 text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">
+                      {item.donorName}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {item.campaignTitle} · {formatDateIndonesia(item.donatedAt)}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-amber-600 dark:text-amber-400">
+                    {formatRupiah(item.amount)}
+                  </p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                    {item.status === "CONFIRMED"
+                      ? "Terkonfirmasi"
+                      : item.status === "PENDING"
+                        ? "Menunggu"
+                        : "Dibatalkan"}
+                  </p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="font-bold text-primary">{formatRupiah(item.amount)}</p>
-                <p className="mt-0.5 text-xs uppercase tracking-[0.14em] text-muted-foreground">{item.status}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </Card3D>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
