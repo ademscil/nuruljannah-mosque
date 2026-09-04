@@ -56,7 +56,7 @@ function DeleteAnnouncementDialog({ announcement }: { announcement: Announcement
         <AlertDialogHeader>
           <AlertDialogTitle>Hapus Pengumuman?</AlertDialogTitle>
           <AlertDialogDescription>
-            Pengumuman "{announcement.title}" akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.
+            Pengumuman &ldquo;{announcement.title}&rdquo; akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -17,6 +17,18 @@ import {
 import type { CmsSettingsRecord } from "@/features/cms/types/cms-settings";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
+type GlobalSettingsFormValues = {
+  siteName: string;
+  siteShortName: string;
+  siteTagline: string;
+  contactAddress: string;
+  contactCity: string;
+  contactEmail: string;
+  contactPhone: string;
+  contactMapUrl: string;
+  heroVideoUrl: string;
+};
+
 type GlobalSettingsFormProps = {
   initialData: CmsSettingsRecord;
 };
@@ -26,7 +38,7 @@ export function GlobalSettingsForm({ initialData }: GlobalSettingsFormProps) {
   const [isUploadingVideo, startVideoUploadTransition] = useTransition();
   const [selectedVideoFile, setSelectedVideoFile] = useState<File | null>(null);
 
-  const form = useForm({
+  const form = useForm<GlobalSettingsFormValues>({
     defaultValues: {
       siteName: initialData.siteName,
       siteShortName: initialData.siteShortName,
@@ -64,7 +76,7 @@ export function GlobalSettingsForm({ initialData }: GlobalSettingsFormProps) {
     });
   };
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: GlobalSettingsFormValues) => {
     startTransition(async () => {
       const payload = {
         id: initialData.id,

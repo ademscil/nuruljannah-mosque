@@ -40,7 +40,6 @@ export function Card3D({
 
   // Combine refs
   const setRefs = (element: HTMLDivElement | null) => {
-    // @ts-ignore
     mouse3DRef.current = element;
     inViewRef(element);
   };
@@ -242,7 +241,6 @@ export function Card3DParallax({
   });
 
   const setRefs = (element: HTMLDivElement | null) => {
-    // @ts-ignore
     mouse3DRef.current = element;
     inViewRef(element);
   };

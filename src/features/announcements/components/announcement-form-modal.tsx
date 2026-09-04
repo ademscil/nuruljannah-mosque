@@ -1,7 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FileText, Tag, Calendar, Image, Plus, Pencil } from "lucide-react";
+import { FileText, Tag, Calendar, Image as ImageIcon, Plus, Pencil } from "lucide-react";
+import { SmartImageUploader } from "@/components/shared/smart-image-uploader";
+import { useAutoSaveDraft } from "@/hooks/use-autosave-draft";
 import { useEffect, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -66,6 +68,17 @@ export function AnnouncementFormModal({
     defaultValues: getDefaultValues(announcement),
   });
 
+  const formKey = mode === "create" ? "draft_announcement_new" : ("draft_announcement_" + announcement?.id);
+  const { clearDraft } = useAutoSaveDraft({
+    key: formKey,
+    data: form.watch(),
+    isDirty: form.formState.isDirty,
+    onRestore: (saved) => {
+      form.reset({ ...getDefaultValues(announcement), ...saved });
+      toast.info("Draf pengumuman berhasil dipulihkan.");
+    },
+  });
+
   const selectedStatus = useWatch({
     control: form.control,
     name: "status",
@@ -90,6 +103,7 @@ export function AnnouncementFormModal({
         return;
       }
 
+      clearDraft();
       toast.success(result.message);
       setOpen(false);
       form.reset();
@@ -216,18 +230,20 @@ export function AnnouncementFormModal({
           {/* Media Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <Image className="h-4 w-4 text-primary" />
-              <span>Media (Opsional)</span>
+              <ImageIcon className="h-4 w-4 text-primary" />
+              <span>Poster / Banner Pengumuman (Opsional)</span>
             </div>
 
             <FormFieldWrapper
-              label="Link Gambar"
+              label="Foto / Flyer Pengumuman"
               error={form.formState.errors.thumbnailUrl?.message}
-              hint="Tempel link gambar dari Google Drive atau layanan lain"
+              hint="Format gambar otomatis dikompresi menjadi WebP ringan (<150KB) untuk pemuatan cepat"
             >
-              <Input
-                placeholder="https://drive.google.com/..."
-                {...form.register("thumbnailUrl")}
+              <SmartImageUploader
+                value={form.watch("thumbnailUrl") ?? ""}
+                onChange={(url) => form.setValue("thumbnailUrl", url, { shouldValidate: true, shouldDirty: true })}
+                folder="announcements"
+                aspectRatio="16:9"
               />
             </FormFieldWrapper>
           </div>

@@ -1,12 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Image as ImageIcon, Tag, Link2, ToggleLeft } from "lucide-react";
+import { Image as ImageIcon, Link2, ToggleLeft } from "lucide-react";
 import { useTransition, useState, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
+import { SmartImageUploader } from "@/components/shared/smart-image-uploader";
+import { useAutoSaveDraft } from "@/hooks/use-autosave-draft";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -50,6 +52,17 @@ export function GalleryFormModal({ item, trigger, onSuccess }: GalleryFormModalP
     defaultValues: getDefaultValues(item),
   });
 
+  const formKey = item?.id ? ("draft_gallery_" + item.id) : "draft_gallery_new";
+  const { clearDraft } = useAutoSaveDraft({
+    key: formKey,
+    data: form.watch(),
+    isDirty: form.formState.isDirty,
+    onRestore: (saved) => {
+      form.reset({ ...getDefaultValues(item), ...saved });
+      toast.info("Draf foto galeri berhasil dipulihkan.");
+    },
+  });
+
   const selectedStatus = useWatch({
     control: form.control,
     name: "status",
@@ -68,6 +81,7 @@ export function GalleryFormModal({ item, trigger, onSuccess }: GalleryFormModalP
         toast.error(result.message);
         return;
       }
+      clearDraft();
       toast.success(result.message);
       setOpen(false);
       onSuccess?.();
@@ -114,11 +128,16 @@ export function GalleryFormModal({ item, trigger, onSuccess }: GalleryFormModalP
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <FormFieldWrapper
-                label="Link Foto"
+                label="Foto Dokumentasi Kegiatan"
                 error={form.formState.errors.imageUrl?.message}
-                hint="Tempel link foto dari Google Drive atau layanan lain"
+                hint="Otomatis dikonversi ke format WebP ringan (<150KB) untuk galeri jernih dan hemat kuota"
               >
-                <Input placeholder="https://drive.google.com/..." {...form.register("imageUrl")} />
+                <SmartImageUploader
+                  value={form.watch("imageUrl") ?? ""}
+                  onChange={(url) => form.setValue("imageUrl", url, { shouldValidate: true, shouldDirty: true })}
+                  folder="gallery"
+                  aspectRatio="free"
+                />
               </FormFieldWrapper>
               <FormFieldWrapper
                 label="Tanggal Kegiatan"

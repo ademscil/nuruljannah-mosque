@@ -69,7 +69,7 @@ function DeleteEventDialog({ event }: { event: EventListItem }) {
         <AlertDialogHeader>
           <AlertDialogTitle>Hapus Agenda Kegiatan?</AlertDialogTitle>
           <AlertDialogDescription>
-            Agenda "{event.name}" akan dihapus permanen. Tindakan ini tidak bisa
+            Agenda &ldquo;{event.name}&rdquo; akan dihapus permanen. Tindakan ini tidak bisa
             dibatalkan.
           </AlertDialogDescription>
         </AlertDialogHeader>

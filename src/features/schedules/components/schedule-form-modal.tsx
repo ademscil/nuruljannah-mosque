@@ -15,6 +15,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
+import { useAutoSaveDraft } from "@/hooks/use-autosave-draft";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -70,6 +71,17 @@ export function ScheduleFormModal({
     defaultValues: getDefaultValues(schedule),
   });
 
+  const formKey = mode === "create" ? "draft_schedule_new" : ("draft_schedule_" + schedule?.id);
+  const { clearDraft } = useAutoSaveDraft({
+    key: formKey,
+    data: form.watch(),
+    isDirty: form.formState.isDirty,
+    onRestore: (saved) => {
+      form.reset({ ...getDefaultValues(schedule), ...saved });
+      toast.info("Draf jadwal berhasil dipulihkan.");
+    },
+  });
+
   const selectedRole = useWatch({
     control: form.control,
     name: "roleType",
@@ -91,6 +103,7 @@ export function ScheduleFormModal({
         return;
       }
 
+      clearDraft();
       toast.success(result.message);
       setOpen(false);
       form.reset();

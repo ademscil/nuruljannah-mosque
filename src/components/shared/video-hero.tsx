@@ -34,7 +34,6 @@ export function VideoHero({
 
   useEffect(() => {
     if (!videoSrc || !videoRef.current) {
-      setVideoStatus("error");
       return;
     }
 

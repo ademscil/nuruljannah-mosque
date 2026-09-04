@@ -1,12 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, Briefcase, Phone, Calendar } from "lucide-react";
+import { User, Phone, Calendar } from "lucide-react";
 import { useTransition, useState, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
+import { SmartImageUploader } from "@/components/shared/smart-image-uploader";
+import { useAutoSaveDraft } from "@/hooks/use-autosave-draft";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -52,6 +54,17 @@ export function ManagementFormModal({ member, trigger, onSuccess }: ManagementFo
     defaultValues: getDefaultValues(member),
   });
 
+  const formKey = member?.id ? ("draft_management_" + member.id) : "draft_management_new";
+  const { clearDraft } = useAutoSaveDraft({
+    key: formKey,
+    data: form.watch(),
+    isDirty: form.formState.isDirty,
+    onRestore: (saved) => {
+      form.reset({ ...getDefaultValues(member), ...saved });
+      toast.info("Draf data pengurus berhasil dipulihkan.");
+    },
+  });
+
   const selectedStatus = useWatch({
     control: form.control,
     name: "status",
@@ -70,6 +83,7 @@ export function ManagementFormModal({ member, trigger, onSuccess }: ManagementFo
         toast.error(result.message);
         return;
       }
+      clearDraft();
       toast.success(result.message);
       setOpen(false);
       onSuccess?.();
@@ -164,11 +178,16 @@ export function ManagementFormModal({ member, trigger, onSuccess }: ManagementFo
                 </FormFieldWrapper>
               </div>
               <FormFieldWrapper
-                label="Link Foto (opsional)"
+                label="Foto Pengurus (opsional)"
                 error={form.formState.errors.photoUrl?.message}
-                hint="Tempel link foto dari Google Drive atau layanan lain"
+                hint="Format foto otomatis dikonversi ke WebP ringan (<150KB)"
               >
-                <Input placeholder="https://drive.google.com/..." {...form.register("photoUrl")} />
+                <SmartImageUploader
+                  value={form.watch("photoUrl") ?? ""}
+                  onChange={(url) => form.setValue("photoUrl", url, { shouldValidate: true, shouldDirty: true })}
+                  folder="management"
+                  aspectRatio="1:1"
+                />
               </FormFieldWrapper>
             </div>
           </div>

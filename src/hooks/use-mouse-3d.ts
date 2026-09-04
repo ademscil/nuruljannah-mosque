@@ -75,7 +75,7 @@ export function useMouse3D(options: Mouse3DOptions = {}): Mouse3DReturn {
     if (!element) return;
 
     let animationFrameId: number;
-    let currentTransform = { x: 0, y: 0, rotateX: 0, rotateY: 0, scale: 1 };
+    const currentTransform = { x: 0, y: 0, rotateX: 0, rotateY: 0, scale: 1 };
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!element) return;

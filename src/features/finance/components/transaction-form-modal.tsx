@@ -1,12 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar, FileText, Link2, Tag, Wallet } from "lucide-react";
+import { Calendar, FileText, Tag, Wallet } from "lucide-react";
 import React, { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
+import { CurrencyInput } from "@/components/shared/currency-input";
+import { SmartImageUploader } from "@/components/shared/smart-image-uploader";
+import { useAutoSaveDraft } from "@/hooks/use-autosave-draft";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -46,7 +49,7 @@ function getDefaultValues(
     id: transaction?.id,
     type: transaction?.type ?? "INCOME",
     category: transaction?.category ?? "",
-    amount: transaction?.amount ?? 0,
+    amount: transaction?.amount ? Number(transaction.amount) : 0,
     transactionAt: transaction?.transactionAt
       ? transaction.transactionAt.slice(0, 16)
       : "",
@@ -67,6 +70,17 @@ export function TransactionFormModal({
     defaultValues: getDefaultValues(transaction),
   });
 
+  const formKey = transaction?.id ? ("draft_tx_" + transaction.id) : "draft_tx_new";
+  const { clearDraft } = useAutoSaveDraft({
+    key: formKey,
+    data: form.watch(),
+    isDirty: form.formState.isDirty,
+    onRestore: (saved) => {
+      form.reset({ ...getDefaultValues(transaction), ...saved });
+      toast.info("Draf transaksi berhasil dipulihkan.");
+    },
+  });
+
   useEffect(() => {
     if (open) {
       form.reset(getDefaultValues(transaction));
@@ -76,13 +90,16 @@ export function TransactionFormModal({
   const handleSubmit = (values: TransactionFormSchema) => {
     startTransition(async () => {
       const result = await saveTransactionAction(values);
+
       if (!result.success) {
         toast.error(result.message);
         return;
       }
+
+      clearDraft();
       toast.success(result.message);
       setOpen(false);
-      form.reset(getDefaultValues());
+      form.reset();
     });
   };
 
@@ -90,67 +107,65 @@ export function TransactionFormModal({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={(props) => trigger && React.cloneElement(trigger, props)} />
+      <DialogTrigger render={trigger} />
       <DialogContent size="xl" className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {transaction ? "Edit Transaksi" : "Tambah Transaksi Baru"}
+            {transaction ? "Edit Transaksi Kas" : "Catat Transaksi Kas Baru"}
           </DialogTitle>
           <DialogDescription>
             {transaction
-              ? "Perbarui informasi transaksi keuangan masjid"
-              : "Catat transaksi pemasukan atau pengeluaran baru"}
+              ? "Perbarui rincian kas masuk atau kas keluar masjid."
+              : "Catat penerimaan infaq/sedekah atau pengeluaran operasional masjid secara akurat."}
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          {/* Transaction Info Section */}
+        <form className="space-y-5" onSubmit={form.handleSubmit(handleSubmit)}>
+          {/* Type & Category Section */}
           <div className="space-y-4 rounded-2xl border border-border/50 bg-card/30 p-5 backdrop-blur-sm">
             <div className="flex items-center gap-2.5">
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
-                <FileText className="size-4 text-blue-600 dark:text-blue-400" />
+              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20">
+                <Tag className="size-4 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="font-semibold tracking-tight text-foreground">
-                Informasi Transaksi
+                Jenis & Kategori Kas
               </h3>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
               <FormFieldWrapper
-                label="Jenis Transaksi"
+                label="Jenis Arus Kas"
                 error={form.formState.errors.type?.message}
               >
-                <div className="relative">
-                  <Wallet className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                  <Select
-                    value={selectedType}
-                    onValueChange={(value) =>
-                      form.setValue(
-                        "type",
-                        (value ?? "INCOME") as TransactionFormSchema["type"],
-                      )
-                    }
-                  >
-                    <SelectTrigger className="pl-10">
-                      <SelectValue placeholder="Pilih jenis" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="INCOME">Pemasukan</SelectItem>
-                      <SelectItem value="EXPENSE">Pengeluaran</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Select
+                  value={selectedType}
+                  onValueChange={(value) =>
+                    form.setValue(
+                      "type",
+                      (value ?? "INCOME") as TransactionFormSchema["type"],
+                      { shouldValidate: true }
+                    )
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Pilih jenis arus kas" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="INCOME">Pemasukan (Infaq / Sedekah / Hibah)</SelectItem>
+                    <SelectItem value="EXPENSE">Pengeluaran (Operasional / Belanja)</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormFieldWrapper>
 
               <FormFieldWrapper
                 label="Kategori"
                 error={form.formState.errors.category?.message}
-                hint="Contoh: Infaq, Zakat, Operasional"
+                hint="Contoh: Infaq Jumat, Kebersihan, Listrik & Air"
               >
                 <div className="relative">
-                  <Tag className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Tag className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   <Input
-                    placeholder="Contoh: Infaq Jumat"
+                    placeholder="Contoh: Infaq Tromol Jumat"
                     className="pl-10"
                     {...form.register("category")}
                   />
@@ -172,13 +187,14 @@ export function TransactionFormModal({
 
             <div className="grid gap-4 md:grid-cols-2">
               <FormFieldWrapper
-                label="Jumlah (Rp)"
+                label="Jumlah Nominal Kas"
                 error={form.formState.errors.amount?.message}
+                hint="Gunakan tombol cepat untuk nominal kelipatan umum"
               >
-                <Input
-                  type="number"
-                  placeholder="Contoh: 500000"
-                  {...form.register("amount", { valueAsNumber: true })}
+                <CurrencyInput
+                  value={form.watch("amount") ?? 0}
+                  onChange={(val) => form.setValue("amount", val, { shouldValidate: true, shouldDirty: true })}
+                  placeholder="Rp 0"
                 />
               </FormFieldWrapper>
 
@@ -187,7 +203,7 @@ export function TransactionFormModal({
                 error={form.formState.errors.transactionAt?.message}
               >
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Calendar className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   <Input
                     type="datetime-local"
                     className="pl-10"
@@ -205,34 +221,32 @@ export function TransactionFormModal({
                 <FileText className="size-4 text-purple-600 dark:text-purple-400" />
               </div>
               <h3 className="font-semibold tracking-tight text-foreground">
-                Keterangan & Lampiran
+                Keterangan & Bukti Kwitansi
               </h3>
             </div>
 
             <FormFieldWrapper
-              label="Keterangan"
+              label="Keterangan Rinci"
               error={form.formState.errors.description?.message}
             >
               <Textarea
-                rows={4}
-                placeholder="Jelaskan sumber atau tujuan transaksi ini..."
+                rows={3}
+                placeholder="Contoh: Pembelian lampu penerangan ruang utama dan pembersihan filter AC..."
                 {...form.register("description")}
               />
             </FormFieldWrapper>
 
             <FormFieldWrapper
-              label="Link Bukti Transaksi (opsional)"
+              label="Foto Bukti Kwitansi / Struk (Opsional)"
               error={form.formState.errors.attachmentUrl?.message}
-              hint="Tempel link foto bukti transfer atau kwitansi"
+              hint="Otomatis dikonversi ke WebP ringan (<150KB) untuk arsip digital bendahara"
             >
-              <div className="relative">
-                <Link2 className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="https://drive.google.com/..."
-                  className="pl-10"
-                  {...form.register("attachmentUrl")}
-                />
-              </div>
+              <SmartImageUploader
+                value={form.watch("attachmentUrl") ?? ""}
+                onChange={(url) => form.setValue("attachmentUrl", url, { shouldValidate: true })}
+                folder="finance"
+                aspectRatio="free"
+              />
             </FormFieldWrapper>
           </div>
 

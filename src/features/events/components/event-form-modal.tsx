@@ -6,7 +6,7 @@ import {
   Calendar,
   MapPin,
   User,
-  Image,
+  Image as ImageIcon,
   Plus,
   Pencil,
   Eye,
@@ -17,6 +17,8 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
+import { SmartImageUploader } from "@/components/shared/smart-image-uploader";
+import { useAutoSaveDraft } from "@/hooks/use-autosave-draft";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -76,6 +78,17 @@ export function EventFormModal({ event, mode = "create" }: EventFormModalProps) 
     defaultValues: getDefaultValues(event),
   });
 
+  const formKey = mode === "create" ? "draft_event_new" : ("draft_event_" + event?.id);
+  const { clearDraft } = useAutoSaveDraft({
+    key: formKey,
+    data: form.watch(),
+    isDirty: form.formState.isDirty,
+    onRestore: (saved) => {
+      form.reset({ ...getDefaultValues(event), ...saved });
+      toast.info("Draf kegiatan berhasil dipulihkan.");
+    },
+  });
+
   const selectedStatus = useWatch({
     control: form.control,
     name: "status",
@@ -110,6 +123,7 @@ export function EventFormModal({ event, mode = "create" }: EventFormModalProps) 
         return;
       }
 
+      clearDraft();
       toast.success(result.message);
       setOpen(false);
       form.reset();
@@ -236,7 +250,7 @@ export function EventFormModal({ event, mode = "create" }: EventFormModalProps) 
           {/* Status & Visibility Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <Image className="h-4 w-4 text-primary" />
+              <ImageIcon className="h-4 w-4 text-primary" />
               <span>Status & Tampilan</span>
             </div>
 
@@ -269,13 +283,15 @@ export function EventFormModal({ event, mode = "create" }: EventFormModalProps) 
               </FormFieldWrapper>
 
               <FormFieldWrapper
-                label="Link Poster"
+                label="Flyer / Poster Kajian (Opsional)"
                 error={form.formState.errors.posterUrl?.message}
-                hint="Opsional, kosongkan jika tidak ada"
+                hint="Format gambar otomatis dikompresi menjadi WebP ringan (<150KB) dengan rasio 4:5 standar poster Instagram / WhatsApp"
               >
-                <Input
-                  placeholder="https://drive.google.com/..."
-                  {...form.register("posterUrl")}
+                <SmartImageUploader
+                  value={form.watch("posterUrl") ?? ""}
+                  onChange={(url) => form.setValue("posterUrl", url, { shouldValidate: true, shouldDirty: true })}
+                  folder="events"
+                  aspectRatio="4:5"
                 />
               </FormFieldWrapper>
             </div>

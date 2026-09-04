@@ -68,7 +68,7 @@ function DeleteScheduleDialog({ schedule }: { schedule: ScheduleListItem }) {
         <AlertDialogHeader>
           <AlertDialogTitle>Hapus Jadwal Petugas?</AlertDialogTitle>
           <AlertDialogDescription>
-            Jadwal "{schedule.title}" akan dihapus permanen. Tindakan ini tidak
+            Jadwal &ldquo;{schedule.title}&rdquo; akan dihapus permanen. Tindakan ini tidak
             bisa dibatalkan.
           </AlertDialogDescription>
         </AlertDialogHeader>

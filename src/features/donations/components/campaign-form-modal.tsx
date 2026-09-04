@@ -7,6 +7,9 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
+import { CurrencyInput } from "@/components/shared/currency-input";
+import { SmartImageUploader } from "@/components/shared/smart-image-uploader";
+import { useAutoSaveDraft } from "@/hooks/use-autosave-draft";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogOverlay, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { DialogClose, DialogTrigger } from "@/components/ui/dialog";
@@ -50,6 +53,17 @@ export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps)
     defaultValues: getDefaultValues(campaign),
   });
 
+  const formKey = campaign?.id ? ("draft_campaign_" + campaign.id) : "draft_campaign_new";
+  const { clearDraft } = useAutoSaveDraft({
+    key: formKey,
+    data: form.watch(),
+    isDirty: form.formState.isDirty,
+    onRestore: (saved) => {
+      form.reset({ ...getDefaultValues(campaign), ...saved });
+      toast.info("Draf program donasi berhasil dipulihkan.");
+    },
+  });
+
   const selectedActive = useWatch({ control: form.control, name: "isActive" });
 
   useEffect(() => {
@@ -68,6 +82,7 @@ export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps)
         toast.error(result.message);
         return;
       }
+      clearDraft();
       toast.success(result.message);
       setOpen(false);
       form.reset(getDefaultValues());
@@ -135,23 +150,25 @@ export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps)
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <FormFieldWrapper
-                label="Target Dana (Rp)"
+                label="Target Dana"
                 error={form.formState.errors.targetAmount?.message}
+                hint="Target total infaq/donasi yang dibutuhkan"
               >
-                <Input
-                  type="number"
-                  placeholder="Contoh: 50000000"
-                  {...form.register("targetAmount", { valueAsNumber: true })}
+                <CurrencyInput
+                  value={form.watch("targetAmount") ?? 0}
+                  onChange={(val) => form.setValue("targetAmount", val, { shouldValidate: true, shouldDirty: true })}
+                  placeholder="Rp 0"
                 />
               </FormFieldWrapper>
               <FormFieldWrapper
-                label="Dana Terkumpul (Rp)"
-                hint="Perbarui sesuai total donasi yang sudah masuk"
+                label="Dana Terkumpul"
+                error={form.formState.errors.collectedAmount?.message}
+                hint="Total donasi yang sudah terhimpun saat ini"
               >
-                <Input
-                  type="number"
-                  placeholder="0"
-                  {...form.register("collectedAmount", { valueAsNumber: true })}
+                <CurrencyInput
+                  value={form.watch("collectedAmount") ?? 0}
+                  onChange={(val) => form.setValue("collectedAmount", val, { shouldValidate: true, shouldDirty: true })}
+                  placeholder="Rp 0"
                 />
               </FormFieldWrapper>
             </div>
@@ -183,11 +200,16 @@ export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps)
               <span className="text-sm font-semibold text-foreground">QRIS Digital</span>
             </div>
             <FormFieldWrapper
-              label="Link Gambar QRIS (opsional)"
+              label="Gambar Kode QRIS Digital (opsional)"
               error={form.formState.errors.qrisImageUrl?.message}
-              hint="Tempel link gambar kode QRIS untuk donasi digital"
+              hint="Otomatis dikonversi ke WebP ringan untuk kemudahan scan jamaah"
             >
-              <Input placeholder="https://drive.google.com/..." {...form.register("qrisImageUrl")} />
+              <SmartImageUploader
+                value={form.watch("qrisImageUrl") ?? ""}
+                onChange={(url) => form.setValue("qrisImageUrl", url, { shouldValidate: true, shouldDirty: true })}
+                folder="qris"
+                aspectRatio="1:1"
+              />
             </FormFieldWrapper>
           </div>
 

@@ -7,6 +7,8 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
+import { CurrencyInput } from "@/components/shared/currency-input";
+import { useAutoSaveDraft } from "@/hooks/use-autosave-draft";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogOverlay, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { DialogClose, DialogTrigger } from "@/components/ui/dialog";
@@ -53,6 +55,17 @@ export function DonationEntryFormModal({
     defaultValues: getDefaultValues(donation),
   });
 
+  const formKey = donation?.id ? ("draft_donation_" + donation.id) : "draft_donation_new";
+  const { clearDraft } = useAutoSaveDraft({
+    key: formKey,
+    data: form.watch(),
+    isDirty: form.formState.isDirty,
+    onRestore: (saved) => {
+      form.reset({ ...getDefaultValues(donation), ...saved });
+      toast.info("Draf data donasi berhasil dipulihkan.");
+    },
+  });
+
   const selectedStatus = useWatch({ control: form.control, name: "status" });
   const selectedCampaignId = useWatch({ control: form.control, name: "campaignId" });
 
@@ -69,6 +82,7 @@ export function DonationEntryFormModal({
         toast.error(result.message);
         return;
       }
+      clearDraft();
       toast.success(result.message);
       setOpen(false);
       form.reset(getDefaultValues());
@@ -150,11 +164,11 @@ export function DonationEntryFormModal({
               <span className="text-sm font-semibold text-foreground">Detail Donasi</span>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
-              <FormFieldWrapper label="Jumlah Donasi (Rp)" error={form.formState.errors.amount?.message}>
-                <Input
-                  type="number"
-                  placeholder="Contoh: 100000"
-                  {...form.register("amount", { valueAsNumber: true })}
+              <FormFieldWrapper label="Jumlah Donasi" error={form.formState.errors.amount?.message} hint="Nominal infaq yang disetorkan">
+                <CurrencyInput
+                  value={form.watch("amount") ?? 0}
+                  onChange={(val) => form.setValue("amount", val, { shouldValidate: true, shouldDirty: true })}
+                  placeholder="Rp 0"
                 />
               </FormFieldWrapper>
               <FormFieldWrapper label="Tanggal Donasi" error={form.formState.errors.donatedAt?.message}>

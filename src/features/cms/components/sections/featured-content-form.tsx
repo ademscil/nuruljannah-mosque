@@ -233,7 +233,7 @@ export function FeaturedContentForm({
 
               <div className="mt-4 rounded-lg bg-green-100/50 dark:bg-green-900/20 p-3">
                 <p className="text-xs text-green-800 dark:text-green-200">
-                  💡 <strong>Tips:</strong> Pastikan status di-set ke "Tampilkan di Website" agar semua perubahan yang Anda buat aktif di halaman beranda.
+                  💡 <strong>Tips:</strong> Pastikan status di-set ke &ldquo;Tampilkan di Website&rdquo; agar semua perubahan yang Anda buat aktif di halaman beranda.
                 </p>
               </div>
             </div>
