@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { Clock, MapPin, Volume2 } from "lucide-react";
-import type { PrayerTimesSchedule } from "../services/prayer-time-service";
+import { getTodayPrayerTimes, type PrayerTimesSchedule } from "../services/prayer-time-service";
 
 export interface PrayerTimesWidgetProps {
   initialSchedule: PrayerTimesSchedule;
 }
 
 export function PrayerTimesWidget({ initialSchedule }: PrayerTimesWidgetProps) {
-  const schedule = initialSchedule;
+  const [schedule, setSchedule] = useState<PrayerTimesSchedule>(initialSchedule);
   const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
@@ -22,6 +22,7 @@ export function PrayerTimesWidget({ initialSchedule }: PrayerTimesWidgetProps) {
           second: "2-digit",
         })
       );
+      setSchedule(getTodayPrayerTimes(now));
     };
 
     updateTime();
