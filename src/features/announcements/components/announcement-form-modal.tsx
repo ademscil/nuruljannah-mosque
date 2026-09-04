@@ -69,9 +69,10 @@ export function AnnouncementFormModal({
   });
 
   const formKey = mode === "create" ? "draft_announcement_new" : ("draft_announcement_" + announcement?.id);
+  const thumbnailUrlValue = useWatch({ control: form.control, name: "thumbnailUrl" });
   const { clearDraft } = useAutoSaveDraft({
     key: formKey,
-    data: form.watch(),
+    watch: form.watch,
     isDirty: form.formState.isDirty,
     onRestore: (saved) => {
       form.reset({ ...getDefaultValues(announcement), ...saved });
@@ -240,7 +241,7 @@ export function AnnouncementFormModal({
               hint="Format gambar otomatis dikompresi menjadi WebP ringan (<150KB) untuk pemuatan cepat"
             >
               <SmartImageUploader
-                value={form.watch("thumbnailUrl") ?? ""}
+                value={thumbnailUrlValue ?? ""}
                 onChange={(url) => form.setValue("thumbnailUrl", url, { shouldValidate: true, shouldDirty: true })}
                 folder="announcements"
                 aspectRatio="16:9"

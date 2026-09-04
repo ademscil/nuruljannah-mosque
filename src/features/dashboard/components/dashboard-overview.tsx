@@ -77,7 +77,7 @@ export async function DashboardOverview() {
 
       {/* Stats Grid with 3D effect */}
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 perspective-normal">
-        {stats.map((s, i) => <StatsCard key={s.title} {...s} />)}
+        {stats.map((s) => <StatsCard key={s.title} {...s} />)}
       </div>
 
       {/* Middle row with glass morphism */}

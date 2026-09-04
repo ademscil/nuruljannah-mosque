@@ -79,9 +79,10 @@ export function EventFormModal({ event, mode = "create" }: EventFormModalProps) 
   });
 
   const formKey = mode === "create" ? "draft_event_new" : ("draft_event_" + event?.id);
+  const posterUrlValue = useWatch({ control: form.control, name: "posterUrl" });
   const { clearDraft } = useAutoSaveDraft({
     key: formKey,
-    data: form.watch(),
+    watch: form.watch,
     isDirty: form.formState.isDirty,
     onRestore: (saved) => {
       form.reset({ ...getDefaultValues(event), ...saved });
@@ -288,7 +289,7 @@ export function EventFormModal({ event, mode = "create" }: EventFormModalProps) 
                 hint="Format gambar otomatis dikompresi menjadi WebP ringan (<150KB) dengan rasio 4:5 standar poster Instagram / WhatsApp"
               >
                 <SmartImageUploader
-                  value={form.watch("posterUrl") ?? ""}
+                  value={posterUrlValue ?? ""}
                   onChange={(url) => form.setValue("posterUrl", url, { shouldValidate: true, shouldDirty: true })}
                   folder="events"
                   aspectRatio="4:5"

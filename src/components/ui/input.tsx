@@ -7,9 +7,14 @@ export interface InputProps extends Omit<React.ComponentProps<"input">, "size"> 
   size?: "sm" | "default";
 }
 
-function Input({ className, type, size = "default", ...props }: InputProps) {
+function Input({ className, type, size = "default", id, autoComplete = "off", ...props }: InputProps) {
+  const generatedId = React.useId();
+  const inputId = id || (props.name ? `field-${props.name}` : generatedId);
+
   return (
     <InputPrimitive
+      id={inputId}
+      autoComplete={autoComplete}
       type={type}
       data-slot="input"
       data-size={size}

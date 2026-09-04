@@ -8,7 +8,6 @@ import {
   Heart, 
   Settings, 
   Sparkles,
-  Video,
   FileText
 } from "lucide-react";
 import type { HomepageContentRecord } from "@/features/cms/types/homepage-content";

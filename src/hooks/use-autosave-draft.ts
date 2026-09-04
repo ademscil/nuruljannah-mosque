@@ -2,17 +2,19 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 
-export interface UseAutoSaveDraftOptions<T> {
+export interface UseAutoSaveDraftOptions<T extends object = Record<string, unknown>> {
   key: string;
-  data: T;
+  data?: T;
+  watch?: (callback: (data: unknown) => void) => { unsubscribe: () => void };
   isDirty?: boolean;
   debounceMs?: number;
-  onRestore?: (restoredData: T) => void;
+  onRestore?: (restoredData: Partial<T>) => void;
 }
 
-export function useAutoSaveDraft<T>({
+export function useAutoSaveDraft<T extends object = Record<string, unknown>>({
   key,
   data,
+  watch,
   isDirty = false,
   debounceMs = 1000,
   onRestore,
@@ -40,13 +42,37 @@ export function useAutoSaveDraft<T>({
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Debounced auto-save when data is dirty
   useEffect(() => {
-    if (!isDirty) return;
+    if (watch) {
+      const subscription = watch((values) => {
+        if (!isDirty) return;
+        if (timerRef.current) clearTimeout(timerRef.current);
 
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+          try {
+            const savedAtTime = new Date().toLocaleTimeString("id-ID", {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            const payload = {
+              ...(values as object),
+              _savedAt: savedAtTime,
+            };
+            localStorage.setItem(`draft_${key}`, JSON.stringify(payload));
+            setHasDraft(true);
+            setDraftSavedAt(savedAtTime);
+          } catch {}
+        }, debounceMs);
+      });
+
+      return () => {
+        subscription.unsubscribe();
+        if (timerRef.current) clearTimeout(timerRef.current);
+      };
     }
+
+    if (!isDirty || !data) return;
+    if (timerRef.current) clearTimeout(timerRef.current);
 
     timerRef.current = setTimeout(() => {
       try {
@@ -61,17 +87,13 @@ export function useAutoSaveDraft<T>({
         localStorage.setItem(`draft_${key}`, JSON.stringify(payload));
         setHasDraft(true);
         setDraftSavedAt(savedAtTime);
-      } catch {
-        // Handle storage quota error
-      }
+      } catch {}
     }, debounceMs);
 
     return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [key, data, isDirty, debounceMs]);
+  }, [key, watch, data, isDirty, debounceMs]);
 
   const restoreDraft = useCallback(() => {
     try {
@@ -81,9 +103,7 @@ export function useAutoSaveDraft<T>({
         delete parsed._savedAt;
         onRestore(parsed as T);
       }
-    } catch {
-      // Handle restore error
-    }
+    } catch {}
   }, [key, onRestore]);
 
   const clearDraft = useCallback(() => {
@@ -91,9 +111,7 @@ export function useAutoSaveDraft<T>({
       localStorage.removeItem(`draft_${key}`);
       setHasDraft(false);
       setDraftSavedAt(null);
-    } catch {
-      // Handle remove error
-    }
+    } catch {}
   }, [key]);
 
   return {
@@ -103,4 +121,3 @@ export function useAutoSaveDraft<T>({
     clearDraft,
   };
 }
-

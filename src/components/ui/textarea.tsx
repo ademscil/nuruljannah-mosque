@@ -6,9 +6,14 @@ export interface TextareaProps extends React.ComponentProps<"textarea"> {
   size?: "sm" | "default";
 }
 
-function Textarea({ className, size = "default", ...props }: TextareaProps) {
+function Textarea({ className, size = "default", id, autoComplete = "off", ...props }: TextareaProps) {
+  const generatedId = React.useId();
+  const textareaId = id || (props.name ? `field-${props.name}` : generatedId);
+
   return (
     <textarea
+      id={textareaId}
+      autoComplete={autoComplete}
       data-slot="textarea"
       data-size={size}
       className={cn(

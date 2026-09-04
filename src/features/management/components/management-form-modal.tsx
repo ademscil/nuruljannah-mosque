@@ -55,9 +55,10 @@ export function ManagementFormModal({ member, trigger, onSuccess }: ManagementFo
   });
 
   const formKey = member?.id ? ("draft_management_" + member.id) : "draft_management_new";
+  const photoUrlValue = useWatch({ control: form.control, name: "photoUrl" });
   const { clearDraft } = useAutoSaveDraft({
     key: formKey,
-    data: form.watch(),
+    watch: form.watch,
     isDirty: form.formState.isDirty,
     onRestore: (saved) => {
       form.reset({ ...getDefaultValues(member), ...saved });
@@ -183,7 +184,7 @@ export function ManagementFormModal({ member, trigger, onSuccess }: ManagementFo
                 hint="Format foto otomatis dikonversi ke WebP ringan (<150KB)"
               >
                 <SmartImageUploader
-                  value={form.watch("photoUrl") ?? ""}
+                  value={photoUrlValue ?? ""}
                   onChange={(url) => form.setValue("photoUrl", url, { shouldValidate: true, shouldDirty: true })}
                   folder="management"
                   aspectRatio="1:1"

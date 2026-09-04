@@ -3,7 +3,7 @@
 import { useTransition, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { Settings, Save, Building2, Phone, Mail, MapPin, Video, Info } from "lucide-react";
+import { Building2, Phone, Mail, MapPin, Video, Info } from "lucide-react";
 
 import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";

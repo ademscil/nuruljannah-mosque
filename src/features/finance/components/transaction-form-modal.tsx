@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar, FileText, Tag, Wallet } from "lucide-react";
 import React, { useEffect, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
@@ -73,7 +73,7 @@ export function TransactionFormModal({
   const formKey = transaction?.id ? ("draft_tx_" + transaction.id) : "draft_tx_new";
   const { clearDraft } = useAutoSaveDraft({
     key: formKey,
-    data: form.watch(),
+    watch: form.watch,
     isDirty: form.formState.isDirty,
     onRestore: (saved) => {
       form.reset({ ...getDefaultValues(transaction), ...saved });
@@ -103,7 +103,9 @@ export function TransactionFormModal({
     });
   };
 
-  const selectedType = form.watch("type");
+  const selectedType = useWatch({ control: form.control, name: "type" });
+  const amountValue = useWatch({ control: form.control, name: "amount" });
+  const attachmentUrlValue = useWatch({ control: form.control, name: "attachmentUrl" });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -192,7 +194,7 @@ export function TransactionFormModal({
                 hint="Gunakan tombol cepat untuk nominal kelipatan umum"
               >
                 <CurrencyInput
-                  value={form.watch("amount") ?? 0}
+                  value={amountValue ?? 0}
                   onChange={(val) => form.setValue("amount", val, { shouldValidate: true, shouldDirty: true })}
                   placeholder="Rp 0"
                 />
@@ -242,7 +244,7 @@ export function TransactionFormModal({
               hint="Otomatis dikonversi ke WebP ringan (<150KB) untuk arsip digital bendahara"
             >
               <SmartImageUploader
-                value={form.watch("attachmentUrl") ?? ""}
+                value={attachmentUrlValue ?? ""}
                 onChange={(url) => form.setValue("attachmentUrl", url, { shouldValidate: true })}
                 folder="finance"
                 aspectRatio="free"

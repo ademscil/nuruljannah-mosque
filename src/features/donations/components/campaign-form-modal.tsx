@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Pencil, FileText, Target, Landmark, QrCode, ToggleLeft } from "lucide-react";
+import { Plus, FileText, Target, Landmark, QrCode, ToggleLeft } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -54,9 +54,12 @@ export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps)
   });
 
   const formKey = campaign?.id ? ("draft_campaign_" + campaign.id) : "draft_campaign_new";
+  const targetAmountValue = useWatch({ control: form.control, name: "targetAmount" });
+  const collectedAmountValue = useWatch({ control: form.control, name: "collectedAmount" });
+  const qrisImageUrlValue = useWatch({ control: form.control, name: "qrisImageUrl" });
   const { clearDraft } = useAutoSaveDraft({
     key: formKey,
-    data: form.watch(),
+    watch: form.watch,
     isDirty: form.formState.isDirty,
     onRestore: (saved) => {
       form.reset({ ...getDefaultValues(campaign), ...saved });
@@ -155,7 +158,7 @@ export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps)
                 hint="Target total infaq/donasi yang dibutuhkan"
               >
                 <CurrencyInput
-                  value={form.watch("targetAmount") ?? 0}
+                  value={targetAmountValue ?? 0}
                   onChange={(val) => form.setValue("targetAmount", val, { shouldValidate: true, shouldDirty: true })}
                   placeholder="Rp 0"
                 />
@@ -166,7 +169,7 @@ export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps)
                 hint="Total donasi yang sudah terhimpun saat ini"
               >
                 <CurrencyInput
-                  value={form.watch("collectedAmount") ?? 0}
+                  value={collectedAmountValue ?? 0}
                   onChange={(val) => form.setValue("collectedAmount", val, { shouldValidate: true, shouldDirty: true })}
                   placeholder="Rp 0"
                 />
@@ -205,7 +208,7 @@ export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps)
               hint="Otomatis dikonversi ke WebP ringan untuk kemudahan scan jamaah"
             >
               <SmartImageUploader
-                value={form.watch("qrisImageUrl") ?? ""}
+                value={qrisImageUrlValue ?? ""}
                 onChange={(url) => form.setValue("qrisImageUrl", url, { shouldValidate: true, shouldDirty: true })}
                 folder="qris"
                 aspectRatio="1:1"

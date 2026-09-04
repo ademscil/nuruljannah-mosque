@@ -74,7 +74,7 @@ export function ScheduleFormModal({
   const formKey = mode === "create" ? "draft_schedule_new" : ("draft_schedule_" + schedule?.id);
   const { clearDraft } = useAutoSaveDraft({
     key: formKey,
-    data: form.watch(),
+    watch: form.watch,
     isDirty: form.formState.isDirty,
     onRestore: (saved) => {
       form.reset({ ...getDefaultValues(schedule), ...saved });

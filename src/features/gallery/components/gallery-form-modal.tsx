@@ -53,9 +53,10 @@ export function GalleryFormModal({ item, trigger, onSuccess }: GalleryFormModalP
   });
 
   const formKey = item?.id ? ("draft_gallery_" + item.id) : "draft_gallery_new";
+  const imageUrlValue = useWatch({ control: form.control, name: "imageUrl" });
   const { clearDraft } = useAutoSaveDraft({
     key: formKey,
-    data: form.watch(),
+    watch: form.watch,
     isDirty: form.formState.isDirty,
     onRestore: (saved) => {
       form.reset({ ...getDefaultValues(item), ...saved });
@@ -133,7 +134,7 @@ export function GalleryFormModal({ item, trigger, onSuccess }: GalleryFormModalP
                 hint="Otomatis dikonversi ke format WebP ringan (<150KB) untuk galeri jernih dan hemat kuota"
               >
                 <SmartImageUploader
-                  value={form.watch("imageUrl") ?? ""}
+                  value={imageUrlValue ?? ""}
                   onChange={(url) => form.setValue("imageUrl", url, { shouldValidate: true, shouldDirty: true })}
                   folder="gallery"
                   aspectRatio="free"

@@ -88,11 +88,6 @@ export function useMouse3D(options: Mouse3DOptions = {}): Mouse3DReturn {
       const mouseX = e.clientX - centerX;
       const mouseY = e.clientY - centerY;
 
-      // Calculate distance from center
-      const distance = Math.sqrt(mouseX * mouseX + mouseY * mouseY);
-      const maxDistance = Math.sqrt(
-        rect.width * rect.width + rect.height * rect.height
-      ) / 2;
 
       // Normalize values (-1 to 1)
       const normalizedX = mouseX / (rect.width / 2);

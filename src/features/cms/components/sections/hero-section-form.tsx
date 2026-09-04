@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { Home, Eye, Save } from "lucide-react";
+import { Home, Eye } from "lucide-react";
 import { z } from "zod";
 
 import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";

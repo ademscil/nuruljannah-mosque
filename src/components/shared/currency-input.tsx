@@ -72,6 +72,7 @@ export function CurrencyInput({
           value={displayString}
           onChange={handleInputChange}
           placeholder={placeholder}
+          autoComplete="off"
           disabled={disabled}
           className={cn("pl-11 pr-14 text-base font-semibold", className)}
         />

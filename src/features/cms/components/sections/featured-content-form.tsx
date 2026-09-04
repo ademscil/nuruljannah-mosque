@@ -2,9 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { FileText, Save, Megaphone, Calendar } from "lucide-react";
+import { FileText, Megaphone, Calendar } from "lucide-react";
 import { z } from "zod";
 
 import { ConfirmSubmitButton } from "@/components/shared/confirm-submit-button";
@@ -49,6 +49,9 @@ export function FeaturedContentForm({
       status: initialData.status,
     },
   });
+  const featuredAnnouncementIdValue = useWatch({ control: form.control, name: "featuredAnnouncementId" });
+  const featuredEventIdValue = useWatch({ control: form.control, name: "featuredEventId" });
+  const statusValue = useWatch({ control: form.control, name: "status" });
 
   const handleSubmit = (values: FeaturedSchema) => {
     startTransition(async () => {
@@ -114,7 +117,7 @@ export function FeaturedContentForm({
                 hint="Opsional - Pilih pengumuman penting yang ingin ditonjolkan"
               >
                 <Select
-                  value={form.watch("featuredAnnouncementId") || "none"}
+                  value={featuredAnnouncementIdValue || "none"}
                   onValueChange={(value) => {
                     form.setValue(
                       "featuredAnnouncementId",
@@ -162,7 +165,7 @@ export function FeaturedContentForm({
                 hint="Opsional - Pilih agenda penting yang akan segera berlangsung"
               >
                 <Select
-                  value={form.watch("featuredEventId") || "none"}
+                  value={featuredEventIdValue || "none"}
                   onValueChange={(value) => {
                     form.setValue(
                       "featuredEventId",
@@ -200,7 +203,7 @@ export function FeaturedContentForm({
                 hint="Pilih 'Tampilkan di Website' agar semua konten beranda aktif"
               >
                 <Select
-                  value={form.watch("status")}
+                  value={statusValue}
                   onValueChange={(value) =>
                     form.setValue("status", value as FeaturedSchema["status"])
                   }

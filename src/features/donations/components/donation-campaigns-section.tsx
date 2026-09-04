@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { Target, Sparkles, Pencil, Trash2, Heart, TrendingUp } from "lucide-react";
+import { Target, Pencil, Trash2, Heart, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";

@@ -6,8 +6,6 @@ import {
   Building2,
   HandCoins,
   ShieldCheck,
-  Calendar,
-  Clock,
   HeartHandshake,
 } from "lucide-react";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Pencil, User, Wallet, Calendar, FileText } from "lucide-react";
+import { Plus, User, Wallet, FileText } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -56,9 +56,10 @@ export function DonationEntryFormModal({
   });
 
   const formKey = donation?.id ? ("draft_donation_" + donation.id) : "draft_donation_new";
+  const amountValue = useWatch({ control: form.control, name: "amount" });
   const { clearDraft } = useAutoSaveDraft({
     key: formKey,
-    data: form.watch(),
+    watch: form.watch,
     isDirty: form.formState.isDirty,
     onRestore: (saved) => {
       form.reset({ ...getDefaultValues(donation), ...saved });
@@ -166,7 +167,7 @@ export function DonationEntryFormModal({
             <div className="grid gap-4 md:grid-cols-3">
               <FormFieldWrapper label="Jumlah Donasi" error={form.formState.errors.amount?.message} hint="Nominal infaq yang disetorkan">
                 <CurrencyInput
-                  value={form.watch("amount") ?? 0}
+                  value={amountValue ?? 0}
                   onChange={(val) => form.setValue("amount", val, { shouldValidate: true, shouldDirty: true })}
                   placeholder="Rp 0"
                 />

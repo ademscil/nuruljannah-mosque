@@ -2,7 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState, useTransition } from "react";
-import { Users, Sparkles, Briefcase, Calendar, Pencil, Trash2, Plus } from "lucide-react";
+import { Sparkles, Briefcase, Calendar, Pencil, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { DataTable } from "@/components/shared/data-table";

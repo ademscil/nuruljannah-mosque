@@ -1,7 +1,7 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import { Megaphone, Calendar, Tag, Sparkles, Trash2, MoreVertical } from "lucide-react";
+import { Megaphone, Calendar, Tag, Sparkles, Trash2 } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 
