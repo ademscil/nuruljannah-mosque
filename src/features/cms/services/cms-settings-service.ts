@@ -11,7 +11,7 @@ const defaultCmsSettings: CmsSettingsRecord = {
   contactCity: "Pangkal Pinang, Bangka Belitung",
   contactEmail: "admin@nuruljannah.id",
   contactPhone: "+62 812-3456-7890",
-  contactMapUrl: "https://www.google.com/maps",
+  contactMapUrl: "https://maps.app.goo.gl/gnuQtg8XMpfbPKVs6",
   homeFeatureTitle: "Portal publik yang lebih mudah dipahami",
   homeFeatureDescription:
     "Dirancang terang, ringan, dan fokus pada informasi yang paling sering dibutuhkan jamaah maupun pengurus.",

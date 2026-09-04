@@ -6,26 +6,23 @@ on:
   pull_request:
     branches: [main, develop]
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-
 jobs:
   validate:
     name: Lint, Typecheck & Production Build
     runs-on: ubuntu-latest
 
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
       DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/masjid?schema=public"
+      AUTH_SECRET: "ci-secret-for-build-validation-32charslong"
       NEXTAUTH_SECRET: "ci-secret-for-build-validation-32charslong"
       NEXTAUTH_URL: "http://localhost:3000"
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js 22 (LTS)
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: "npm"

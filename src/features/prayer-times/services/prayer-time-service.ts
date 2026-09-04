@@ -25,8 +25,8 @@ export type PrayerTimesSchedule = {
 };
 
 // Koordinat Masjid Nurul Jannah Pangkal Pinang
-const LATITUDE = -2.1298;
-const LONGITUDE = 106.1139;
+const LATITUDE = -2.1052125;
+const LONGITUDE = 106.0909844;
 const TIMEZONE = 7; // WIB
 
 function toRadians(deg: number): number {
