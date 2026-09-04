@@ -18,7 +18,7 @@ function MobileNavMenu({ pathname, nav }: { pathname: string; nav: CmsNavItem[] 
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Tutup menu" : "Buka menu"}
         aria-expanded={open}
-        className="relative z-50 flex size-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border bg-white text-foreground shadow-sm transition hover:bg-muted lg:hidden"
+        className="relative z-50 flex size-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition hover:bg-muted lg:hidden"
       >
         {open ? <X className="size-4" /> : <Menu className="size-4" />}
       </button>
@@ -27,17 +27,17 @@ function MobileNavMenu({ pathname, nav }: { pathname: string; nav: CmsNavItem[] 
         <button
           type="button"
           aria-label="Tutup menu"
-          className="fixed inset-0 top-[57px] z-40 bg-black/35 backdrop-blur-[2px] transition-opacity lg:hidden"
+          className="fixed inset-0 top-[68px] z-40 bg-black/35 backdrop-blur-[2px] transition-opacity lg:hidden"
           onClick={() => setOpen(false)}
         />
       ) : null}
 
       <div
-        className={`fixed inset-x-0 top-[57px] z-50 px-4 transition-all duration-300 lg:hidden ${
+        className={`fixed inset-x-0 top-[68px] z-50 px-4 transition-all duration-300 lg:hidden ${
           open ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
         }`}
       >
-        <div className="mt-2 max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-2xl border border-border bg-white/96 shadow-[0_16px_48px_-16px_oklch(0.18_0.018_250_/_0.18)] backdrop-blur-2xl">
+        <div className="mt-2 max-h-[calc(100dvh-5rem)] overflow-y-auto pb-[max(1rem,env(safe-area-inset-bottom))] rounded-2xl border border-border bg-background/96 dark:bg-card/96 shadow-[0_16px_48px_-16px_oklch(0.18_0.018_250_/_0.18)] backdrop-blur-2xl">
           <nav className="flex flex-col gap-0.5 p-3" aria-label="Menu utama">
             {nav.map((item, i) => {
               const active = pathname === item.href;
@@ -57,7 +57,7 @@ function MobileNavMenu({ pathname, nav }: { pathname: string; nav: CmsNavItem[] 
             })}
           </nav>
           <div className="border-t border-border p-3">
-            <Link href={ROUTE_PATHS.login} className="btn-primary w-full justify-center py-2.5 text-xs" onClick={() => setOpen(false)}>
+            <Link href={ROUTE_PATHS.login} className="btn-primary flex min-h-[44px] w-full items-center justify-center py-2.5 text-xs" onClick={() => setOpen(false)}>
               Login Admin
             </Link>
           </div>
@@ -90,8 +90,8 @@ export function PublicHeader({
       <header
         className={`sticky top-0 z-40 transition-all duration-300 ${
           scrolled
-            ? "border-b border-border bg-white/90 shadow-[0_2px_20px_-4px_oklch(0.18_0.018_250_/_0.08)] backdrop-blur-2xl"
-            : "border-b border-transparent bg-white/70 backdrop-blur-lg"
+            ? "border-b border-border bg-background/90 shadow-[0_2px_20px_-4px_oklch(0.18_0.018_250_/_0.08)] backdrop-blur-2xl"
+            : "border-b border-transparent bg-background/70 backdrop-blur-lg"
         }`}
       >
         <div className="mx-auto flex max-w-[88rem] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
@@ -119,7 +119,7 @@ export function PublicHeader({
                   className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-150 ${
                     active
                       ? "nav-active shadow-sm"
-                      : "text-muted-foreground hover:bg-white hover:text-foreground hover:shadow-sm"
+                      : "text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-sm"
                   }`}
                 >
                   {item.label}

@@ -10,7 +10,7 @@ import { FormFieldWrapper } from "@/components/shared/form-field-wrapper";
 import { CurrencyInput } from "@/components/shared/currency-input";
 import { useAutoSaveDraft } from "@/hooks/use-autosave-draft";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogOverlay, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { DialogClose, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -95,9 +95,9 @@ export function DonationEntryFormModal({
       <DialogTrigger
         render={(props) =>
           trigger ? (
-            <button {...props} onClick={() => setOpen(true)}>
+            <span {...props} onClick={() => setOpen(true)}>
               {trigger}
-            </button>
+            </span>
           ) : (
             <Button {...props} onClick={() => setOpen(true)}>
               <Plus className="size-4" />
@@ -106,7 +106,6 @@ export function DonationEntryFormModal({
           )
         }
       />
-      <DialogOverlay className="backdrop-blur-sm" />
       <DialogContent className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-background/95 p-0 shadow-depth-xl">
         <div className="sticky top-0 z-10 border-b border-border/50 bg-gradient-to-br from-card/95 via-card/90 to-card/95 px-6 py-5 backdrop-blur-md">
           <DialogTitle className="font-heading text-xl font-bold">

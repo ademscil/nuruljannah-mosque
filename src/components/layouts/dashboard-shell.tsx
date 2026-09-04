@@ -34,7 +34,7 @@ export function DashboardShell({
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
-          <div className="fixed inset-y-0 left-0 max-w-[85vw] w-72 shadow-2xl transition-transform duration-300 ease-in-out animate-slide-right">
+          <div className="fixed inset-y-0 left-0 max-w-[calc(100vw-3rem)] w-72 shadow-2xl transition-transform duration-300 ease-in-out">
             <AppSidebar
               userName={userName}
               role={role}
@@ -52,7 +52,7 @@ export function DashboardShell({
           role={role}
           onOpenMenu={() => setMobileMenuOpen(true)}
         />
-        <main className="flex-1 px-3 py-4 sm:px-6 sm:py-7 pb-24 lg:pb-10">
+        <main className="flex-1 px-3 py-4 sm:px-6 sm:py-7 pb-32 lg:pb-10">
           <div className="mx-auto w-full max-w-[88rem]">{children}</div>
         </main>
         <AppBottomNav onOpenMenu={() => setMobileMenuOpen(true)} />

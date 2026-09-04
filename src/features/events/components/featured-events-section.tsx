@@ -98,10 +98,10 @@ export function FeaturedEventsSection({ events }: FeaturedEventsSectionProps) {
                 </div>
 
                 <div className="space-y-3 border-t border-border/60 pt-3">
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1.5 line-clamp-1">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground gap-2">
+                    <div className="flex min-w-0 items-center gap-1.5">
                       <User className="size-3.5 shrink-0 text-primary" />
-                      <span className="font-medium text-foreground">{item.personInCharge}</span>
+                      <span className="truncate font-medium text-foreground">{item.personInCharge}</span>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <MapPin className="size-3.5 text-muted-foreground" />
@@ -112,7 +112,7 @@ export function FeaturedEventsSection({ events }: FeaturedEventsSectionProps) {
                   <div className="flex items-center gap-2 pt-1">
                     <Link
                       href={ROUTE_PATHS.events}
-                      className="flex-1 rounded-xl bg-primary/10 py-2 text-center text-xs font-bold text-primary transition hover:bg-primary hover:text-white"
+                      className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl bg-primary/10 px-4 py-2 text-center text-xs font-bold text-primary transition hover:bg-primary hover:text-white"
                     >
                       Detail Kegiatan
                     </Link>
@@ -120,10 +120,10 @@ export function FeaturedEventsSection({ events }: FeaturedEventsSectionProps) {
                       href={waUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex size-8 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-50 text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:bg-emerald-950/50 dark:text-emerald-300"
+                      className="flex size-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-50 text-emerald-700 transition hover:bg-emerald-600 hover:text-white dark:bg-emerald-950/50 dark:text-emerald-300"
                       title="Bagikan ke WhatsApp"
                     >
-                      <Share2 className="size-3.5" />
+                      <Share2 className="size-4" />
                     </a>
                   </div>
                 </div>

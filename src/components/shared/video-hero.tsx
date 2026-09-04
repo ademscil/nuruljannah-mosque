@@ -136,7 +136,7 @@ export function VideoHero({
           >
             {/* 3D Title with depth */}
             <motion.h1
-              className="text-5xl font-bold leading-tight text-white md:text-6xl lg:text-7xl"
+              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight text-white"
               style={{
                 textShadow: `
                   0 1px 0 rgba(0,0,0,0.3),
@@ -183,7 +183,7 @@ export function VideoHero({
 
       {/* Scroll Indicator with 3D effect */}
       <motion.div
-        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
+        className="hidden sm:block absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1 }}

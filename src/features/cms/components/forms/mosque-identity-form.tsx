@@ -52,7 +52,6 @@ export function MosqueIdentityForm({ initialData }: MosqueIdentityFormProps) {
     startTransition(async () => {
       const result = await saveCmsSettingsAction({
         id: initialData.id,
-        ...initialData,
         ...values,
       });
 
@@ -92,7 +91,7 @@ export function MosqueIdentityForm({ initialData }: MosqueIdentityFormProps) {
             <Input
               {...form.register("siteName")}
               placeholder="Masjid Nurul Jannah"
-              className="h-11 text-sm font-medium"
+              className="h-11 text-base sm:text-sm font-medium"
             />
           </FormFieldWrapper>
 
@@ -103,7 +102,7 @@ export function MosqueIdentityForm({ initialData }: MosqueIdentityFormProps) {
             <Input
               {...form.register("siteShortName")}
               placeholder="Nurul Jannah"
-              className="h-11 text-sm"
+              className="h-11 text-base sm:text-sm"
             />
           </FormFieldWrapper>
 
@@ -115,7 +114,7 @@ export function MosqueIdentityForm({ initialData }: MosqueIdentityFormProps) {
               <Input
                 {...form.register("siteTagline")}
                 placeholder="Pusat Ibadah, Dakwah, dan Ukhuwah Islamiyah"
-                className="h-11 text-sm"
+                className="h-11 text-base sm:text-sm"
               />
             </FormFieldWrapper>
           </div>
@@ -129,7 +128,7 @@ export function MosqueIdentityForm({ initialData }: MosqueIdentityFormProps) {
                 {...form.register("contactAddress")}
                 placeholder="Jl. Merdeka No. 12, Kelurahan..."
                 rows={2}
-                className="text-sm resize-none"
+                className="text-base sm:text-sm resize-none"
               />
             </FormFieldWrapper>
           </div>
@@ -142,7 +141,7 @@ export function MosqueIdentityForm({ initialData }: MosqueIdentityFormProps) {
               <Input
                 {...form.register("contactCity")}
                 placeholder="Pangkalpinang"
-                className="h-11 text-sm pl-9"
+                className="h-11 text-base sm:text-sm pl-9"
               />
               <MapPin className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
             </div>
@@ -156,7 +155,7 @@ export function MosqueIdentityForm({ initialData }: MosqueIdentityFormProps) {
               <Input
                 {...form.register("contactPhone")}
                 placeholder="+62 812-3456-7890"
-                className="h-11 text-sm pl-9"
+                className="h-11 text-base sm:text-sm pl-9"
               />
               <Phone className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
             </div>
@@ -171,7 +170,7 @@ export function MosqueIdentityForm({ initialData }: MosqueIdentityFormProps) {
                 {...form.register("contactEmail")}
                 type="email"
                 placeholder="sekretariat@masjidnuruljannah.com"
-                className="h-11 text-sm pl-9"
+                className="h-11 text-base sm:text-sm pl-9"
               />
               <Mail className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
             </div>
@@ -185,18 +184,18 @@ export function MosqueIdentityForm({ initialData }: MosqueIdentityFormProps) {
               <Input
                 {...form.register("contactMapUrl")}
                 placeholder="https://maps.app.goo.gl/..."
-                className="h-11 text-sm pl-9"
+                className="h-11 text-base sm:text-sm pl-9"
               />
               <Globe className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
             </div>
           </FormFieldWrapper>
         </div>
 
-        <div className="flex items-center justify-end pt-6 border-t border-border/60">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end pt-6 border-t border-border/60">
           <Button
             type="submit"
             disabled={isPending}
-            className="h-11 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-sm"
+            className="w-full sm:w-auto h-11 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-sm"
           >
             {isPending ? (
               <>

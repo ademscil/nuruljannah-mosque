@@ -59,7 +59,7 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
       </div>
 
       {/* 4 Kartu Neraca Kas */}
-      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Saldo Awal Pekan */}
         <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
           <p className="text-xs font-medium text-muted-foreground">Saldo Awal Pekan</p>
@@ -136,7 +136,7 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
                       <ArrowDownRight className="size-4" />
                     )}
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-xs font-bold text-foreground truncate">
                       {item.description}
                     </p>

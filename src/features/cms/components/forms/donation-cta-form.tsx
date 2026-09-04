@@ -15,8 +15,8 @@ import { saveHomepageContentAction } from "@/features/cms/services/homepage-cont
 import type { HomepageContentRecord } from "@/features/cms/types/homepage-content";
 
 const donationSchema = z.object({
-  donationCtaTitle: z.string().min(1, "Judul ajakan donasi wajib diisi"),
-  donationCtaDescription: z.string().min(1, "Deskripsi ajakan donasi wajib diisi"),
+  donationCtaTitle: z.string().min(3, "Judul ajakan donasi minimal 3 karakter"),
+  donationCtaDescription: z.string().min(10, "Deskripsi ajakan donasi minimal 10 karakter"),
 });
 
 type DonationFormValues = z.infer<typeof donationSchema>;
@@ -40,16 +40,7 @@ export function DonationCtaForm({ initialData }: DonationCtaFormProps) {
     startTransition(async () => {
       const result = await saveHomepageContentAction({
         id: initialData.id,
-        heroTitle: initialData.heroTitle,
-        heroSubtitle: initialData.heroSubtitle,
-        heroPrimaryCtaLabel: initialData.heroPrimaryCtaLabel,
-        heroPrimaryCtaHref: initialData.heroPrimaryCtaHref,
-        welcomeTitle: initialData.welcomeTitle,
-        welcomeContent: initialData.welcomeContent,
         ...values,
-        featuredAnnouncementId: initialData.featuredAnnouncementId ?? undefined,
-        featuredEventId: initialData.featuredEventId ?? undefined,
-        status: initialData.status,
       });
 
       if (!result.success) {
@@ -102,16 +93,16 @@ export function DonationCtaForm({ initialData }: DonationCtaFormProps) {
               {...form.register("donationCtaDescription")}
               placeholder="Setiap rupiah yang Anda infaqkan menjadi amal jariyah untuk santunan anak yatim, renovasi fasilitas, dan program dakwah."
               rows={4}
-              className="text-sm leading-relaxed"
+              className="text-base sm:text-sm leading-relaxed"
             />
           </FormFieldWrapper>
         </div>
 
-        <div className="flex items-center justify-end pt-6 border-t border-border/60">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end pt-6 border-t border-border/60">
           <Button
             type="submit"
             disabled={isPending}
-            className="h-11 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-sm"
+            className="w-full sm:w-auto h-11 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-sm"
           >
             {isPending ? (
               <>

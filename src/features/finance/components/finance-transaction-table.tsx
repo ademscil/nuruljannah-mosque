@@ -60,7 +60,7 @@ function DeleteTransactionDialog({
             {...props}
             variant="ghost"
             size="icon"
-            className="size-8 text-muted-foreground hover:text-destructive"
+            className="size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 text-muted-foreground hover:text-destructive"
           >
             <Trash2 className="size-4" />
           </Button>
@@ -179,7 +179,7 @@ export function FinanceTransactionTable({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="size-8 text-muted-foreground hover:text-foreground"
+                  className="size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 text-muted-foreground hover:text-foreground"
                 >
                   <Pencil className="size-4" />
                 </Button>
@@ -313,11 +313,15 @@ export function FinanceTransactionTable({
                   </p>
                 </div>
 
-                <div className="flex items-center justify-end gap-1 pt-2 border-t border-border/50">
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-border/50">
                   <TransactionFormModal
                     transaction={item}
                     trigger={
-                      <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-foreground">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 text-muted-foreground hover:text-foreground"
+                      >
                         <Pencil className="size-4" />
                       </Button>
                     }

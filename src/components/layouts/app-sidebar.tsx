@@ -34,12 +34,12 @@ export function AppSidebar({ userName, role, onClose }: Props) {
   const nav = navItems.filter((item) => item.permission ? hasPermission(role, item.permission) : true);
 
   return (
-    <aside className="relative flex h-full min-h-screen w-72 shrink-0 flex-col bg-gradient-to-br from-[oklch(0.22_0.04_175)] via-[oklch(0.20_0.04_175)] to-[oklch(0.18_0.04_175)] shadow-depth-lg">
+    <aside className="relative flex h-full min-h-screen w-72 max-w-[calc(100vw-3rem)] shrink-0 flex-col bg-gradient-to-br from-[oklch(0.22_0.04_175)] via-[oklch(0.20_0.04_175)] to-[oklch(0.18_0.04_175)] shadow-depth-lg">
       {/* Decorative gradient overlay */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-primary/5 opacity-50" />
       
       {/* Brand Header */}
-      <div className="relative z-10 border-b border-white/10 px-6 py-6 backdrop-blur-sm">
+      <div className="relative z-10 border-b border-white/10 px-4 py-3 sm:px-6 sm:py-6 backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="card-3d-advanced flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary via-primary to-primary/80 text-white shadow-depth-md shadow-primary/30">
@@ -54,7 +54,7 @@ export function AppSidebar({ userName, role, onClose }: Props) {
             <button
               type="button"
               onClick={onClose}
-              className="flex size-8 items-center justify-center rounded-lg text-white/60 transition-all hover:bg-white/10 hover:text-white"
+              className="flex size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 items-center justify-center rounded-lg text-white/60 transition-all hover:bg-white/10 hover:text-white"
               aria-label="Tutup menu"
             >
               <X className="size-4" />
@@ -64,8 +64,8 @@ export function AppSidebar({ userName, role, onClose }: Props) {
       </div>
 
       {/* User Profile Card with 3D effect */}
-      <div className="relative z-10 px-4 pt-6">
-        <div className="card-3d-advanced glass-ultra rounded-2xl border border-white/20 bg-gradient-to-br from-white/10 to-white/5 p-4 shadow-depth-md backdrop-blur-xl">
+      <div className="relative z-10 px-3 pt-3 sm:px-4 sm:pt-6">
+        <div className="card-3d-advanced glass-ultra rounded-2xl border border-white/20 bg-gradient-to-br from-white/10 to-white/5 p-3 sm:p-4 shadow-depth-md backdrop-blur-xl">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary via-primary to-primary/80 text-sm font-bold text-white shadow-depth-sm">
               {userName.charAt(0).toUpperCase()}
@@ -82,7 +82,7 @@ export function AppSidebar({ userName, role, onClose }: Props) {
       </div>
 
       {/* Navigation with 3D cards */}
-      <nav className="relative z-10 flex-1 space-y-1 overflow-y-auto px-3 py-5 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10">
+      <nav className="relative z-10 flex-1 min-h-0 space-y-1 overflow-y-auto px-3 py-3 sm:py-5 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10">
         {nav.map((item) => {
           const active = item.href === DASHBOARD_PATHS.overview
             ? pathname === item.href
@@ -114,7 +114,7 @@ export function AppSidebar({ userName, role, onClose }: Props) {
       </nav>
 
       {/* Footer with glass effect */}
-      <div className="relative z-10 border-t border-white/10 px-4 py-4 backdrop-blur-sm">
+      <div className="relative z-10 border-t border-white/10 px-4 py-3 sm:py-4 backdrop-blur-sm">
         <div className="glass-frosted rounded-lg border border-white/10 bg-white/5 px-3 py-2.5">
           <p className="text-center text-[10px] font-medium text-white/50">
             {SITE_CONFIG.name}

@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogOverlay,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -63,7 +62,6 @@ function DeleteDonationDialog({ donation }: { donation: DonationListItem }) {
           </Button>
         )}
       />
-      <AlertDialogOverlay />
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Hapus data donasi?</AlertDialogTitle>

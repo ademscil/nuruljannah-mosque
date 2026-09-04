@@ -181,7 +181,7 @@ export function LoginForm() {
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+              className="absolute right-1 top-1/2 -translate-y-1/2 size-11 min-h-[44px] min-w-[44px] flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
               aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
             >
               {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}

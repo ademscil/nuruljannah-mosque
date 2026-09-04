@@ -74,13 +74,13 @@ export function CurrencyInput({
           placeholder={placeholder}
           autoComplete="off"
           disabled={disabled}
-          className={cn("pl-11 pr-14 text-base font-semibold", className)}
+          className={cn("pl-11 pr-16 text-base font-semibold", className)}
         />
         {value > 0 && !disabled && (
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-3 top-1/2 -translate-y-1/2 rounded px-1.5 py-0.5 text-xs font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 flex min-h-[36px] sm:min-h-[32px] items-center rounded-lg px-2.5 py-1 text-xs font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground active:scale-95"
           >
             Reset
           </button>
@@ -97,7 +97,7 @@ export function CurrencyInput({
               variant="outline"
               size="sm"
               onClick={() => handleAddAmount(item.value)}
-              className="h-7 px-2.5 text-xs font-medium"
+              className="min-h-[36px] sm:min-h-[32px] h-9 sm:h-8 px-3 text-xs font-medium"
             >
               {item.label}
             </Button>

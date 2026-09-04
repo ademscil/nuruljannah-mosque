@@ -37,9 +37,9 @@ export function ManagementPublicGrid({ members }: { members: ManagementMemberIte
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-start justify-between gap-2">
-                <div>
-                  <h3 className="font-semibold leading-snug tracking-tight">{member.name}</h3>
-                  <p className="mt-0.5 text-sm font-medium text-primary">{member.position}</p>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold leading-snug tracking-tight break-words">{member.name}</h3>
+                  <p className="mt-0.5 text-sm font-medium text-primary break-words">{member.position}</p>
                 </div>
                 <StatusBadge label="Aktif" value={member.status} />
               </div>
@@ -49,15 +49,15 @@ export function ManagementPublicGrid({ members }: { members: ManagementMemberIte
           <div className="mt-5 space-y-2 border-t border-border pt-4 text-sm text-muted-foreground">
             <p className="text-xs">Periode: {member.termPeriod}</p>
             {member.phone && (
-              <div className="flex items-center gap-2">
+              <div className="flex min-w-0 items-center gap-2">
                 <Phone className="size-3.5 shrink-0 text-primary/60" />
-                <span>{member.phone}</span>
+                <span className="truncate">{member.phone}</span>
               </div>
             )}
             {member.email && (
-              <div className="flex items-center gap-2">
+              <div className="flex min-w-0 items-center gap-2">
                 <Mail className="size-3.5 shrink-0 text-primary/60" />
-                <span className="truncate">{member.email}</span>
+                <span className="min-w-0 truncate break-all">{member.email}</span>
               </div>
             )}
           </div>

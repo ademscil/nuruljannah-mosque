@@ -114,7 +114,7 @@ export function GalleryAdminTable({ items }: GalleryAdminTableProps) {
             <GalleryFormModal
               item={row.original}
               trigger={
-                <button className="inline-flex size-8 items-center justify-center rounded-lg border border-border/50 bg-background/50 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                <button className="inline-flex size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 items-center justify-center rounded-lg border border-border/50 bg-background/50 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
                   <Pencil className="size-3.5" />
                 </button>
               }
@@ -122,7 +122,7 @@ export function GalleryAdminTable({ items }: GalleryAdminTableProps) {
             <DeleteGalleryDialog
               item={row.original}
               trigger={
-                <button className="inline-flex size-8 items-center justify-center rounded-lg border border-border/50 bg-background/50 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive">
+                <button className="inline-flex size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 items-center justify-center rounded-lg border border-border/50 bg-background/50 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive">
                   <Trash2 className="size-3.5" />
                 </button>
               }
@@ -197,12 +197,15 @@ export function GalleryAdminTable({ items }: GalleryAdminTableProps) {
                 </h4>
               </div>
 
-              <div className="flex items-center justify-end gap-1 pt-2 border-t border-border/50">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-border/50">
                 <GalleryFormModal
                   item={item}
-                  
                   trigger={
-                    <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-foreground">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 text-muted-foreground hover:text-foreground"
+                    >
                       <Pencil className="size-4" />
                     </Button>
                   }
@@ -210,7 +213,11 @@ export function GalleryAdminTable({ items }: GalleryAdminTableProps) {
                 <DeleteGalleryDialog
                   item={item}
                   trigger={
-                    <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-destructive">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 text-muted-foreground hover:text-destructive"
+                    >
                       <Trash2 className="size-4" />
                     </Button>
                   }

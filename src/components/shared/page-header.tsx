@@ -9,7 +9,7 @@ type PageHeaderProps = {
 
 export function PageHeader({ eyebrow, title, description, action }: PageHeaderProps) {
   return (
-    <div className="animate-card-entry relative">
+    <div className="animate-card-entry relative overflow-hidden">
       {/* Decorative background blur */}
       <div className="pointer-events-none absolute -left-10 -top-10 size-40 rounded-full bg-primary/10 blur-3xl" />
       

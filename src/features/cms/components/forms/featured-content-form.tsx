@@ -92,7 +92,7 @@ export function FeaturedContentForm({
           >
             <select
               {...form.register("featuredAnnouncementId")}
-              className="w-full h-12 rounded-xl border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="w-full h-12 rounded-xl border border-input bg-background px-3 text-base sm:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <option value="">-- Tidak ada pengumuman disematkan --</option>
               {announcementOptions.map((opt) => (
@@ -109,7 +109,7 @@ export function FeaturedContentForm({
           >
             <select
               {...form.register("featuredEventId")}
-              className="w-full h-12 rounded-xl border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="w-full h-12 rounded-xl border border-input bg-background px-3 text-base sm:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <option value="">-- Tidak ada kegiatan disematkan --</option>
               {eventOptions.map((opt) => (

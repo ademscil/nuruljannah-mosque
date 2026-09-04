@@ -32,7 +32,7 @@ export default async function DashboardDonasiPage() {
       />
       <DonationSummaryCards summary={summary} />
       <DonationCampaignsSection campaigns={campaigns} />
-      <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
+      <div className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
         <DonationAdminTable campaigns={campaigns} donations={donations} />
         <DonationRecentList
           donations={donations}

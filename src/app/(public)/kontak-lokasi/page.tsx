@@ -62,19 +62,19 @@ export default async function KontakLokasiPage() {
                 >
                   <item.icon className="size-5" />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
                     {item.label}
                   </p>
                   {item.href ? (
                     <a
                       href={item.href}
-                      className="mt-1 block text-sm font-medium text-foreground transition-colors hover:text-primary"
+                      className="mt-1 block text-sm font-medium text-foreground transition-colors hover:text-primary break-all"
                     >
                       {item.value}
                     </a>
                   ) : (
-                    <p className="mt-1 text-sm font-medium leading-6">
+                    <p className="mt-1 text-sm font-medium leading-6 break-words">
                       {item.value}
                     </p>
                   )}

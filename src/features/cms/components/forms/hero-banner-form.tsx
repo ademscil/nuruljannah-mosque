@@ -18,7 +18,13 @@ const heroSchema = z.object({
   heroTitle: z.string().min(3, "Judul utama minimal 3 karakter."),
   heroSubtitle: z.string().min(5, "Kalimat pembuka minimal 5 karakter."),
   heroPrimaryCtaLabel: z.string().min(2, "Teks tombol aksi minimal 2 karakter."),
-  heroPrimaryCtaHref: z.string().min(1, "Link tujuan tombol wajib diisi."),
+  heroPrimaryCtaHref: z
+    .string()
+    .min(1, "Link tujuan tombol wajib diisi.")
+    .refine(
+      (value) => value.startsWith("/") || value.startsWith("http"),
+      "Link tujuan harus berupa path internal (contoh: /agenda-kegiatan) atau URL valid.",
+    ),
 });
 
 type HeroFormValues = z.infer<typeof heroSchema>;
@@ -45,13 +51,6 @@ export function HeroBannerForm({ initialData }: HeroBannerFormProps) {
       const result = await saveHomepageContentAction({
         id: initialData.id,
         ...values,
-        welcomeTitle: initialData.welcomeTitle,
-        welcomeContent: initialData.welcomeContent,
-        donationCtaTitle: initialData.donationCtaTitle,
-        donationCtaDescription: initialData.donationCtaDescription,
-        featuredAnnouncementId: initialData.featuredAnnouncementId ?? undefined,
-        featuredEventId: initialData.featuredEventId ?? undefined,
-        status: initialData.status,
       });
 
       if (!result.success) {
@@ -104,7 +103,7 @@ export function HeroBannerForm({ initialData }: HeroBannerFormProps) {
               {...form.register("heroSubtitle")}
               placeholder="Contoh: Pusat ibadah, dakwah, dan pemberdayaan umat berbasis masjid yang inklusif dan amanah di Kota Pangkalpinang."
               rows={3}
-              className="text-sm resize-none"
+              className="text-base sm:text-sm resize-none"
             />
           </FormFieldWrapper>
 
@@ -121,7 +120,7 @@ export function HeroBannerForm({ initialData }: HeroBannerFormProps) {
                 <Input
                   {...form.register("heroPrimaryCtaLabel")}
                   placeholder="Contoh: Lihat Jadwal Sholat"
-                  className="h-11 text-sm"
+                  className="h-11 text-base sm:text-sm"
                 />
               </FormFieldWrapper>
 
@@ -134,7 +133,7 @@ export function HeroBannerForm({ initialData }: HeroBannerFormProps) {
                   <Input
                     {...form.register("heroPrimaryCtaHref")}
                     placeholder="/agenda-kegiatan"
-                    className="h-11 text-sm pl-9"
+                    className="h-11 text-base sm:text-sm pl-9"
                   />
                   <ArrowRight className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
                 </div>
@@ -143,11 +142,11 @@ export function HeroBannerForm({ initialData }: HeroBannerFormProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-end pt-6 border-t border-border/60">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end pt-6 border-t border-border/60">
           <Button
             type="submit"
             disabled={isPending}
-            className="h-11 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-sm"
+            className="w-full sm:w-auto h-11 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-sm"
           >
             {isPending ? (
               <>

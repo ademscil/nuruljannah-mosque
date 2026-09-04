@@ -12,7 +12,10 @@ import {
   cmsSettingsSchema,
   type CmsSettingsSchema,
 } from "@/features/cms/schemas/cms-settings-schema";
-import { saveCmsSettings } from "@/features/cms/services/cms-settings-service";
+import {
+  getCmsSettings,
+  saveCmsSettings,
+} from "@/features/cms/services/cms-settings-service";
 
 export type CmsSettingsActionState = {
   success: boolean;
@@ -26,7 +29,7 @@ export type CmsVideoUploadActionState = {
 };
 
 export async function saveCmsSettingsAction(
-  input: CmsSettingsSchema & { id?: string },
+  input: Partial<CmsSettingsSchema> & { id?: string },
 ): Promise<CmsSettingsActionState> {
   const session = await auth();
 
@@ -37,19 +40,30 @@ export async function saveCmsSettingsAction(
     };
   }
 
-  const parsed = cmsSettingsSchema.safeParse(input);
+  // Fetch current database settings to support partial section updates safely
+  const current = await getCmsSettings();
+  const merged = {
+    ...current,
+    ...input,
+  };
+
+  const parsed = cmsSettingsSchema.safeParse(merged);
 
   if (!parsed.success) {
+    const errorMsg =
+      parsed.error.issues.map((i) => i.message).join(", ") ||
+      "Data CMS global belum valid.";
     return {
       success: false,
-      message: "Data CMS global belum valid.",
+      message: errorMsg,
     };
   }
 
   try {
     await saveCmsSettings({
-      id: input.id,
+      ...current,
       ...parsed.data,
+      id: input.id ?? current.id,
     });
 
     revalidatePath(ROUTE_PATHS.home);

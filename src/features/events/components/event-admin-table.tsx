@@ -60,7 +60,11 @@ function DeleteEventDialog({ event }: { event: EventListItem }) {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
         render={
-          <Button variant="ghost" size="icon-sm">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8"
+          >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Hapus</span>
           </Button>
@@ -172,7 +176,7 @@ export function EventAdminTable({ events }: EventAdminTableProps) {
         id: "actions",
         header: "Aksi",
         cell: ({ row }) => (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <EventFormModal event={row.original} mode="edit" />
             <DeleteEventDialog event={row.original} />
           </div>
@@ -299,7 +303,7 @@ export function EventAdminTable({ events }: EventAdminTableProps) {
                 <span className="text-xs text-muted-foreground">
                   PIC: {item.personInCharge}
                 </span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <EventFormModal event={item} mode="edit" />
                   <DeleteEventDialog event={item} />
                 </div>

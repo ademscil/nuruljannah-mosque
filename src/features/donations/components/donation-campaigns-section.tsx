@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogOverlay,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -49,7 +48,6 @@ function DeleteCampaignDialog({ campaign }: { campaign: DonationCampaignItem }) 
           </Button>
         )}
       />
-      <AlertDialogOverlay />
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Hapus program donasi?</AlertDialogTitle>

@@ -43,10 +43,10 @@ export function PrayerTimesWidget({ initialSchedule }: PrayerTimesWidgetProps) {
   ];
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-border/80 bg-gradient-to-br from-card via-card to-muted/30 p-6 shadow-sm sm:p-8">
+    <div className="overflow-hidden rounded-3xl border border-border/80 bg-gradient-to-br from-card via-card to-muted/30 p-4 sm:p-6 lg:p-8 shadow-sm">
       {/* Header Widget */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 pb-5">
-        <div className="space-y-1">
+        <div className="min-w-0 space-y-1">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
             <MapPin className="size-3.5" />
             <span>{schedule.location}</span>
@@ -60,7 +60,7 @@ export function PrayerTimesWidget({ initialSchedule }: PrayerTimesWidgetProps) {
         </div>
 
         {/* Live Clock & Next Prayer Counter */}
-        <div className="flex items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-2.5 dark:bg-primary/10">
+        <div className="flex w-full sm:w-auto items-center gap-3 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-2.5 dark:bg-primary/10">
           <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm">
             <Clock className="size-4.5" />
           </div>
@@ -94,7 +94,7 @@ export function PrayerTimesWidget({ initialSchedule }: PrayerTimesWidgetProps) {
               key={p.name}
               className={`group relative flex flex-col items-center justify-center rounded-2xl border p-4 transition-all duration-300 ${
                 isNext
-                  ? "border-primary bg-primary text-white shadow-md scale-[1.03]"
+                  ? "border-primary bg-primary text-white shadow-md sm:scale-[1.02] ring-2 ring-primary ring-offset-2 ring-offset-background"
                   : "border-border/60 bg-card hover:border-primary/40 hover:bg-muted/30"
               }`}
             >

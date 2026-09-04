@@ -49,7 +49,15 @@ function DeleteAnnouncementDialog({ announcement }: { announcement: Announcement
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger render={<Button variant="ghost" size="icon-sm" />}>
+      <AlertDialogTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8"
+          />
+        }
+      >
         <Trash2 className="h-4 w-4" />
         <span className="sr-only">Hapus</span>
       </AlertDialogTrigger>
@@ -126,7 +134,7 @@ export function AnnouncementAdminTable({ announcements }: { announcements: Annou
       id: "actions",
       header: "Aksi",
       cell: ({ row }) => (
-        <div className="flex items-center justify-end gap-1">
+        <div className="flex items-center justify-end gap-2">
           <AnnouncementFormModal
             announcement={row.original}
             mode="edit"

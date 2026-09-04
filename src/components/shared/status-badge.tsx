@@ -8,6 +8,10 @@ const statusStyles: Record<string, string> = {
     "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300",
   ARCHIVED:
     "border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300",
+  ACTIVE:
+    "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300",
+  INACTIVE:
+    "border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300",
 };
 
 type StatusBadgeProps = {
@@ -20,7 +24,7 @@ export function StatusBadge({ label, value }: StatusBadgeProps) {
     <Badge
       variant="outline"
       className={cn(
-        "rounded-full px-2.5 py-1 text-xs font-medium",
+        "inline-flex items-center min-h-[22px] rounded-full px-2.5 py-0.5 text-xs font-medium leading-normal",
         statusStyles[value] ??
           "border-border bg-muted text-muted-foreground dark:bg-muted/40",
       )}

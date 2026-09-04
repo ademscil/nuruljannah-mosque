@@ -28,7 +28,7 @@ export function DonationCampaignGrid({ campaigns }: { campaigns: DonationCampaig
           <div className="relative p-4 sm:p-6 lg:p-8">
             {/* Header */}
             <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="flex-1">
+              <div className="min-w-0 flex-1">
                 <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
                   c.isActive 
                     ? "bg-gradient-to-r from-primary/15 to-primary/5 text-primary border border-primary/20" 
@@ -58,7 +58,7 @@ export function DonationCampaignGrid({ campaigns }: { campaigns: DonationCampaig
                   style={{ width: `${Math.min(c.progress, 100)}%` }}
                 />
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
                 <span className="text-sm font-bold text-primary">{formatRupiah(c.collectedAmount)}</span>
                 <span className="text-sm text-muted-foreground">Target {formatRupiah(c.targetAmount)}</span>
               </div>

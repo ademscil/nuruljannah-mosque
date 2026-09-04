@@ -59,7 +59,11 @@ function DeleteScheduleDialog({ schedule }: { schedule: ScheduleListItem }) {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
         render={
-          <Button variant="ghost" size="icon-sm">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8"
+          >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Hapus</span>
           </Button>
@@ -148,7 +152,7 @@ export function ScheduleAdminTable({ schedules }: ScheduleAdminTableProps) {
         id: "actions",
         header: "Aksi",
         cell: ({ row }) => (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <ScheduleFormModal schedule={row.original} mode="edit" />
             <DeleteScheduleDialog schedule={row.original} />
           </div>
@@ -252,7 +256,7 @@ export function ScheduleAdminTable({ schedules }: ScheduleAdminTableProps) {
                 <span className="text-xs font-medium text-muted-foreground">
                   {item.timeLabel}
                 </span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <ScheduleFormModal schedule={item} mode="edit" />
                   <DeleteScheduleDialog schedule={item} />
                 </div>

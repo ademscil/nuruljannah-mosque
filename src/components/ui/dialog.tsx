@@ -56,7 +56,7 @@ function DialogContent({
         data-slot="dialog-content"
         data-size={size}
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-5 rounded-2xl border border-white/60 bg-white/95 backdrop-blur-xl p-6 text-sm text-popover-foreground shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25),0_8px_16px_-8px_rgba(0,0,0,0.1)] ring-1 ring-black/5 duration-200 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-[size=sm]:sm:max-w-sm data-[size=default]:sm:max-w-md data-[size=lg]:sm:max-w-lg data-[size=xl]:sm:max-w-2xl dark:bg-card/95 dark:border-white/20",
+          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100vw-2rem)] sm:w-full max-w-[calc(100%-2rem)] max-h-[calc(100dvh-2rem)] sm:max-h-[90dvh] overflow-y-auto -translate-x-1/2 -translate-y-1/2 gap-5 rounded-2xl border border-white/60 bg-white/95 backdrop-blur-xl p-6 text-sm text-popover-foreground shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25),0_8px_16px_-8px_rgba(0,0,0,0.1)] ring-1 ring-black/5 duration-200 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-[size=sm]:sm:max-w-sm data-[size=default]:sm:max-w-md data-[size=lg]:sm:max-w-lg data-[size=xl]:sm:max-w-2xl dark:bg-card/95 dark:border-white/20",
           className
         )}
         {...props}
@@ -68,7 +68,7 @@ function DialogContent({
             render={
               <Button
                 variant="ghost"
-                className="absolute top-3 right-3 size-8"
+                className="absolute top-3 right-3 size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8"
                 size="icon-sm"
               />
             }

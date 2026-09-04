@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { MapPin, Mail, Phone, ExternalLink, Building2 } from "lucide-react";
 
 import { ROUTE_PATHS } from "@/constants/routes";
@@ -38,7 +38,7 @@ export function PublicFooter({
   return (
     <footer className="mt-24 bg-[oklch(0.2_0.04_175)]">
       <div className="mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-12 py-16 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1.1fr]">
+        <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1.1fr]">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="flex size-10 items-center justify-center rounded-xl bg-[oklch(0.68_0.14_82)] text-[oklch(0.15_0.02_250)] shadow-lg">
@@ -86,7 +86,7 @@ export function PublicFooter({
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="size-4 shrink-0 text-[oklch(0.68_0.14_82)]" />
-                <a href={`mailto:${contactEmail}`} className="text-sm text-[oklch(0.68_0.03_175)] transition-colors hover:text-white">
+                <a href={`mailto:${contactEmail}`} className="text-sm break-all text-[oklch(0.68_0.03_175)] transition-colors hover:text-white">
                   {contactEmail}
                 </a>
               </li>
