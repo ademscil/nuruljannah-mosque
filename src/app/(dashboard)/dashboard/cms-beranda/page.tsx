@@ -4,7 +4,7 @@ import { getCmsSettings } from "@/features/cms/services/cms-settings-service";
 import { getHomepageContentForCms } from "@/features/cms/services/homepage-content-service";
 import { getEvents } from "@/features/events/services/event-service";
 import { hasDashboardPermission } from "@/lib/dashboard-access";
-import { CmsBerandaModernLayout } from "@/features/cms/components/cms-beranda-modern-layout";
+import { CmsBerandaView } from "@/features/cms/components/cms-beranda-view";
 
 export default async function CmsBerandaPage() {
   const canAccess = await hasDashboardPermission("cms");
@@ -20,7 +20,7 @@ export default async function CmsBerandaPage() {
   ]);
 
   return (
-    <CmsBerandaModernLayout
+    <CmsBerandaView
       homepageContent={homepageContent}
       cmsSettings={cmsSettings}
       announcementOptions={announcements
