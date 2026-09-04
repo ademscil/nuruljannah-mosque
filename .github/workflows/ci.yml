@@ -1,10 +1,13 @@
-﻿name: CI Quality Gate & Build Verification
+name: CI Quality Gate & Build Verification
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   validate:
@@ -12,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
       DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/masjid?schema=public"
       NEXTAUTH_SECRET: "ci-secret-for-build-validation-32charslong"
       NEXTAUTH_URL: "http://localhost:3000"
@@ -20,7 +24,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22 (LTS)
         uses: actions/setup-node@v4
         with:
           node-version: 22
