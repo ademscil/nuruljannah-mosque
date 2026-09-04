@@ -37,7 +37,7 @@ export function DonationRecentList({
 
         {/* Content */}
         {donations.length === 0 ? (
-          <div className="rounded-2xl border border-border/50 bg-card/30 p-8 backdrop-blur-sm">
+          <div className="rounded-2xl border border-border/50 bg-card/30 p-4 sm:p-6 lg:p-8 backdrop-blur-sm">
             <EmptyState
               icon={Heart}
               title="Belum ada donasi"

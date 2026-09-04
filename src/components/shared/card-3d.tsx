@@ -259,7 +259,7 @@ export function Card3DParallax({
         ease: [0.16, 1, 0.3, 1],
       }}
       className={cn(
-        "card-3d relative overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-depth-xl",
+        "card-3d relative overflow-hidden rounded-3xl border border-border bg-card p-4 sm:p-6 lg:p-8 shadow-depth-xl",
         className
       )}
     >

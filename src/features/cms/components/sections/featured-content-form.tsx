@@ -80,7 +80,7 @@ export function FeaturedContentForm({
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="card-3d-advanced glass-ultra rounded-3xl p-8 shadow-depth-lg space-y-6">
+      <div className="card-3d-advanced glass-ultra rounded-3xl p-4 sm:p-6 lg:p-8 shadow-depth-lg space-y-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/10 shadow-depth-sm">

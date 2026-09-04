@@ -38,7 +38,7 @@ export default async function KontakLokasiPage() {
       />
 
       <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-        <div className="card-hero space-y-6 p-8">
+        <div className="card-hero space-y-6 p-4 sm:p-6 lg:p-8">
           <div>
             <div className="badge-primary mb-3">
               {cmsSettings.contentBlocks.contactIntroBadge}

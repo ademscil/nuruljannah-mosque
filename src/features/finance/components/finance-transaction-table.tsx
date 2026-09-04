@@ -5,7 +5,8 @@ import { Download, Landmark, Pencil, Plus, Sparkles, Trash2, Wallet } from "luci
 import React, { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 
-import { DataTable } from "@/components/shared/data-table";
+import { ResponsiveDataView } from "@/components/shared/responsive-data-view";
+import { EmptyState } from "@/components/shared/empty-state";
 import { FilterSelect } from "@/components/shared/filter-select";
 import { SearchInput } from "@/components/shared/search-input";
 import {
@@ -276,9 +277,63 @@ export function FinanceTransactionTable({
         </div>
 
         {/* Table */}
-        <div className="overflow-hidden rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm">
-          <DataTable columns={columns} data={filteredData} />
-        </div>
+        <ResponsiveDataView
+          columns={columns}
+          data={filteredData}
+          renderMobileCard={(item) => {
+            const isIncome = item.type === "INCOME";
+            return (
+              <div
+                key={item.id}
+                className="rounded-2xl border border-border/70 bg-card p-4 shadow-depth-sm space-y-3 transition-all hover:border-primary/40"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                      isIncome
+                        ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                        : "bg-amber-500/10 text-amber-700 dark:text-amber-300"
+                    }`}
+                  >
+                    {item.category}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {formatDateIndonesia(item.transactionAt)}
+                  </span>
+                </div>
+
+                <div>
+                  <p className="font-heading text-lg font-bold">
+                    <span className={isIncome ? "text-emerald-600" : "text-rose-600"}>
+                      {isIncome ? "+" : "-"} {formatRupiah(item.amount)}
+                    </span>
+                  </p>
+                  <p className="mt-1 text-sm text-foreground leading-snug">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-end gap-1 pt-2 border-t border-border/50">
+                  <TransactionFormModal
+                    transaction={item}
+                    trigger={
+                      <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-foreground">
+                        <Pencil className="size-4" />
+                      </Button>
+                    }
+                  />
+                  <DeleteTransactionDialog transaction={item} />
+                </div>
+              </div>
+            );
+          }}
+          emptyState={
+            <EmptyState
+              title="Belum ada transaksi"
+              description="Klik tombol Tambah Transaksi di atas untuk mencatat kas masjid."
+            />
+          }
+        />
 
         {/* Info footer */}
         <div className="flex items-center justify-between rounded-xl border border-border/50 bg-muted/30 px-4 py-3 backdrop-blur-sm">

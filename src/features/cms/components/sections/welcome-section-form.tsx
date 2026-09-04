@@ -68,7 +68,7 @@ export function WelcomeSectionForm({ initialData }: WelcomeSectionFormProps) {
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
       {/* Form Section */}
-      <div className="card-3d-advanced glass-ultra rounded-3xl p-8 shadow-depth-lg space-y-6">
+      <div className="card-3d-advanced glass-ultra rounded-3xl p-4 sm:p-6 lg:p-8 shadow-depth-lg space-y-6">
         <div className="flex items-start gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 shadow-depth-sm">
             <MessageSquare className="h-6 w-6 text-emerald-600" />

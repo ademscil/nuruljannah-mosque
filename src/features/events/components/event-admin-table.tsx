@@ -5,7 +5,8 @@ import { Calendar, MapPin, Eye, EyeOff, Star, Sparkles, Trash2 } from "lucide-re
 import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 
-import { DataTable } from "@/components/shared/data-table";
+import { ResponsiveDataView } from "@/components/shared/responsive-data-view";
+import { EmptyState } from "@/components/shared/empty-state";
 import { FilterSelect } from "@/components/shared/filter-select";
 import { SearchInput } from "@/components/shared/search-input";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -198,13 +199,13 @@ export function EventAdminTable({ events }: EventAdminTableProps) {
   });
 
   return (
-    <div className="glass-ultra rounded-3xl border border-border/50 p-8 shadow-depth-lg backdrop-blur-sm">
+    <div className="glass-ultra rounded-3xl border border-border/50 p-4 sm:p-6 lg:p-8 shadow-depth-lg backdrop-blur-sm">
       {/* Decorative gradient overlay */}
       <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 pointer-events-none" />
       
       <div className="relative space-y-6">
         {/* Header Section */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 shadow-depth-sm">
               <Sparkles className="h-6 w-6 text-purple-600" />
@@ -216,11 +217,11 @@ export function EventAdminTable({ events }: EventAdminTableProps) {
               </p>
             </div>
           </div>
-          <EventFormModal mode="create" />
+          <div className="w-full sm:w-auto shrink-0"><EventFormModal mode="create" /></div>
         </div>
 
         {/* Filters Section */}
-        <div className="grid gap-4 xl:grid-cols-[1fr_220px_220px]">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_200px_200px]">
           <SearchInput 
             value={query} 
             placeholder="Cari kegiatan, lokasi, atau PIC..." 
@@ -251,9 +252,67 @@ export function EventAdminTable({ events }: EventAdminTableProps) {
         </div>
 
         {/* Table Section */}
-        <div className="rounded-2xl border border-border/50 bg-background/50 backdrop-blur-sm overflow-hidden">
-          <DataTable columns={columns} data={filteredData} />
-        </div>
+        <ResponsiveDataView
+          columns={columns}
+          data={filteredData}
+          renderMobileCard={(item) => (
+            <div
+              key={item.id}
+              className="rounded-2xl border border-border/70 bg-card p-4 shadow-depth-sm space-y-3 transition-all hover:border-primary/40"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="rounded-full bg-purple-500/10 px-2.5 py-0.5 text-xs font-semibold text-purple-700 dark:text-purple-300">
+                  {item.timeLabel}
+                </span>
+                <StatusBadge
+                  label={statusLabelMap[item.status]}
+                  value={
+                    item.status === "COMPLETED"
+                      ? "PUBLISHED"
+                      : item.status === "CANCELLED"
+                        ? "ARCHIVED"
+                        : item.status
+                  }
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <h4 className="font-heading font-bold text-base text-foreground leading-snug">
+                    {item.name}
+                  </h4>
+                  {item.isFeatured ? (
+                    <Star className="size-4 fill-amber-400 text-amber-500 shrink-0" />
+                  ) : null}
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground flex items-center gap-1.5">
+                  <Calendar className="size-3.5" />
+                  {formatDateIndonesia(item.date)}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground flex items-center gap-1.5">
+                  <MapPin className="size-3.5" />
+                  {item.location}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between gap-2 pt-2 border-t border-border/50">
+                <span className="text-xs text-muted-foreground">
+                  PIC: {item.personInCharge}
+                </span>
+                <div className="flex items-center gap-1">
+                  <EventFormModal event={item} mode="edit" />
+                  <DeleteEventDialog event={item} />
+                </div>
+              </div>
+            </div>
+          )}
+          emptyState={
+            <EmptyState
+              title="Belum ada agenda kegiatan"
+              description="Klik tombol Tambah Agenda di atas untuk menjadwalkan kegiatan baru."
+            />
+          }
+        />
 
         {/* Info Footer */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground">

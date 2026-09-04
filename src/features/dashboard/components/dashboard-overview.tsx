@@ -76,14 +76,14 @@ export async function DashboardOverview() {
       />
 
       {/* Stats Grid with 3D effect */}
-      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 perspective-normal">
+      <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((s) => <StatsCard key={s.title} {...s} />)}
       </div>
 
       {/* Middle row with glass morphism */}
       <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
         {/* Modul aktif with enhanced 3D */}
-        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-8 shadow-depth-lg backdrop-blur-sm">
+        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-4 sm:p-6 lg:p-8 shadow-depth-lg backdrop-blur-sm">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-gradient-to-r from-primary/10 to-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary shadow-depth-sm">
             <Sparkles className="size-3" />
             Modul Aktif
@@ -109,7 +109,7 @@ export async function DashboardOverview() {
         </div>
 
         {/* Pengumuman aktif with glass effect */}
-        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-8 shadow-depth-lg backdrop-blur-sm">
+        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-4 sm:p-6 lg:p-8 shadow-depth-lg backdrop-blur-sm">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-gradient-to-r from-blue-50 to-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-blue-600 shadow-depth-sm">
             <Bell className="size-3" />
             Pengumuman Aktif
@@ -134,7 +134,7 @@ export async function DashboardOverview() {
       {/* Bottom row with 3D cards */}
       <div className="grid gap-6 xl:grid-cols-2">
         {/* Agenda with modern styling */}
-        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-8 shadow-depth-lg backdrop-blur-sm">
+        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-4 sm:p-6 lg:p-8 shadow-depth-lg backdrop-blur-sm">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-gradient-to-r from-primary/10 to-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary shadow-depth-sm">
             <CalendarClock className="size-3" />
             Agenda Terdekat
@@ -157,7 +157,7 @@ export async function DashboardOverview() {
         </div>
 
         {/* Jadwal petugas with amber theme */}
-        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-8 shadow-depth-lg backdrop-blur-sm">
+        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-4 sm:p-6 lg:p-8 shadow-depth-lg backdrop-blur-sm">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-gradient-to-r from-amber-50 to-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-amber-600 shadow-depth-sm">
             <Clock className="size-3" />
             Jadwal Petugas
@@ -183,7 +183,7 @@ export async function DashboardOverview() {
       {/* Activity feed with enhanced styling */}
       <div className="space-y-5">
         <SectionHeader title="Aktivitas Terbaru" description="Ringkasan pembaruan modul yang paling sering dipantau pengurus." />
-        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-8 shadow-depth-lg backdrop-blur-sm">
+        <div className="card-3d-advanced glass-ultra rounded-3xl border border-border/50 bg-gradient-to-br from-white to-gray-50/50 p-4 sm:p-6 lg:p-8 shadow-depth-lg backdrop-blur-sm">
           <div className="space-y-3">
             {[
               { icon: Landmark, text: `Bendahara memperbarui ${transactions[0]?.description ?? "data transaksi kas"}.`, color: "from-emerald-500 to-emerald-600", bgColor: "bg-emerald-50/50" },

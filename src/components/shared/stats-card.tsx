@@ -23,7 +23,7 @@ export function StatsCard({
   iconBg = "bg-primary/8",
 }: StatsCardProps) {
   return (
-    <div className="card-3d animate-card-entry group flex flex-col gap-4 p-6">
+    <div className="card-3d animate-card-entry group flex flex-col gap-3 sm:gap-4 p-4 sm:p-6">
       <div className="flex items-start justify-between">
         <p className="text-sm font-medium text-muted-foreground">{title}</p>
         <div className={cn("flex size-10 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110", iconBg)}>
@@ -31,7 +31,7 @@ export function StatsCard({
         </div>
       </div>
       <div>
-        <p className="text-3xl font-bold tracking-tight">{value}</p>
+        <p className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">{value}</p>
         <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{description}</p>
       </div>
       {trendLabel && (

@@ -5,7 +5,8 @@ import { Calendar, Sparkles, UserRoundCheck, Trash2 } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 
-import { DataTable } from "@/components/shared/data-table";
+import { ResponsiveDataView } from "@/components/shared/responsive-data-view";
+import { EmptyState } from "@/components/shared/empty-state";
 import { FilterSelect } from "@/components/shared/filter-select";
 import { SearchInput } from "@/components/shared/search-input";
 import {
@@ -175,7 +176,7 @@ export function ScheduleAdminTable({ schedules }: ScheduleAdminTableProps) {
 
       <div className="relative space-y-6 p-6">
         {/* Header */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20">
               <Sparkles className="size-5 text-blue-600 dark:text-blue-400" />
@@ -189,7 +190,7 @@ export function ScheduleAdminTable({ schedules }: ScheduleAdminTableProps) {
               </p>
             </div>
           </div>
-          <ScheduleFormModal mode="create" />
+          <div className="w-full sm:w-auto shrink-0"><ScheduleFormModal mode="create" /></div>
         </div>
 
         {/* Filters */}
@@ -214,9 +215,57 @@ export function ScheduleAdminTable({ schedules }: ScheduleAdminTableProps) {
         </div>
 
         {/* Table */}
-        <div className="overflow-hidden rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm">
-          <DataTable columns={columns} data={filteredData} />
-        </div>
+        <ResponsiveDataView
+          columns={columns}
+          data={filteredData}
+          renderMobileCard={(item) => (
+            <div
+              key={item.id}
+              className="rounded-2xl border border-border/70 bg-card p-4 shadow-depth-sm space-y-3 transition-all hover:border-primary/40"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="rounded-full bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:text-blue-300">
+                  {roleLabelMap[item.roleType]}
+                </span>
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Calendar className="size-3" />
+                  {formatDateIndonesia(item.scheduleFor)}
+                </span>
+              </div>
+
+              <div>
+                <h4 className="font-heading font-bold text-base text-foreground leading-snug">
+                  {item.title}
+                </h4>
+                <p className="mt-1 text-sm text-foreground flex items-center gap-1.5 font-medium">
+                  <UserRoundCheck className="size-3.5 text-primary" />
+                  {item.personName}
+                </p>
+                {item.notes ? (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {item.notes}
+                  </p>
+                ) : null}
+              </div>
+
+              <div className="flex items-center justify-between gap-2 pt-2 border-t border-border/50">
+                <span className="text-xs font-medium text-muted-foreground">
+                  {item.timeLabel}
+                </span>
+                <div className="flex items-center gap-1">
+                  <ScheduleFormModal schedule={item} mode="edit" />
+                  <DeleteScheduleDialog schedule={item} />
+                </div>
+              </div>
+            </div>
+          )}
+          emptyState={
+            <EmptyState
+              title="Belum ada jadwal petugas"
+              description="Klik tombol Tambah Jadwal di atas untuk menugaskan imam, muadzin, atau khatib."
+            />
+          }
+        />
 
         {/* Info footer */}
         <div className="flex items-center justify-between rounded-xl border border-border/50 bg-muted/30 px-4 py-3 backdrop-blur-sm">

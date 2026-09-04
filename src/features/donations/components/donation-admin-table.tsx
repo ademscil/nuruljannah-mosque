@@ -5,7 +5,8 @@ import { useMemo, useState, useTransition } from "react";
 import { Heart, Sparkles, Tag, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { DataTable } from "@/components/shared/data-table";
+import { ResponsiveDataView } from "@/components/shared/responsive-data-view";
+import { EmptyState } from "@/components/shared/empty-state";
 import { FilterSelect } from "@/components/shared/filter-select";
 import { SearchInput } from "@/components/shared/search-input";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -195,7 +196,7 @@ export function DonationAdminTable({
               <p className="text-sm text-muted-foreground">Kelola dan verifikasi donasi masuk</p>
             </div>
           </div>
-          <DonationEntryFormModal campaigns={campaigns} />
+          <div className="w-full sm:w-auto shrink-0"><DonationEntryFormModal campaigns={campaigns} /></div>
         </div>
 
         {/* Filters */}
@@ -224,7 +225,62 @@ export function DonationAdminTable({
         </div>
 
         {/* Table */}
-        <DataTable columns={columns} data={filteredData} />
+        <ResponsiveDataView
+          columns={columns}
+          data={filteredData}
+          renderMobileCard={(item) => (
+            <div
+              key={item.id}
+              className="rounded-2xl border border-border/70 bg-card p-4 shadow-depth-sm space-y-3 transition-all hover:border-primary/40"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="rounded-full bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:text-amber-300">
+                  {item.campaignTitle}
+                </span>
+                <StatusBadge
+                  label={statusLabelMap[item.status]}
+                  value={
+                    item.status === "CONFIRMED"
+                      ? "PUBLISHED"
+                      : item.status === "CANCELLED"
+                        ? "ARCHIVED"
+                        : "DRAFT"
+                  }
+                />
+              </div>
+
+              <div>
+                <p className="font-heading text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                  {formatRupiah(item.amount)}
+                </p>
+                <h4 className="font-medium text-sm text-foreground">
+                  {item.donorName}
+                </h4>
+                {item.note ? (
+                  <p className="mt-1 text-xs text-muted-foreground italic">
+                    &quot;{item.note}&quot;
+                  </p>
+                ) : null}
+              </div>
+
+              <div className="flex items-center justify-between gap-2 pt-2 border-t border-border/50">
+                <span className="text-xs text-muted-foreground">
+                  {formatDateIndonesia(item.donatedAt)}
+                </span>
+                <div className="flex items-center gap-1">
+                  <DonationEntryFormModal campaigns={campaigns} donation={item}  />
+                  <DeleteDonationDialog donation={item} />
+                </div>
+              </div>
+            </div>
+          )}
+          emptyState={
+            <EmptyState
+              title="Belum ada transaksi donasi"
+              description="Catatan infaq dan donasi jamaah akan muncul di sini."
+            />
+          }
+        />
 
         {/* Footer Info */}
         {filteredData.length < donations.length && (

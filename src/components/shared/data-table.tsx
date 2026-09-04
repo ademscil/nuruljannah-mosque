@@ -45,8 +45,8 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-[1.25rem] border border-border/80 bg-white shadow-[0_18px_40px_-24px_oklch(0.18_0.018_250_/_0.35)]">
-        <Table>
+      <div className="w-full overflow-x-auto rounded-[1.25rem] border border-border/80 bg-white shadow-[0_18px_40px_-24px_oklch(0.18_0.018_250_/_0.35)]">
+        <Table className="min-w-[580px]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="bg-muted/35 hover:bg-muted/35">

@@ -36,7 +36,7 @@ export function CmsBerandaModernLayout({
   return (
     <div className="min-h-screen pb-20">
       {/* Hero Header */}
-      <div className="gradient-mesh-primary relative overflow-hidden rounded-3xl p-8 md:p-12 mb-8 shadow-depth-lg">
+      <div className="gradient-mesh-primary relative overflow-hidden rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 mb-6 shadow-depth-md">
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm shadow-depth-sm">
@@ -46,12 +46,12 @@ export function CmsBerandaModernLayout({
               <p className="text-sm font-medium text-primary/70 uppercase tracking-wider">
                 CMS Dashboard
               </p>
-              <h1 className="text-3xl md:text-4xl font-bold text-primary">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">
                 Kelola Halaman Beranda
               </h1>
             </div>
           </div>
-          <p className="text-lg text-primary/80 max-w-3xl">
+          <p className="text-sm sm:text-base text-primary/80 max-w-3xl mt-1">
             Atur tampilan halaman utama website masjid dengan mudah. Pilih bagian yang ingin diubah di tab di bawah.
           </p>
         </div>

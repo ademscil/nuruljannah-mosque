@@ -5,7 +5,8 @@ import { useMemo, useState, useTransition } from "react";
 import { Sparkles, Briefcase, Calendar, Pencil, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
 
-import { DataTable } from "@/components/shared/data-table";
+import { ResponsiveDataView } from "@/components/shared/responsive-data-view";
+import { EmptyState } from "@/components/shared/empty-state";
 import { SearchInput } from "@/components/shared/search-input";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
@@ -181,7 +182,65 @@ export function ManagementAdminTable({
         <SearchInput value={query} placeholder="Cari nama, jabatan, atau periode..." onChange={setQuery} />
 
         {/* Table */}
-        <DataTable columns={columns} data={filtered} />
+        <ResponsiveDataView
+          columns={columns}
+          data={filtered}
+          renderMobileCard={(item) => (
+            <div
+              key={item.id}
+              className="rounded-2xl border border-border/70 bg-card p-4 shadow-depth-sm space-y-3 transition-all hover:border-primary/40"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="rounded-full bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:text-blue-300">
+                  {item.position}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  Urutan: #{item.position}
+                </span>
+              </div>
+
+              <div>
+                <h4 className="font-heading font-bold text-base text-foreground leading-snug">
+                  {item.name}
+                </h4>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Periode: {item.termPeriod}
+                </p>
+                {item.phone ? (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Kontak: {item.phone}
+                  </p>
+                ) : null}
+              </div>
+
+              <div className="flex items-center justify-end gap-1 pt-2 border-t border-border/50">
+                <ManagementFormModal
+                  member={item}
+                  
+                  trigger={
+                    <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-foreground">
+                      <Pencil className="size-4" />
+                    </Button>
+                  }
+                />
+                <DeleteManagementDialog
+                  member={item}
+                  trigger={
+                    <Button variant="ghost" size="icon" className="size-8 text-muted-foreground hover:text-destructive">
+                      <Trash2 className="size-4" />
+                    </Button>
+                  }
+                />
+              </div>
+            </div>
+          )}
+          emptyState={
+            <EmptyState
+              title="Belum ada data pengurus"
+              description="Klik tombol Tambah Pengurus di atas untuk mendata jajaran takmir masjid."
+            />
+          }
+        />
 
         {/* Footer Info */}
         {filtered.length < members.length && (

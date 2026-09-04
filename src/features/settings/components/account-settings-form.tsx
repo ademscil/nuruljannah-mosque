@@ -62,7 +62,7 @@ export function AccountSettingsForm({
     <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
       {/* Main Form Card */}
       <form 
-        className="glass-ultra rounded-3xl border border-border/50 p-8 shadow-depth-lg backdrop-blur-sm transition-all hover:shadow-depth-xl"
+        className="glass-ultra rounded-3xl border border-border/50 p-4 sm:p-6 lg:p-8 shadow-depth-lg backdrop-blur-sm transition-all hover:shadow-depth-xl"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
         {/* Decorative gradient overlay */}
@@ -135,7 +135,7 @@ export function AccountSettingsForm({
       </form>
 
       {/* Summary Card */}
-      <div className="card-3d-advanced rounded-3xl bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/50 p-8 shadow-depth-lg dark:from-blue-950/20 dark:via-purple-950/10 dark:to-pink-950/10">
+      <div className="card-3d-advanced rounded-3xl bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/50 p-4 sm:p-6 lg:p-8 shadow-depth-lg dark:from-blue-950/20 dark:via-purple-950/10 dark:to-pink-950/10">
         {/* Decorative gradient overlay */}
         <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
         

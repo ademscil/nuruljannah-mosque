@@ -21,7 +21,7 @@ export function PageHeader({ eyebrow, title, description, action }: PageHeaderPr
               {eyebrow}
             </div>
           )}
-          <h1 className="font-heading text-3xl font-bold leading-tight tracking-tight text-gradient drop-shadow-sm md:text-4xl lg:text-5xl">
+          <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight tracking-tight text-gradient drop-shadow-sm lg:text-5xl">
             {title}
           </h1>
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">

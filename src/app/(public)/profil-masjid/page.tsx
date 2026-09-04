@@ -19,7 +19,7 @@ export default async function ProfilMasjidPage() {
       sidebarDescription={cmsSettings.profileSidebarDescription}
       sidebarItems={cmsSettings.profileSidebarItems}
     >
-      <div className="card-3d-depth p-8">
+      <div className="card-3d-depth p-4 sm:p-6 lg:p-8">
         <div className="badge-primary mb-4">{cmsSettings.contentBlocks.profileAboutTitle}</div>
         <h2 className="font-heading text-3xl font-semibold leading-snug">{cmsSettings.contentBlocks.profileAboutHeading}</h2>
         <p className="mt-4 text-base leading-8 text-muted-foreground">{cmsSettings.contentBlocks.profileAboutContent}</p>

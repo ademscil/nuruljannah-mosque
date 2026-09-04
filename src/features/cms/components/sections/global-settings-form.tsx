@@ -145,7 +145,7 @@ export function GlobalSettingsForm({ initialData }: GlobalSettingsFormProps) {
         <Accordion className="space-y-4">
           {/* Informasi Masjid */}
           <AccordionItem value="info" className="card-3d-advanced glass-ultra rounded-3xl border-0 shadow-depth-lg overflow-hidden">
-            <AccordionTrigger className="px-8 py-6 hover:no-underline">
+            <AccordionTrigger className="px-4 sm:px-6 lg:px-8 py-6 hover:no-underline">
               <div className="flex items-center gap-4 text-left">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10">
                   <Building2 className="h-6 w-6 text-blue-600" />
@@ -156,7 +156,7 @@ export function GlobalSettingsForm({ initialData }: GlobalSettingsFormProps) {
                 </div>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="px-8 pb-6">
+            <AccordionContent className="px-4 sm:px-6 lg:px-8 pb-6">
               <div className="grid gap-5 md:grid-cols-2 pt-2">
                 <FormFieldWrapper
                   label="Nama Lengkap Masjid"
@@ -197,7 +197,7 @@ export function GlobalSettingsForm({ initialData }: GlobalSettingsFormProps) {
 
           {/* Kontak & Lokasi */}
           <AccordionItem value="contact" className="card-3d-advanced glass-ultra rounded-3xl border-0 shadow-depth-lg overflow-hidden">
-            <AccordionTrigger className="px-8 py-6 hover:no-underline">
+            <AccordionTrigger className="px-4 sm:px-6 lg:px-8 py-6 hover:no-underline">
               <div className="flex items-center gap-4 text-left">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10">
                   <Phone className="h-6 w-6 text-green-600" />
@@ -208,7 +208,7 @@ export function GlobalSettingsForm({ initialData }: GlobalSettingsFormProps) {
                 </div>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="px-8 pb-6">
+            <AccordionContent className="px-4 sm:px-6 lg:px-8 pb-6">
               <div className="grid gap-5 md:grid-cols-2 pt-2">
                 <FormFieldWrapper
                   label="Alamat Lengkap"
@@ -282,7 +282,7 @@ export function GlobalSettingsForm({ initialData }: GlobalSettingsFormProps) {
 
           {/* Video Hero */}
           <AccordionItem value="video" className="card-3d-advanced glass-ultra rounded-3xl border-0 shadow-depth-lg overflow-hidden">
-            <AccordionTrigger className="px-8 py-6 hover:no-underline">
+            <AccordionTrigger className="px-4 sm:px-6 lg:px-8 py-6 hover:no-underline">
               <div className="flex items-center gap-4 text-left">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10">
                   <Video className="h-6 w-6 text-purple-600" />
@@ -293,7 +293,7 @@ export function GlobalSettingsForm({ initialData }: GlobalSettingsFormProps) {
                 </div>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="px-8 pb-6">
+            <AccordionContent className="px-4 sm:px-6 lg:px-8 pb-6">
               <div className="space-y-5 pt-2">
                 <FormFieldWrapper
                   label="URL Video"
@@ -354,7 +354,7 @@ export function GlobalSettingsForm({ initialData }: GlobalSettingsFormProps) {
         </Accordion>
 
         {/* Submit Button */}
-        <div className="card-3d-advanced glass-ultra rounded-3xl p-8 shadow-depth-lg">
+        <div className="card-3d-advanced glass-ultra rounded-3xl p-4 sm:p-6 lg:p-8 shadow-depth-lg">
           <ConfirmSubmitButton
             title="Simpan perubahan pengaturan global?"
             description="Perubahan ini akan mempengaruhi tampilan di seluruh website. Pastikan data sudah benar."

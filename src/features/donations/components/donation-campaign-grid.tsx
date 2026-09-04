@@ -25,7 +25,7 @@ export function DonationCampaignGrid({ campaigns }: { campaigns: DonationCampaig
               : "bg-gradient-to-r from-muted-foreground/50 via-muted-foreground/30 to-transparent"
           }`} />
 
-          <div className="relative p-8">
+          <div className="relative p-4 sm:p-6 lg:p-8">
             {/* Header */}
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex-1">
