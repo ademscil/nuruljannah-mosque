@@ -195,11 +195,6 @@ export function GalleryAdminTable({ items }: GalleryAdminTableProps) {
                 <h4 className="font-heading font-bold text-base text-foreground leading-snug">
                   {item.title}
                 </h4>
-                {item.title ? (
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                    {item.title}
-                  </p>
-                ) : null}
               </div>
 
               <div className="flex items-center justify-end gap-1 pt-2 border-t border-border/50">

@@ -52,8 +52,11 @@ export async function saveTransactionAction(
     });
 
     revalidatePath("/dashboard/keuangan");
+    revalidatePath("/");
     revalidatePath("/laporan-keuangan");
+    revalidatePath("/");
     revalidatePath("/dashboard");
+    revalidatePath("/");
     return { success: true, message: "Transaksi berhasil disimpan." };
   } catch (error) {
     return {
@@ -74,8 +77,11 @@ export async function deleteTransactionAction(
   try {
     await prisma.transaction.delete({ where: { id } });
     revalidatePath("/dashboard/keuangan");
+    revalidatePath("/");
     revalidatePath("/laporan-keuangan");
+    revalidatePath("/");
     revalidatePath("/dashboard");
+    revalidatePath("/");
     return { success: true, message: "Transaksi berhasil dihapus." };
   } catch (error) {
     return {

@@ -1,6 +1,6 @@
 "use server";
 
-import { hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
@@ -28,10 +28,47 @@ export async function saveAccountSettingsAction(
   const parsed = accountSettingsSchema.safeParse(input);
 
   if (!parsed.success) {
-    return { success: false, message: "Data akun belum valid." };
+    const errorMsg = parsed.error.issues.map((i) => i.message).join(", ") || "Data akun belum valid.";
+    return { success: false, message: errorMsg };
   }
 
   try {
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    if (!currentUser) {
+      // If demo account in dev mode
+      if (session.user.id.startsWith("demo-")) {
+        return {
+          success: true,
+          message: "Akun demo berhasil diperbarui secara lokal untuk simulasi sesi ini.",
+        };
+      }
+      return { success: false, message: "Pengguna tidak ditemukan di database." };
+    }
+
+    if (parsed.data.password) {
+      if (!parsed.data.currentPassword) {
+        return {
+          success: false,
+          message: "Password saat ini wajib diisi untuk mengubah password.",
+        };
+      }
+
+      const isCurrentPasswordValid = await compare(
+        parsed.data.currentPassword,
+        currentUser.passwordHash,
+      );
+
+      if (!isCurrentPasswordValid) {
+        return {
+          success: false,
+          message: "Password saat ini salah. Periksa kembali password lama Anda.",
+        };
+      }
+    }
+
     await prisma.user.update({
       where: { id: session.user.id },
       data: {

@@ -122,7 +122,7 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
                 key={item.id}
                 className="flex items-center justify-between p-3.5 transition hover:bg-muted/20"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0 flex-1 mr-2">
                   <div
                     className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${
                       item.type === "INCOME"
@@ -137,16 +137,16 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
                     )}
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-foreground line-clamp-1">
+                    <p className="text-xs font-bold text-foreground truncate">
                       {item.description}
                     </p>
-                    <p className="text-[11px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground truncate">
                       {item.category} · {formatDateIndonesia(item.transactionAt)}
                     </p>
                   </div>
                 </div>
                 <p
-                  className={`text-xs font-extrabold tracking-tight ${
+                  className={`text-xs font-extrabold tracking-tight shrink-0 whitespace-nowrap ${
                     item.type === "INCOME"
                       ? "text-emerald-700 dark:text-emerald-400"
                       : "text-rose-700 dark:text-rose-400"

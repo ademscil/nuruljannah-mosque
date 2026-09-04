@@ -1,22 +1,22 @@
 import { z } from "zod";
 
 export const homepageContentSchema = z.object({
-  heroTitle: z.string().min(10, "Judul hero minimal 10 karakter."),
-  heroSubtitle: z.string().min(20, "Subtitle hero minimal 20 karakter."),
-  heroPrimaryCtaLabel: z.string().min(3, "Label CTA minimal 3 karakter."),
+  heroTitle: z.string().min(3, "Judul hero minimal 3 karakter."),
+  heroSubtitle: z.string().min(5, "Subtitle hero minimal 5 karakter."),
+  heroPrimaryCtaLabel: z.string().min(2, "Label CTA minimal 2 karakter."),
   heroPrimaryCtaHref: z
     .string()
     .min(1, "Link CTA wajib diisi.")
-    .refine((value) => value.startsWith("/"), "Link CTA harus berupa path internal, contoh: /agenda-kegiatan."),
-  welcomeTitle: z.string().min(5, "Judul sambutan minimal 5 karakter."),
-  welcomeContent: z.string().min(20, "Isi sambutan minimal 20 karakter."),
-  donationCtaTitle: z.string().min(5, "Judul CTA donasi minimal 5 karakter."),
+    .refine((value) => value.startsWith("/") || value.startsWith("http"), "Link CTA harus berupa path internal (contoh: /agenda-kegiatan) atau URL valid."),
+  welcomeTitle: z.string().min(3, "Judul sambutan minimal 3 karakter."),
+  welcomeContent: z.string().min(10, "Isi sambutan minimal 10 karakter."),
+  donationCtaTitle: z.string().min(3, "Judul CTA donasi minimal 3 karakter."),
   donationCtaDescription: z
     .string()
-    .min(20, "Deskripsi CTA donasi minimal 20 karakter."),
+    .min(10, "Deskripsi CTA donasi minimal 10 karakter."),
   featuredAnnouncementId: z.string().optional(),
   featuredEventId: z.string().optional(),
-  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).default("PUBLISHED"),
 });
 
 export type HomepageContentSchema = z.infer<typeof homepageContentSchema>;

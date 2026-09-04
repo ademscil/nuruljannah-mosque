@@ -28,6 +28,8 @@ import {
   type LoginSchema,
 } from "@/features/auth/schemas/login-schema";
 
+const isDevelopment = process.env.NODE_ENV !== "production";
+
 const QUICK_ROLES = [
   {
     roleName: "Admin Utama",
@@ -64,8 +66,8 @@ export function LoginForm() {
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "admin@nuruljannah.id",
-      password: "Admin123!",
+      email: "",
+      password: "",
     },
   });
 
@@ -105,36 +107,38 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
-      {/* 1-Click Role Quick Fill for DKM Administrators */}
-      <div className="space-y-2.5">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
-            Pilih Akses Cepat (1-Klik)
-          </p>
-          <span className="text-[11px] text-primary font-medium">Auto-fill akun</span>
+      {/* 1-Click Role Quick Fill for DKM Administrators (Development only) */}
+      {isDevelopment && (
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              Pilih Akses Cepat Demo (Dev Only)
+            </p>
+            <span className="text-[11px] text-primary font-medium">Auto-fill akun</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {QUICK_ROLES.map((role) => {
+              const isSelected = selectedRole === role.roleName;
+              const Icon = role.icon;
+              return (
+                <button
+                  key={role.roleName}
+                  type="button"
+                  onClick={() => handleSelectRole(role)}
+                  className={`flex flex-col items-center justify-center p-2.5 rounded-2xl border text-center transition-all ${
+                    isSelected
+                      ? "border-primary bg-primary/10 shadow-sm ring-1 ring-primary/40 font-semibold"
+                      : "border-border/60 bg-muted/30 hover:bg-muted/60 text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Icon className={`size-4 mb-1 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
+                  <span className="text-xs">{role.roleName}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-        <div className="grid grid-cols-3 gap-2">
-          {QUICK_ROLES.map((role) => {
-            const isSelected = selectedRole === role.roleName;
-            const Icon = role.icon;
-            return (
-              <button
-                key={role.roleName}
-                type="button"
-                onClick={() => handleSelectRole(role)}
-                className={`flex flex-col items-center justify-center p-2.5 rounded-2xl border text-center transition-all ${
-                  isSelected
-                    ? "border-primary bg-primary/10 shadow-sm ring-1 ring-primary/40 font-semibold"
-                    : "border-border/60 bg-muted/30 hover:bg-muted/60 text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Icon className={`size-4 mb-1 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
-                <span className="text-xs">{role.roleName}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      )}
 
       <div className="relative flex items-center justify-center">
         <div className="w-full border-t border-border/60" />

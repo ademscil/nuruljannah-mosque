@@ -3,6 +3,8 @@
 import { randomUUID } from "crypto";
 import { createClient } from "@supabase/supabase-js";
 import { auth } from "@/auth";
+import { type UserRole } from "@/constants/roles";
+import { hasPermission } from "@/lib/role-guard";
 
 export type ImageUploadResult = {
   success: boolean;
@@ -19,6 +21,13 @@ export async function uploadImageAction(
     return {
       success: false,
       message: "Silakan login terlebih dahulu untuk mengunggah gambar.",
+    };
+  }
+
+  if (!hasPermission(session.user.role as UserRole, "cms") && !hasPermission(session.user.role as UserRole, "agenda")) {
+    return {
+      success: false,
+      message: "Akses ditolak: Anda tidak memiliki izin untuk mengunggah berkas media.",
     };
   }
 

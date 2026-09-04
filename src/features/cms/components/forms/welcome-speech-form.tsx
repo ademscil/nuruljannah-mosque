@@ -15,8 +15,8 @@ import { saveHomepageContentAction } from "@/features/cms/services/homepage-cont
 import type { HomepageContentRecord } from "@/features/cms/types/homepage-content";
 
 const welcomeSchema = z.object({
-  welcomeTitle: z.string().min(1, "Judul sambutan wajib diisi"),
-  welcomeContent: z.string().min(1, "Isi sambutan wajib diisi"),
+  welcomeTitle: z.string().min(3, "Judul sambutan minimal 3 karakter."),
+  welcomeContent: z.string().min(10, "Isi sambutan minimal 10 karakter."),
 });
 
 type WelcomeFormValues = z.infer<typeof welcomeSchema>;

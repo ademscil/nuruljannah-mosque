@@ -17,7 +17,10 @@ export const eventFormSchema = z.object({
   status: z.enum(["DRAFT", "PUBLISHED", "COMPLETED", "CANCELLED"]),
   isPublic: z.boolean(),
   isFeatured: z.boolean(),
-  posterUrl: z.string().url("Poster harus berupa URL valid.").or(z.literal("")),
+  posterUrl: z.string().refine(
+    (val) => !val || val.startsWith("http://") || val.startsWith("https://") || val.startsWith("data:image/") || val.startsWith("/"),
+    "Poster harus berupa URL atau berkas gambar valid.",
+  ).optional().or(z.literal("")),
 });
 
 export type EventFormSchema = z.infer<typeof eventFormSchema>;

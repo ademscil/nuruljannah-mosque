@@ -11,7 +11,10 @@ export const donationCampaignFormSchema = z.object({
   collectedAmount: z.number().min(0, "Total terkumpul tidak boleh negatif."),
   bankAccountName: z.string().optional(),
   bankAccountNumber: z.string().optional(),
-  qrisImageUrl: z.string().url("QRIS harus berupa URL valid.").or(z.literal("")),
+  qrisImageUrl: z.string().refine(
+    (val) => !val || val.startsWith("http://") || val.startsWith("https://") || val.startsWith("data:image/") || val.startsWith("/"),
+    "QRIS harus berupa URL atau berkas gambar valid.",
+  ).optional().or(z.literal("")),
   isActive: z.boolean(),
 });
 

@@ -195,7 +195,7 @@ export function ManagementAdminTable({
                   {item.position}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  Urutan: #{item.position}
+                  Status: {item.status}
                 </span>
               </div>
 

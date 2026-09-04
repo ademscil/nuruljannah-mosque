@@ -54,7 +54,11 @@ export async function saveManagementMemberAction(
     });
 
     revalidatePath("/dashboard/data-pengurus");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/profil-masjid");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     return { success: true, message: "Data pengurus berhasil disimpan." };
   } catch (error) {
     return {
@@ -75,7 +79,11 @@ export async function deleteManagementMemberAction(
   try {
     await prisma.managementMember.delete({ where: { id } });
     revalidatePath("/dashboard/data-pengurus");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/profil-masjid");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     return { success: true, message: "Data pengurus berhasil dihapus." };
   } catch (error) {
     return {

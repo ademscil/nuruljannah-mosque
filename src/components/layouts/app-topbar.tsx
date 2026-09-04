@@ -36,7 +36,7 @@ export function AppTopbar({ title, onOpenMenu }: Props) {
           {onOpenMenu && (
             <button
               type="button"
-              className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-border/60 bg-muted/50 text-muted-foreground transition-all hover:bg-muted hover:text-foreground active:scale-95 lg:hidden"
+              className="flex size-11 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-xl border border-border/60 bg-muted/50 text-muted-foreground transition-all hover:bg-muted hover:text-foreground active:scale-95 lg:hidden"
               onClick={onOpenMenu}
               aria-label="Buka navigasi menu"
             >

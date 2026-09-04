@@ -15,10 +15,10 @@ import { saveHomepageContentAction } from "@/features/cms/services/homepage-cont
 import type { HomepageContentRecord } from "@/features/cms/types/homepage-content";
 
 const heroSchema = z.object({
-  heroTitle: z.string().min(1, "Judul utama wajib diisi"),
-  heroSubtitle: z.string().min(1, "Kalimat pembuka wajib diisi"),
-  heroPrimaryCtaLabel: z.string().min(1, "Teks tombol aksi wajib diisi"),
-  heroPrimaryCtaHref: z.string().min(1, "Link tujuan tombol wajib diisi"),
+  heroTitle: z.string().min(3, "Judul utama minimal 3 karakter."),
+  heroSubtitle: z.string().min(5, "Kalimat pembuka minimal 5 karakter."),
+  heroPrimaryCtaLabel: z.string().min(2, "Teks tombol aksi minimal 2 karakter."),
+  heroPrimaryCtaHref: z.string().min(1, "Link tujuan tombol wajib diisi."),
 });
 
 type HeroFormValues = z.infer<typeof heroSchema>;

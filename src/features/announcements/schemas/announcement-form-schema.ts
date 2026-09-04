@@ -13,7 +13,10 @@ export const announcementFormSchema = z.object({
     .string()
     .optional()
     .refine((value) => !value || isValidDateString(value), "Tanggal publish tidak valid."),
-  thumbnailUrl: z.string().url("Thumbnail harus berupa URL valid.").or(z.literal("")),
+  thumbnailUrl: z.string().refine(
+    (val) => !val || val.startsWith("http://") || val.startsWith("https://") || val.startsWith("data:image/") || val.startsWith("/"),
+    "Thumbnail harus berupa URL atau berkas gambar valid.",
+  ).optional().or(z.literal("")),
 });
 
 export type AnnouncementFormSchema = z.infer<typeof announcementFormSchema>;

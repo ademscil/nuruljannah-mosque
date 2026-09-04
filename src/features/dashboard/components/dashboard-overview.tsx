@@ -1,3 +1,6 @@
+import { auth } from "@/auth";
+import { hasPermission } from "@/lib/role-guard";
+import { type UserRole } from "@/constants/roles";
 import { CalendarClock, HeartHandshake, Landmark, Megaphone, Wallet, TrendingUp, Bell, Clock, Sparkles } from "lucide-react";
 
 import { EmptyState } from "@/components/shared/empty-state";
@@ -13,6 +16,10 @@ import { formatDateIndonesia } from "@/lib/format-date";
 import { formatRupiah } from "@/lib/format-rupiah";
 
 export async function DashboardOverview() {
+  const session = await auth();
+  const userRole = (session?.user?.role as UserRole) || "SEKRETARIS";
+  const canViewFinance = hasPermission(userRole, "finance");
+
   const [transactions, announcements, events, schedules, campaigns, donations] = await Promise.all([
     getTransactions(), getAnnouncements(), getEvents(),
     getSchedules(), getDonationCampaigns(), getDonations(),
@@ -27,7 +34,7 @@ export async function DashboardOverview() {
   const stats = [
     {
       title: "Total Pemasukan",
-      value: formatRupiah(fin.totalIncome),
+      value: canViewFinance ? formatRupiah(fin.totalIncome) : "Rp ••••••••",
       description: "Akumulasi pemasukan dari transaksi aktif.",
       trend: "up" as const,
       trendLabel: `${fin.transactionCount} transaksi`,
@@ -37,7 +44,7 @@ export async function DashboardOverview() {
     },
     {
       title: "Total Pengeluaran",
-      value: formatRupiah(fin.totalExpense),
+      value: canViewFinance ? formatRupiah(fin.totalExpense) : "Rp ••••••••",
       description: "Belanja operasional dan pengeluaran program.",
       trend: "down" as const,
       trendLabel: "Tercatat di modul keuangan",

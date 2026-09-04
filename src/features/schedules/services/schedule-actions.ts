@@ -54,7 +54,11 @@ export async function saveScheduleAction(
     });
 
     revalidatePath("/dashboard/jadwal-petugas");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/jadwal-sholat");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     return { success: true, message: "Jadwal berhasil disimpan." };
   } catch (error) {
     return {
@@ -73,7 +77,11 @@ export async function deleteScheduleAction(id: string): Promise<ScheduleActionRe
   try {
     await prisma.schedule.delete({ where: { id } });
     revalidatePath("/dashboard/jadwal-petugas");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/jadwal-sholat");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     return { success: true, message: "Jadwal berhasil dihapus." };
   } catch (error) {
     return {

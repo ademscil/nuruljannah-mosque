@@ -7,11 +7,21 @@ import { USER_ROLE, type UserRole } from "@/constants/roles";
 import { loginSchema } from "@/features/auth/schemas/login-schema";
 import { prisma } from "@/lib/prisma";
 
+const authSecret =
+  process.env.AUTH_SECRET ||
+  process.env.NEXTAUTH_SECRET ||
+  (process.env.NODE_ENV !== "production"
+    ? "portal-masjid-local-dev-session-key-must-be-changed-in-prod"
+    : undefined);
+
+if (!authSecret && process.env.NODE_ENV === "production") {
+  throw new Error(
+    "CRITICAL SECURITY CONFIGURATION: AUTH_SECRET or NEXTAUTH_SECRET must be defined in production.",
+  );
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  secret:
-    process.env.AUTH_SECRET ||
-    process.env.NEXTAUTH_SECRET ||
-    "portal-masjid-nurul-jannah-secure-session-key-2026",
+  secret: authSecret,
   trustHost: true,
   pages: {
     signIn: ROUTE_PATHS.login,
@@ -65,38 +75,42 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           );
         }
 
-        // 2. Demo & emergency fallback accounts (ensures admin panel is accessible for DKM testing/demo)
-        const demoAccounts: Record<
-          string,
-          { name: string; role: UserRole; pass: string }
-        > = {
-          "admin@nuruljannah.id": {
-            name: "Ahmad Fauzi",
-            role: USER_ROLE.ADMIN_UTAMA,
-            pass: "Admin123!",
-          },
-          "bendahara@nuruljannah.id": {
-            name: "Nur Aini",
-            role: USER_ROLE.BENDAHARA,
-            pass: "Admin123!",
-          },
-          "sekretaris@nuruljannah.id": {
-            name: "Rizky Hidayat",
-            role: USER_ROLE.SEKRETARIS,
-            pass: "Admin123!",
-          },
-        };
-
-        const demo = demoAccounts[normalizedEmail];
-        if (demo && (demo.pass === password || password === "Admin123!")) {
-          return {
-            id: `demo-${demo.role.toLowerCase()}`,
-            name: demo.name,
-            email: normalizedEmail,
-            role: demo.role,
+                // 2. Demo & development fallback accounts (strictly restricted to non-production environments)
+        if (process.env.NODE_ENV !== "production") {
+          const demoAccounts: Record<
+            string,
+            { name: string; role: UserRole; pass: string }
+          > = {
+            "admin@nuruljannah.id": {
+              name: "Ahmad Fauzi",
+              role: USER_ROLE.ADMIN_UTAMA,
+              pass: "Admin123!",
+            },
+            "bendahara@nuruljannah.id": {
+              name: "Nur Aini",
+              role: USER_ROLE.BENDAHARA,
+              pass: "Admin123!",
+            },
+            "sekretaris@nuruljannah.id": {
+              name: "Rizky Hidayat",
+              role: USER_ROLE.SEKRETARIS,
+              pass: "Admin123!",
+            },
           };
+
+          const demo = demoAccounts[normalizedEmail];
+          if (demo && (demo.pass === password || password === "Admin123!")) {
+            return {
+              id: `demo-${demo.role.toLowerCase()}`,
+              name: demo.name,
+              email: normalizedEmail,
+              role: demo.role,
+            };
+          }
         }
 
+        // Timing attack mitigation: run dummy compare if user not found
+        await compare(password, "$2a$10$e7xY6vD4yT7gW6kX5bZ4nOU1m2p3q4r5s6t7u8v9w0x1y2z3a4b5c");
         return null;
       },
     }),

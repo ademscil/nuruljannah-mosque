@@ -14,7 +14,10 @@ export const transactionFormSchema = z.object({
   description: z.string().min(5, "Keterangan minimal 5 karakter."),
   attachmentUrl: z
     .string()
-    .url("Lampiran harus berupa URL valid.")
+    .refine(
+      (val) => !val || val.startsWith("http://") || val.startsWith("https://") || val.startsWith("data:image/") || val.startsWith("/"),
+      "Lampiran harus berupa URL atau berkas gambar valid.",
+    )
     .or(z.literal("")),
 });
 

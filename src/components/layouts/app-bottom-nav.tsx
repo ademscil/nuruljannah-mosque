@@ -49,7 +49,7 @@ export function AppBottomNav({ onOpenMenu }: AppBottomNavProps) {
   return (
     <nav
       aria-label="Navigasi Mobile Pengurus"
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-border/70 bg-card/95 backdrop-blur-xl shadow-[0_-8px_30px_rgba(0,0,0,0.08)] lg:hidden"
+      className="fixed bottom-0 left-0 right-0 z-40 border-t border-border/70 bg-card/95 backdrop-blur-xl shadow-[0_-8px_30px_rgba(0,0,0,0.08)] lg:hidden pb-[env(safe-area-inset-bottom)]"
     >
       <div className="mx-auto flex h-16 max-w-lg items-center justify-around px-2">
         {bottomNavItems.map((item) => {

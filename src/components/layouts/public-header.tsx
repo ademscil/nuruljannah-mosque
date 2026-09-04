@@ -18,7 +18,7 @@ function MobileNavMenu({ pathname, nav }: { pathname: string; nav: CmsNavItem[] 
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Tutup menu" : "Buka menu"}
         aria-expanded={open}
-        className="relative z-50 flex size-9 items-center justify-center rounded-full border border-border bg-white text-foreground shadow-sm transition hover:bg-muted lg:hidden"
+        className="relative z-50 flex size-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border bg-white text-foreground shadow-sm transition hover:bg-muted lg:hidden"
       >
         {open ? <X className="size-4" /> : <Menu className="size-4" />}
       </button>
@@ -37,7 +37,7 @@ function MobileNavMenu({ pathname, nav }: { pathname: string; nav: CmsNavItem[] 
           open ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
         }`}
       >
-        <div className="mt-2 overflow-hidden rounded-2xl border border-border bg-white/96 shadow-[0_16px_48px_-16px_oklch(0.18_0.018_250_/_0.18)] backdrop-blur-2xl">
+        <div className="mt-2 max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-2xl border border-border bg-white/96 shadow-[0_16px_48px_-16px_oklch(0.18_0.018_250_/_0.18)] backdrop-blur-2xl">
           <nav className="flex flex-col gap-0.5 p-3" aria-label="Menu utama">
             {nav.map((item, i) => {
               const active = pathname === item.href;

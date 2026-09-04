@@ -44,3 +44,7 @@ next-env.d.ts
 
 # Local generated presentation files
 *.pptx
+
+# Teamwork preview audit artifacts
+.agents/
+ORIGINAL_REQUEST.md

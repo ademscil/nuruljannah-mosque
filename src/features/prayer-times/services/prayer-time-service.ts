@@ -72,12 +72,17 @@ function formatHours(hours: number): string {
   return `${padZero(h)}:${padZero(m)}`;
 }
 
-export function getTodayPrayerTimes(baseDate = new Date()): PrayerTimesSchedule {
-  const year = baseDate.getFullYear();
-  const month = baseDate.getMonth() + 1;
-  const day = baseDate.getDate();
+export function getTodayPrayerTimes(inputDate = new Date()): PrayerTimesSchedule {
+  // Normalize input date to Asia/Jakarta (WIB, UTC+7) timezone
+  const jakartaDate = new Date(
+    inputDate.toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
+  );
 
-  // Julian Day
+  const year = jakartaDate.getFullYear();
+  const month = jakartaDate.getMonth() + 1;
+  const day = jakartaDate.getDate();
+
+  // Julian Day calculation
   const a = Math.floor((14 - month) / 12);
   const y = year + 4800 - a;
   const m = month + 12 * a - 3;
@@ -93,28 +98,14 @@ export function getTodayPrayerTimes(baseDate = new Date()): PrayerTimesSchedule 
   const d = jd - 2451545.0;
   const g = fixAngle(357.529 + 0.98560028 * d);
   const q = fixAngle(280.459 + 0.98564736 * d);
-  const L = fixAngle(
-    q + 1.915 * Math.sin(toRadians(g)) + 0.02 * Math.sin(toRadians(2 * g))
-  );
+  const L = fixAngle(q + 1.915 * Math.sin(toRadians(g)) + 0.02 * Math.sin(toRadians(2 * g)));
   const e = 23.439 - 0.00000036 * d;
-
-  let RA =
-    toDegrees(
-      Math.atan2(
-        Math.cos(toRadians(e)) * Math.sin(toRadians(L)),
-        Math.cos(toRadians(L))
-      )
-    ) / 15;
-  RA = fixHour(RA);
-
+  const RA = toDegrees(Math.atan2(Math.cos(toRadians(e)) * Math.sin(toRadians(L)), Math.cos(toRadians(L)))) / 15;
   const D = toDegrees(Math.asin(Math.sin(toRadians(e)) * Math.sin(toRadians(L))));
-  let EqT = q / 15 - RA;
-  EqT = EqT - 24 * Math.round(EqT / 24);
 
-  // Transit (Dzuhur)
-  const noon = fixHour(12 + TIMEZONE - LONGITUDE / 15 - EqT);
+  const noon = fixHour(12 + TIMEZONE - LONGITUDE / 15 - (q / 15 - fixHour(RA)));
 
-  // Subuh (alpha = 20 deg)
+  // Subuh (fajr angle = 20 deg)
   const subuhH =
     toDegrees(
       Math.acos(
@@ -123,9 +114,9 @@ export function getTodayPrayerTimes(baseDate = new Date()): PrayerTimesSchedule 
           (Math.cos(toRadians(LATITUDE)) * Math.cos(toRadians(D)))
       )
     ) / 15;
-  const subuh = fixHour(noon - subuhH + 2 / 60); // +2 menit Ihtiyat
+  const subuh = fixHour(noon - subuhH + 2 / 60);
 
-  // Terbit (alpha = 0.833 deg)
+  // Terbit (sunrise, alpha = 0.833 deg)
   const sunriseH =
     toDegrees(
       Math.acos(
@@ -134,9 +125,9 @@ export function getTodayPrayerTimes(baseDate = new Date()): PrayerTimesSchedule 
           (Math.cos(toRadians(LATITUDE)) * Math.cos(toRadians(D)))
       )
     ) / 15;
-  const terbit = fixHour(noon - sunriseH);
+  const terbit = fixHour(noon - sunriseH - 2 / 60);
 
-  // Ashar (Shafi'i: shadow length = object height + noon shadow)
+  // Ashar (shafii factor = 1)
   const asharH =
     toDegrees(
       Math.acos(
@@ -162,7 +153,6 @@ export function getTodayPrayerTimes(baseDate = new Date()): PrayerTimesSchedule 
       )
     ) / 15;
   const isya = fixHour(noon + isyaH + 2 / 60);
-
   const dzuhur = fixHour(noon + 2 / 60);
 
   const timings = {
@@ -174,18 +164,22 @@ export function getTodayPrayerTimes(baseDate = new Date()): PrayerTimesSchedule 
     isya: formatHours(isya),
   };
 
-  // Tentukan salat berikutnya berdasarkan waktu sekarang
-  const currentHours = baseDate.getHours() + baseDate.getMinutes() / 60;
-  const prayerHoursList = [
+  // Current hours in Jakarta (WIB) time
+  const currentHours =
+    jakartaDate.getHours() +
+    jakartaDate.getMinutes() / 60 +
+    jakartaDate.getSeconds() / 3600;
+
+  // The 5 mandatory salat times (excluding Sunrise / Terbit which is not a prayer)
+  const salatHoursList = [
     { name: "Subuh", val: subuh },
-    { name: "Terbit", val: terbit },
     { name: "Dzuhur", val: dzuhur },
     { name: "Ashar", val: ashar },
     { name: "Maghrib", val: maghrib },
     { name: "Isya", val: isya },
   ];
 
-  let nextPrayerItem = prayerHoursList.find((p) => p.val > currentHours);
+  let nextPrayerItem = salatHoursList.find((p) => p.val > currentHours);
   let minutesRemaining = 0;
 
   if (!nextPrayerItem) {
@@ -196,9 +190,13 @@ export function getTodayPrayerTimes(baseDate = new Date()): PrayerTimesSchedule 
     minutesRemaining = Math.round((nextPrayerItem.val - currentHours) * 60);
   }
 
-  const isAdzanNow = minutesRemaining >= -5 && minutesRemaining <= 5;
+  // Adzan is active when current time is between salat time and +15 minutes
+  const isAdzanNow = salatHoursList.some((s) => {
+    const elapsedMinutes = (currentHours - s.val) * 60;
+    return elapsedMinutes >= 0 && elapsedMinutes <= 15;
+  });
 
-  const dateFormatted = baseDate.toLocaleDateString("id-ID", {
+  const dateFormatted = jakartaDate.toLocaleDateString("id-ID", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -207,7 +205,7 @@ export function getTodayPrayerTimes(baseDate = new Date()): PrayerTimesSchedule 
 
   return {
     date: dateFormatted,
-    hijri: getDynamicHijriDate(baseDate),
+    hijri: getDynamicHijriDate(jakartaDate),
     location: "Pangkal Pinang, Bangka Belitung",
     timings,
     nextPrayer: {

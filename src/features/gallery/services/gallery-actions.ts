@@ -50,7 +50,11 @@ export async function saveGalleryItemAction(
     });
 
     revalidatePath("/dashboard/galeri");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/galeri");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     return { success: true, message: "Galeri berhasil disimpan." };
   } catch (error) {
     return {
@@ -69,7 +73,11 @@ export async function deleteGalleryItemAction(id: string): Promise<GalleryAction
   try {
     await prisma.galleryItem.delete({ where: { id } });
     revalidatePath("/dashboard/galeri");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/galeri");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     return { success: true, message: "Galeri berhasil dihapus." };
   } catch (error) {
     return {

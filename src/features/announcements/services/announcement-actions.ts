@@ -68,7 +68,11 @@ export async function saveAnnouncementAction(
     });
 
     revalidatePath("/dashboard/pengumuman");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/pengumuman");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
 
     return { success: true, message: "Pengumuman berhasil disimpan." };
   } catch (error) {
@@ -92,7 +96,11 @@ export async function deleteAnnouncementAction(
     await prisma.announcement.delete({ where: { id } });
 
     revalidatePath("/dashboard/pengumuman");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/pengumuman");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
 
     return { success: true, message: "Pengumuman berhasil dihapus." };
   } catch (error) {

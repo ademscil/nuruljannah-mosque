@@ -37,6 +37,7 @@ export function AccountSettingsForm({
       name: initialValues.name,
       email: initialValues.email,
       phone: initialValues.phone,
+      currentPassword: "",
       password: "",
       confirmPassword: "",
     },
@@ -52,6 +53,7 @@ export function AccountSettingsForm({
       toast.success(result.message);
       form.reset({
         ...values,
+        currentPassword: "",
         password: "",
         confirmPassword: "",
       });
@@ -107,6 +109,18 @@ export function AccountSettingsForm({
               </div>
             </FormFieldWrapper>
             
+                        <FormFieldWrapper
+              label="Password Saat Ini"
+              error={form.formState.errors.currentPassword?.message}
+              className="md:col-span-2"
+            >
+              <Input
+                type="password"
+                {...form.register("currentPassword")}
+                placeholder="Wajib diisi jika ingin mengubah password"
+              />
+            </FormFieldWrapper>
+
             <FormFieldWrapper label="Password Baru" error={form.formState.errors.password?.message}>
               <Input type="password" {...form.register("password")} placeholder="••••••••" />
             </FormFieldWrapper>

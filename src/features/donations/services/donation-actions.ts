@@ -84,8 +84,11 @@ export async function saveDonationCampaignAction(
     }
 
     revalidatePath("/dashboard/donasi");
+    revalidatePath("/");
     revalidatePath("/donasi");
+    revalidatePath("/");
     revalidatePath("/dashboard");
+    revalidatePath("/");
     return { success: true, message: "Campaign donasi berhasil disimpan." };
   } catch (error) {
     return {
@@ -107,8 +110,11 @@ export async function deleteDonationCampaignAction(
     await prisma.donationCampaign.delete({ where: { id } });
 
     revalidatePath("/dashboard/donasi");
+    revalidatePath("/");
     revalidatePath("/donasi");
+    revalidatePath("/");
     revalidatePath("/dashboard");
+    revalidatePath("/");
     return { success: true, message: "Campaign donasi berhasil dihapus." };
   } catch (error) {
     return {
@@ -161,8 +167,11 @@ export async function saveDonationEntryAction(
     await syncCampaignCollectedAmount(parsed.data.campaignId);
 
     revalidatePath("/dashboard/donasi");
+    revalidatePath("/");
     revalidatePath("/donasi");
+    revalidatePath("/");
     revalidatePath("/dashboard");
+    revalidatePath("/");
     return { success: true, message: "Data donasi berhasil disimpan." };
   } catch (error) {
     return {
@@ -189,8 +198,11 @@ export async function deleteDonationEntryAction(
     await syncCampaignCollectedAmount(donation.campaignId);
 
     revalidatePath("/dashboard/donasi");
+    revalidatePath("/");
     revalidatePath("/donasi");
+    revalidatePath("/");
     revalidatePath("/dashboard");
+    revalidatePath("/");
     return { success: true, message: "Data donasi berhasil dihapus." };
   } catch (error) {
     return {
@@ -233,8 +245,11 @@ export async function updateDonationStatusAction(
     }
 
     revalidatePath("/dashboard/donasi");
+    revalidatePath("/");
     revalidatePath("/donasi");
+    revalidatePath("/");
     revalidatePath("/dashboard");
+    revalidatePath("/");
     return { success: true, message: "Status donasi berhasil diperbarui." };
   } catch (error) {
     return {

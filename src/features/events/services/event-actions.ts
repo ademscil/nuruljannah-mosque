@@ -64,7 +64,11 @@ export async function saveEventAction(
     });
 
     revalidatePath("/dashboard/agenda-kegiatan");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/agenda-kegiatan");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     return { success: true, message: "Agenda berhasil disimpan." };
   } catch (error) {
     return {
@@ -84,7 +88,11 @@ export async function deleteEventAction(id: string): Promise<EventActionResult> 
   try {
     await prisma.event.delete({ where: { id } });
     revalidatePath("/dashboard/agenda-kegiatan");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/agenda-kegiatan");
+    revalidatePath("/");
+    revalidatePath("/dashboard");
     return { success: true, message: "Agenda berhasil dihapus." };
   } catch (error) {
     return {
