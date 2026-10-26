@@ -157,7 +157,7 @@ export function ManagementAdminTable({
   });
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-card/50 p-6 shadow-depth-lg backdrop-blur-sm">
+    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-card/50 p-6 shadow-lg backdrop-blur-sm">
       {/* Decorative Gradient Overlay */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-indigo-500/5" />
 
@@ -193,7 +193,7 @@ export function ManagementAdminTable({
           renderMobileCard={(item) => (
             <div
               key={item.id}
-              className="rounded-2xl border border-border/70 bg-card p-4 shadow-depth-sm space-y-3 transition-all hover:border-primary/40"
+              className="rounded-2xl border border-border/70 bg-card p-4 shadow-sm space-y-3 transition-all hover:border-primary/40"
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="rounded-full bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:text-blue-300">

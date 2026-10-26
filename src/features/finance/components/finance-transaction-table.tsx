@@ -206,7 +206,7 @@ export function FinanceTransactionTable({
   });
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-muted/20 shadow-depth-lg backdrop-blur-sm">
+    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-muted/20 shadow-lg backdrop-blur-sm">
       {/* Decorative gradient overlay */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-amber-500/5" />
 
@@ -285,7 +285,7 @@ export function FinanceTransactionTable({
             return (
               <div
                 key={item.id}
-                className="rounded-2xl border border-border/70 bg-card p-4 shadow-depth-sm space-y-3 transition-all hover:border-primary/40"
+                className="rounded-2xl border border-border/70 bg-card p-4 shadow-sm space-y-3 transition-all hover:border-primary/40"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span

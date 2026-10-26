@@ -16,7 +16,7 @@ export function PageHeader({ eyebrow, title, description, action }: PageHeaderPr
       <div className="relative flex flex-col gap-4 border-b border-border/50 pb-6 md:flex-row md:items-end md:justify-between md:gap-5 md:pb-8">
         <div className="space-y-3">
           {eyebrow && (
-            <div className="card-3d-advanced inline-flex items-center gap-2 rounded-full border border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary shadow-depth-sm backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-depth-md">
+            <div className="card-craft inline-flex items-center gap-2 rounded-full border border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-md">
               <Sparkles className="size-3" />
               {eyebrow}
             </div>

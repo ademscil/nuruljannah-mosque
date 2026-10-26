@@ -53,7 +53,7 @@ export default async function LoginPage() {
               href={ROUTE_PATHS.home}
               className="group flex items-center gap-3.5 transition-transform hover:scale-105"
             >
-              <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 text-slate-950 shadow-depth-md transition-shadow group-hover:shadow-amber-400/30">
+              <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 text-slate-950 shadow-md transition-shadow group-hover:shadow-amber-400/30">
                 <Building2 className="size-6" />
               </div>
               <div>
@@ -123,7 +123,7 @@ export default async function LoginPage() {
           <div className="mx-auto w-full max-w-md space-y-6">
             {/* Mobile Header (Hidden on Desktop) */}
             <div className="flex items-center gap-3 lg:hidden">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-depth-sm">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
                 <Building2 className="size-5" />
               </div>
               <div>
@@ -143,7 +143,7 @@ export default async function LoginPage() {
             </div>
 
             {/* Elevated Form Container */}
-            <div className="rounded-3xl border border-border/80 bg-card p-7 shadow-depth-lg backdrop-blur-sm sm:p-8">
+            <div className="rounded-3xl border border-border/80 bg-card p-7 shadow-lg backdrop-blur-sm sm:p-8">
               <LoginForm />
             </div>
 

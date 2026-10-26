@@ -42,7 +42,7 @@ export function GalleryPublicGrid({ items }: { items: GalleryItemRecord[] }) {
 
             {/* Bottom info on hover */}
             <div className="absolute bottom-0 left-0 right-0 translate-y-4 p-5 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-              <div className="glass-ultra rounded-xl p-3">
+              <div className="bg-card/90 border border-border/80 backdrop-blur-md rounded-xl p-3">
                 <p className="text-xs font-bold text-white/90">{formatDateIndonesia(item.activityDate)}</p>
               </div>
             </div>

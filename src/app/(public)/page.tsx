@@ -29,18 +29,24 @@ export default async function HomePage() {
     getPublicEvents(),
   ]);
 
+  const heroVideo =
+    cmsSettings.contentBlocks?.heroVideoUrl &&
+    !cmsSettings.contentBlocks.heroVideoUrl.includes("BigBuckBunny")
+      ? cmsSettings.contentBlocks.heroVideoUrl
+      : "/videos/hero-mosque.webm";
+
   return (
     <div className="space-y-16 sm:space-y-24 pb-20">
       {/* 1. Hero Section Video & Sambutan */}
       <VideoHero
-        videoSrc={cmsSettings.contentBlocks.heroVideoUrl}
+        videoSrc={heroVideo}
         title={cms.heroTitle || "Selamat Datang di Masjid Nurul Jannah"}
         subtitle={
           cms.heroSubtitle ||
           "Pusat Ibadah, Pembinaan Umat, dan Kemakmuran Sosial di Kota Pangkal Pinang"
         }
         height="large"
-        overlayOpacity={0.60}
+        overlayOpacity={0.42}
       >
         <Link href={cms.heroPrimaryCtaHref || ROUTE_PATHS.donations} className="btn-primary">
           {cms.heroPrimaryCtaLabel || "Salurkan Infaq & Sedekah"}

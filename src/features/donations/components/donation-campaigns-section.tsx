@@ -69,7 +69,7 @@ function DeleteCampaignDialog({ campaign }: { campaign: DonationCampaignItem }) 
 
 export function DonationCampaignsSection({ campaigns }: DonationCampaignsSectionProps) {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-card/50 p-6 shadow-depth-lg backdrop-blur-sm">
+    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-card/50 p-6 shadow-lg backdrop-blur-sm">
       {/* Decorative Gradient Overlay */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-purple-500/5 via-blue-500/5 to-emerald-500/5" />
 
@@ -94,7 +94,7 @@ export function DonationCampaignsSection({ campaigns }: DonationCampaignsSection
             {campaigns.map((campaign) => (
               <div
                 key={campaign.id}
-                className="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-muted/30 to-muted/10 p-5 backdrop-blur-sm transition-all hover:shadow-depth-md"
+                className="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-muted/30 to-muted/10 p-5 backdrop-blur-sm transition-all hover:shadow-md"
               >
                 {/* Status Badge */}
                 {campaign.isActive && (

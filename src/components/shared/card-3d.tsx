@@ -44,18 +44,18 @@ export function Card3D({
     inViewRef(element);
   };
 
-  const baseClasses = "card-3d-advanced relative overflow-hidden transition-all duration-500";
+  const baseClasses = "card-craft relative overflow-hidden transition-all duration-500";
   
   const variantClasses = {
     default: "rounded-3xl border border-border bg-card p-6",
-    magnetic: "rounded-3xl border border-border bg-card p-6 shadow-depth-md",
-    glass: "glass-ultra rounded-3xl p-6",
-    elevated: "rounded-3xl border border-border bg-card p-6 shadow-depth-lg",
-    float: "card-3d-float rounded-3xl border border-border bg-card p-6",
+    magnetic: "rounded-3xl border border-border bg-card p-6 shadow-md",
+    glass: "bg-card/90 border border-border/80 backdrop-blur-md rounded-3xl p-6",
+    elevated: "rounded-3xl border border-border bg-card p-6 shadow-lg",
+    float: "card-craft rounded-3xl border border-border bg-card p-6",
   };
 
   const hoverClasses = isHovered && enableHover
-    ? "border-primary/20 shadow-depth-xl"
+    ? "border-primary/20 shadow-xl"
     : "";
 
   return (
@@ -137,7 +137,7 @@ export function Card3DFlip({
     >
       {/* Front Face */}
       <div
-        className="card-flip-3d-front rounded-3xl border border-border bg-card p-6 shadow-depth-md"
+        className="card-flip-3d-front rounded-3xl border border-border bg-card p-6 shadow-md"
         style={{
           backfaceVisibility: "hidden",
           WebkitBackfaceVisibility: "hidden",
@@ -148,7 +148,7 @@ export function Card3DFlip({
 
       {/* Back Face */}
       <div
-        className="card-flip-3d-back rounded-3xl border border-border bg-gradient-to-br from-primary to-primary/80 p-6 text-white shadow-depth-md"
+        className="card-flip-3d-back rounded-3xl border border-border bg-gradient-to-br from-primary to-primary/80 p-6 text-white shadow-md"
         style={{
           backfaceVisibility: "hidden",
           WebkitBackfaceVisibility: "hidden",
@@ -198,7 +198,7 @@ export function Card3DStack({ cards, className }: Card3DStackProps) {
             delay: index * 0.1,
             ease: [0.16, 1, 0.3, 1],
           }}
-          className="card-3d rounded-3xl border border-border bg-card p-6 shadow-depth-lg"
+          className="card-3d rounded-3xl border border-border bg-card p-6 shadow-lg"
           style={{
             position: index > 0 ? "absolute" : "relative",
             inset: 0,
@@ -259,7 +259,7 @@ export function Card3DParallax({
         ease: [0.16, 1, 0.3, 1],
       }}
       className={cn(
-        "card-3d relative overflow-hidden rounded-3xl border border-border bg-card p-4 sm:p-6 lg:p-8 shadow-depth-xl",
+        "card-3d relative overflow-hidden rounded-3xl border border-border bg-card p-4 sm:p-6 lg:p-8 shadow-xl",
         className
       )}
     >

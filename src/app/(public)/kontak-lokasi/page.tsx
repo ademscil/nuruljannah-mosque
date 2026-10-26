@@ -85,7 +85,7 @@ export default async function KontakLokasiPage() {
         </div>
 
         {/* Embedded Interactive Map Card */}
-        <div className="card-hero overflow-hidden p-0 rounded-3xl border border-border/70 shadow-depth-lg flex flex-col">
+        <div className="card-hero overflow-hidden p-0 rounded-3xl border border-border/70 shadow-lg flex flex-col">
           <div className="relative w-full h-80 sm:h-96 lg:h-[420px] bg-muted">
             <iframe
               title="Peta Lokasi Masjid Nurul Jannah"

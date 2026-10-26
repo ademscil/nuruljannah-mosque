@@ -108,7 +108,7 @@ export function CampaignFormModal({ campaign, trigger }: CampaignFormModalProps)
           )
         }
       />
-      <DialogContent className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-background/95 p-0 shadow-depth-xl">
+      <DialogContent className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-background/95 p-0 shadow-xl">
         <div className="sticky top-0 z-10 border-b border-border/50 bg-gradient-to-br from-card/95 via-card/90 to-card/95 px-6 py-5 backdrop-blur-md">
           <DialogTitle className="font-heading text-xl font-bold">
             {campaign ? "Edit Program Donasi" : "Tambah Program Donasi Baru"}

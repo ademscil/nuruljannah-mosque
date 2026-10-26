@@ -17,7 +17,7 @@ export function DonationRecentList({
   description,
 }: DonationRecentListProps) {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-muted/20 shadow-depth-lg backdrop-blur-sm">
+    <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-background via-background to-muted/20 shadow-lg backdrop-blur-sm">
       {/* Decorative gradient overlay */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-rose-500/5" />
 

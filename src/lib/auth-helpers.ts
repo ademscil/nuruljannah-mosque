@@ -14,3 +14,4 @@ export function getSafeAuthorId(
   }
   return userId;
 }
+

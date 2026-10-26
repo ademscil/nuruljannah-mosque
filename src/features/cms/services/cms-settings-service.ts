@@ -74,7 +74,7 @@ const defaultCmsSettings: CmsSettingsRecord = {
     },
   ],
   contentBlocks: {
-    heroVideoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    heroVideoUrl: "/videos/hero-mosque.webm",
     heroBadge: "Website Resmi Masjid Nurul Jannah",
     heroEyebrow: "Pusat Informasi Jamaah dan Pengurus",
     heroSecondaryButtonLabel: "Lihat Lokasi",

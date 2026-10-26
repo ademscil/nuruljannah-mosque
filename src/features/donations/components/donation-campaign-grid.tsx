@@ -13,7 +13,7 @@ export function DonationCampaignGrid({ campaigns }: { campaigns: DonationCampaig
       {campaigns.map((c) => (
         <div
           key={c.id}
-          className="group relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-card/50 shadow-depth-lg backdrop-blur-sm transition-all duration-500 hover:border-primary/30 hover:shadow-depth-xl"
+          className="group relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card to-card/50 shadow-lg backdrop-blur-sm transition-all duration-500 hover:border-primary/30 hover:shadow-xl"
         >
           {/* Decorative Gradient Overlay */}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/5 via-rose-500/5 to-purple-500/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
