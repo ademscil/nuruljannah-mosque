@@ -29,14 +29,14 @@ export function AppTopbar({ title, onOpenMenu }: Props) {
   const isRoot = pathname === DASHBOARD_PATHS.overview;
 
   return (
-    <div className="sticky top-0 z-30 border-b border-border/50 bg-card/95 backdrop-blur-xl shadow-depth-sm">
+    <div className="sticky top-0 z-30 border-b border-border/70 bg-card/95 backdrop-blur-xl shadow-sm">
       <div className="mx-auto flex w-full max-w-[88rem] items-center justify-between gap-3 px-3 py-3 sm:px-6 sm:py-4">
         <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
           {/* Hamburger button on mobile */}
           {onOpenMenu && (
             <button
               type="button"
-              className="flex size-11 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-xl border border-border/60 bg-muted/50 text-muted-foreground transition-all hover:bg-muted hover:text-foreground active:scale-95 lg:hidden"
+              className="flex size-11 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-xl border border-border/80 bg-muted/40 text-muted-foreground transition-all hover:bg-muted hover:text-foreground active:scale-95 lg:hidden"
               onClick={onOpenMenu}
               aria-label="Buka navigasi menu"
             >
@@ -81,7 +81,7 @@ export function AppTopbar({ title, onOpenMenu }: Props) {
           type="button"
           variant="outline"
           size="sm"
-          className="shrink-0 rounded-xl border-border/70 font-semibold text-xs transition-all hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive active:scale-95"
+          className="shrink-0 rounded-xl border-border/80 font-semibold text-xs transition-all hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive active:scale-95 min-h-[38px] px-3.5"
           onClick={() => signOut({ callbackUrl: "/login" })}
         >
           <LogOut className="size-3.5" />

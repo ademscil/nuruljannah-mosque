@@ -1,5 +1,6 @@
 "use server";
 
+import { getSafeAuthorId } from "@/lib/auth-helpers";
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
@@ -49,7 +50,7 @@ export async function saveScheduleAction(
         timeLabel: parsed.data.timeLabel,
         personName: parsed.data.personName,
         notes: parsed.data.notes || null,
-        createdById: session.user.id,
+        createdById: getSafeAuthorId(session.user.id),
       },
     });
 

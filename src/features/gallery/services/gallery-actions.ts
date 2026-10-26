@@ -1,5 +1,6 @@
 "use server";
 
+import { getSafeAuthorId } from "@/lib/auth-helpers";
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
@@ -45,7 +46,7 @@ export async function saveGalleryItemAction(
         imageUrl: parsed.data.imageUrl,
         activityDate: new Date(parsed.data.activityDate),
         status: parsed.data.status,
-        createdById: session.user.id,
+        createdById: getSafeAuthorId(session.user.id),
       },
     });
 

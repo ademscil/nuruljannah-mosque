@@ -1,5 +1,6 @@
 "use server";
 
+import { getSafeAuthorId } from "@/lib/auth-helpers";
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
@@ -59,7 +60,7 @@ export async function saveEventAction(
         isFeatured: parsed.data.isFeatured,
         posterUrl: parsed.data.posterUrl || null,
         publishedAt: parsed.data.status === "PUBLISHED" ? new Date() : null,
-        createdById: session.user.id,
+        createdById: getSafeAuthorId(session.user.id),
       },
     });
 

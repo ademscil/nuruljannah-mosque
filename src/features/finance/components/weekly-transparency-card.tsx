@@ -33,37 +33,37 @@ export interface WeeklyTransparencyCardProps {
 
 export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-border/80 bg-card p-6 shadow-sm sm:p-8">
+    <div className="card-craft p-6 sm:p-8 overflow-hidden">
       {/* Header Info */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 pb-5">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
             <ShieldCheck className="size-3.5" />
-            Transparansi Kas Masjid (Model Jogokariyan)
+            <span>Transparansi Kas Terbuka</span>
           </div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-            Laporan Keuangan Terbuka
+          <h2 className="font-heading text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+            Laporan Keuangan Amanah
           </h2>
           <p className="text-xs text-muted-foreground">
-            Rekapitulasi mutasi {report.periodLabel}. Saldo dipertanggungjawabkan untuk kemakmuran umat.
+            Rekapitulasi mutasi {report.periodLabel}. Saldo kas dilaporkan secara terbuka untuk kemakmuran ummat.
           </p>
         </div>
 
         <Link
           href={ROUTE_PATHS.finance}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline transition-colors"
         >
-          Lihat Buku Kas Lengkap
+          <span>Lihat Buku Kas Lengkap</span>
           <ArrowRight className="size-3.5" />
         </Link>
       </div>
 
       {/* 4 Kartu Neraca Kas */}
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* Saldo Awal Pekan */}
-        <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
+        <div className="rounded-2xl border border-border/70 bg-muted/20 p-4">
           <p className="text-xs font-medium text-muted-foreground">Saldo Awal Pekan</p>
-          <p className="mt-1.5 text-base font-bold text-foreground sm:text-lg">
+          <p className="mt-1.5 text-base sm:text-lg font-bold text-foreground tabular-nums tracking-tight">
             {formatRupiah(report.startingBalance)}
           </p>
         </div>
@@ -76,7 +76,7 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
             </p>
             <TrendingUp className="size-4 text-emerald-600" />
           </div>
-          <p className="mt-1.5 text-base font-bold text-emerald-700 dark:text-emerald-400 sm:text-lg">
+          <p className="mt-1.5 text-base sm:text-lg font-bold text-emerald-700 dark:text-emerald-400 tabular-nums tracking-tight">
             +{formatRupiah(report.weeklyIncome)}
           </p>
         </div>
@@ -89,7 +89,7 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
             </p>
             <TrendingDown className="size-4 text-rose-600" />
           </div>
-          <p className="mt-1.5 text-base font-bold text-rose-700 dark:text-rose-400 sm:text-lg">
+          <p className="mt-1.5 text-base sm:text-lg font-bold text-rose-700 dark:text-rose-400 tabular-nums tracking-tight">
             −{formatRupiah(report.weeklyExpense)}
           </p>
         </div>
@@ -100,18 +100,18 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
             <p className="text-xs font-semibold text-primary">Saldo Kas Berjalan</p>
             <Wallet className="size-4 text-primary" />
           </div>
-          <p className="mt-1.5 text-lg font-extrabold text-primary sm:text-xl">
+          <p className="mt-1.5 text-lg sm:text-xl font-bold text-primary tabular-nums tracking-tight font-heading">
             {formatRupiah(report.currentBalance)}
           </p>
         </div>
       </div>
 
       {/* Mutasi Terkini */}
-      <div className="mt-6 space-y-2">
+      <div className="mt-6 space-y-2.5">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Catatan Transaksi Terakhir
+          Catatan Mutasi Kas Terakhir
         </p>
-        <div className="divide-y divide-border/60 rounded-2xl border border-border/60 bg-card overflow-hidden">
+        <div className="divide-y divide-border/60 rounded-2xl border border-border/70 bg-card overflow-hidden">
           {report.recentTransactions.length === 0 ? (
             <div className="p-4 text-center text-xs text-muted-foreground">
               Belum ada mutasi kas tercatat pekan ini.
@@ -137,7 +137,7 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold text-foreground truncate">
+                    <p className="text-xs font-semibold text-foreground truncate">
                       {item.description}
                     </p>
                     <p className="text-[11px] text-muted-foreground truncate">
@@ -146,7 +146,7 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
                   </div>
                 </div>
                 <p
-                  className={`text-xs font-extrabold tracking-tight shrink-0 whitespace-nowrap ${
+                  className={`text-xs font-bold tracking-tight shrink-0 whitespace-nowrap tabular-nums ${
                     item.type === "INCOME"
                       ? "text-emerald-700 dark:text-emerald-400"
                       : "text-rose-700 dark:text-rose-400"
@@ -162,4 +162,3 @@ export function WeeklyTransparencyCard({ report }: WeeklyTransparencyCardProps) 
     </div>
   );
 }
-

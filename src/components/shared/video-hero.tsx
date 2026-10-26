@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { Volume2, VolumeX, Sparkles, ChevronDown } from "lucide-react";
 
 interface VideoHeroProps {
   videoSrc?: string;
@@ -19,71 +20,49 @@ export function VideoHero({
   title,
   subtitle,
   children,
-  overlayOpacity = 0.6,
-  height = "screen",
+  overlayOpacity = 0.55,
+  height = "large",
 }: VideoHeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoStatus, setVideoStatus] = useState<"loading" | "playing" | "error">("loading");
   const [showVideo, setShowVideo] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   const heightClass = {
-    screen: "min-h-screen",
-    large: "min-h-[80vh]",
+    screen: "min-h-[100dvh]",
+    large: "min-h-[82vh] sm:min-h-[85vh]",
     medium: "min-h-[60vh]",
   }[height];
 
   useEffect(() => {
-    if (!videoSrc || !videoRef.current) {
-      return;
-    }
-
+    if (!videoSrc || !videoRef.current) return;
     const video = videoRef.current;
 
     const handleCanPlay = () => {
-      setVideoStatus("playing");
       setShowVideo(true);
-      // Force play if browser blocked autoplay
-      video.play().catch((err) => {
-        console.warn("Video autoplay failed:", err);
-      });
-    };
-
-    const handleError = (e: Event) => {
-      console.error("Video load error:", e);
-      setVideoStatus("error");
-      setShowVideo(false);
-    };
-
-    const handleLoadedData = () => {
-      setShowVideo(true);
+      video.play().catch(() => {});
     };
 
     video.addEventListener("canplay", handleCanPlay);
-    video.addEventListener("error", handleError);
-    video.addEventListener("loadeddata", handleLoadedData);
-
-    // Force load
     video.load();
 
     return () => {
       video.removeEventListener("canplay", handleCanPlay);
-      video.removeEventListener("error", handleError);
-      video.removeEventListener("loadeddata", handleLoadedData);
     };
   }, [videoSrc]);
 
-  // Log for debugging
-  useEffect(() => {
-    console.log("VideoHero state:", { videoSrc, videoStatus, showVideo });
-  }, [videoSrc, videoStatus, showVideo]);
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    const nextMuted = !isMuted;
+    videoRef.current.muted = nextMuted;
+    setIsMuted(nextMuted);
+  };
 
   return (
-    <div className={`${heightClass} relative w-full overflow-hidden`}>
-      {/* Video Background Layer */}
+    <div className={`${heightClass} relative w-full overflow-hidden flex items-center justify-center`}>
+      {/* Background Video Layer */}
       <div className="absolute inset-0 w-full h-full">
         {videoSrc ? (
           <>
-            {/* Actual Video Element */}
             <video
               ref={videoRef}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
@@ -91,128 +70,88 @@ export function VideoHero({
               }`}
               autoPlay
               loop
-              muted
+              muted={isMuted}
               playsInline
               preload="auto"
               poster={videoPoster}
-              style={{ zIndex: 1 }}
             >
               <source src={videoSrc} type="video/mp4" />
               <source src={videoSrc} type="video/webm" />
-              Your browser does not support video playback.
             </video>
-
-            {/* Fallback gradient while video loads or if it fails */}
+            {/* Fallback ambient gradient if video is loading */}
             {!showVideo && (
-              <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-emerald-900 via-teal-800 to-green-700 animate-pulse" />
+              <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-emerald-950 via-[oklch(0.20_0.04_170)] to-[oklch(0.16_0.03_170)]" />
             )}
           </>
         ) : (
-          // No video URL provided - show gradient
-          <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-emerald-900 via-teal-800 to-green-700" />
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-emerald-950 via-[oklch(0.20_0.04_170)] to-[oklch(0.16_0.03_170)]" />
         )}
       </div>
 
-      {/* Dark Gradient Overlay */}
+      {/* Modern Gradient Overlays */}
       <div
-        className="absolute inset-0 w-full h-full bg-gradient-to-b from-black/60 via-black/40 to-black/70"
-        style={{ opacity: overlayOpacity, zIndex: 2 }}
+        className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/45 to-black/80"
+        style={{ opacity: overlayOpacity }}
       />
+      
+      {/* Subtle radial center highlight */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.08)_0%,transparent_60%)]" />
 
-      {/* 3D Glass Effect Overlay */}
-      <div
-        className="absolute inset-0 w-full h-full bg-gradient-to-t from-transparent via-white/[0.02] to-transparent"
-        style={{ zIndex: 3 }}
-      />
+      {/* Main Content */}
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 py-24 sm:px-6 sm:py-32 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-6 sm:space-y-8"
+        >
+          {/* Eyebrow Pill */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-white/95 backdrop-blur-md shadow-sm">
+            <Sparkles className="size-3.5 text-amber-300" />
+            <span>Pusat Ibadah & Dakwah Pangkal Pinang</span>
+          </div>
 
-      {/* Content Layer with 3D Effects */}
-      <div className="relative z-10 flex h-full w-full items-center justify-center px-4 py-20">
-        <div className="container mx-auto max-w-5xl text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="space-y-6"
-          >
-            {/* 3D Title with depth */}
-            <motion.h1
-              className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight text-white"
-              style={{
-                textShadow: `
-                  0 1px 0 rgba(0,0,0,0.3),
-                  0 2px 0 rgba(0,0,0,0.2),
-                  0 3px 0 rgba(0,0,0,0.1),
-                  0 10px 20px rgba(0,0,0,0.4),
-                  0 15px 40px rgba(0,0,0,0.3)
-                `,
-              }}
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              {title}
-            </motion.h1>
+          {/* Heading */}
+          <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] leading-[1.15]">
+            {title}
+          </h1>
 
-            {subtitle && (
-              <motion.p
-                className="mx-auto max-w-2xl text-lg text-white/90 md:text-xl"
-                style={{
-                  textShadow: "0 2px 10px rgba(0,0,0,0.5), 0 4px 20px rgba(0,0,0,0.3)",
-                }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                {subtitle}
-              </motion.p>
-            )}
+          {/* Subtitle */}
+          {subtitle && (
+            <p className="mx-auto max-w-2xl text-base sm:text-lg md:text-xl text-white/85 font-normal leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+              {subtitle}
+            </p>
+          )}
 
-            {children && (
-              <motion.div
-                className="flex flex-wrap items-center justify-center gap-4 pt-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              >
-                {children}
-              </motion.div>
-            )}
-          </motion.div>
-        </div>
+          {/* Action CTAs */}
+          {children && (
+            <div className="flex flex-wrap items-center justify-center gap-3.5 pt-4 sm:pt-6">
+              {children}
+            </div>
+          )}
+        </motion.div>
       </div>
 
-      {/* Scroll Indicator with 3D effect */}
-      <motion.div
-        className="hidden sm:block absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2 text-white/70"
-          style={{
-            filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))",
-          }}
+      {/* Video Audio Control (if video active) */}
+      {videoSrc && showVideo && (
+        <button
+          type="button"
+          onClick={toggleMute}
+          aria-label={isMuted ? "Aktifkan suara video" : "Bisukan video"}
+          className="absolute bottom-8 right-6 z-20 flex size-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white/90 backdrop-blur-md transition-all hover:bg-black/60 active:scale-95"
         >
-          <span className="text-sm uppercase tracking-widest font-semibold">Scroll</span>
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </motion.div>
-      </motion.div>
+          {isMuted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+        </button>
+      )}
 
-      {/* Bottom fade for smooth transition to content below */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"
-        style={{ zIndex: 4 }}
-      />
+      {/* Subtle Scroll Down Prompt on desktop */}
+      <div className="hidden sm:flex absolute bottom-8 left-1/2 z-10 -translate-x-1/2 flex-col items-center gap-1.5 text-white/60 transition-opacity hover:text-white/90">
+        <span className="text-[11px] font-medium tracking-widest uppercase">Jelajahi</span>
+        <ChevronDown className="size-4 animate-bounce" />
+      </div>
+
+      {/* Bottom Seamless Fade into Alabaster Body */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-background via-background/40 to-transparent" />
     </div>
   );
 }

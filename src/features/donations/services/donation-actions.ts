@@ -1,5 +1,6 @@
 "use server";
 
+import { getSafeAuthorId } from "@/lib/auth-helpers";
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
@@ -75,7 +76,7 @@ export async function saveDonationCampaignAction(
         bankAccountNumber: parsed.data.bankAccountNumber || null,
         qrisImageUrl: parsed.data.qrisImageUrl || null,
         isActive: parsed.data.isActive,
-        createdById: session.user.id,
+        createdById: getSafeAuthorId(session.user.id),
       },
     });
 

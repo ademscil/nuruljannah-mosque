@@ -3,9 +3,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  CalendarClock, CalendarDays, HeartHandshake, House,
-  Image as ImageIcon, LayoutGrid, Megaphone, Settings,
-  Users, Wallet, Building2, X, Sparkles,
+  CalendarClock,
+  CalendarDays,
+  HeartHandshake,
+  House,
+  Image as ImageIcon,
+  LayoutGrid,
+  Megaphone,
+  Settings,
+  Users,
+  Wallet,
+  Building2,
+  X,
+  Shield,
 } from "lucide-react";
 
 import { DASHBOARD_PATHS } from "@/constants/routes";
@@ -34,27 +44,24 @@ export function AppSidebar({ userName, role, onClose }: Props) {
   const nav = navItems.filter((item) => item.permission ? hasPermission(role, item.permission) : true);
 
   return (
-    <aside className="relative flex h-full min-h-screen w-72 max-w-[calc(100vw-3rem)] shrink-0 flex-col bg-gradient-to-br from-[oklch(0.22_0.04_175)] via-[oklch(0.20_0.04_175)] to-[oklch(0.18_0.04_175)] shadow-depth-lg">
-      {/* Decorative gradient overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-primary/5 opacity-50" />
-      
+    <aside className="relative flex h-full min-h-screen w-72 max-w-[calc(100vw-3rem)] shrink-0 flex-col bg-[oklch(0.18_0.035_170)] text-white/90 shadow-xl border-r border-white/10">
       {/* Brand Header */}
-      <div className="relative z-10 border-b border-white/10 px-4 py-3 sm:px-6 sm:py-6 backdrop-blur-sm">
+      <div className="relative z-10 border-b border-white/10 px-5 py-5 sm:px-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="card-3d-advanced flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary via-primary to-primary/80 text-white shadow-depth-md shadow-primary/30">
+          <Link href={DASHBOARD_PATHS.overview} className="flex items-center gap-3 group">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md transition-transform duration-200 group-hover:scale-105">
               <Building2 className="size-5" />
             </div>
             <div>
-              <p className="text-sm font-bold text-white drop-shadow-sm">{SITE_CONFIG.shortName}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary/90">Admin CMS</p>
+              <p className="text-sm font-bold text-white tracking-tight">{SITE_CONFIG.shortName}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/80">CMS Pengurus</p>
             </div>
-          </div>
+          </Link>
           {onClose && (
             <button
               type="button"
               onClick={onClose}
-              className="flex size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 items-center justify-center rounded-lg text-white/60 transition-all hover:bg-white/10 hover:text-white"
+              className="flex size-11 min-h-[44px] min-w-[44px] sm:size-8 sm:min-h-8 sm:min-w-8 items-center justify-center rounded-lg text-white/60 transition-colors hover:bg-white/10 hover:text-white"
               aria-label="Tutup menu"
             >
               <X className="size-4" />
@@ -63,26 +70,26 @@ export function AppSidebar({ userName, role, onClose }: Props) {
         </div>
       </div>
 
-      {/* User Profile Card with 3D effect */}
-      <div className="relative z-10 px-3 pt-3 sm:px-4 sm:pt-6">
-        <div className="card-3d-advanced glass-ultra rounded-2xl border border-white/20 bg-gradient-to-br from-white/10 to-white/5 p-3 sm:p-4 shadow-depth-md backdrop-blur-xl">
+      {/* User Profile Card */}
+      <div className="relative z-10 px-4 pt-4 sm:pt-5">
+        <div className="rounded-xl border border-white/15 bg-white/5 p-3.5 backdrop-blur-md">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary via-primary to-primary/80 text-sm font-bold text-white shadow-depth-sm">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/30 text-white font-bold text-sm border border-primary/40">
               {userName.charAt(0).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-white drop-shadow-sm">{userName}</p>
+              <p className="truncate text-sm font-semibold text-white">{userName}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <Sparkles className="size-3 text-primary" />
-                <p className="text-xs font-medium text-primary">{ROLE_LABELS[role]}</p>
+                <Shield className="size-3 text-amber-400" />
+                <p className="text-xs font-medium text-amber-300/90">{ROLE_LABELS[role]}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Navigation with 3D cards */}
-      <nav className="relative z-10 flex-1 min-h-0 space-y-1 overflow-y-auto px-3 py-3 sm:py-5 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10">
+      {/* Navigation */}
+      <nav className="relative z-10 flex-1 min-h-0 space-y-1 overflow-y-auto px-3.5 py-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10" aria-label="Menu CMS">
         {nav.map((item) => {
           const active = item.href === DASHBOARD_PATHS.overview
             ? pathname === item.href
@@ -94,34 +101,27 @@ export function AppSidebar({ userName, role, onClose }: Props) {
               href={item.href}
               onClick={onClose}
               className={cn(
-                "group relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200",
+                "group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-150 min-h-[44px]",
                 active
-                  ? "card-3d-advanced bg-gradient-to-r from-primary via-primary to-primary/90 text-white shadow-depth-md shadow-primary/40"
-                  : "text-white/70 hover:bg-white/10 hover:text-white hover:shadow-depth-sm",
+                  ? "bg-primary text-primary-foreground shadow-md font-semibold"
+                  : "text-white/70 hover:bg-white/10 hover:text-white",
               )}
             >
-              {active && (
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 to-transparent opacity-50 blur-xl" />
-              )}
               <item.icon className={cn(
-                "size-4 shrink-0 transition-transform duration-200",
-                active ? "scale-110" : "group-hover:scale-110"
+                "size-4 shrink-0 transition-transform duration-150",
+                active ? "scale-105 text-primary-foreground" : "text-white/60 group-hover:text-white"
               )} />
-              <span className="relative">{item.label}</span>
+              <span className="truncate">{item.label}</span>
             </Link>
           );
         })}
       </nav>
 
-      {/* Footer with glass effect */}
-      <div className="relative z-10 border-t border-white/10 px-4 py-3 sm:py-4 backdrop-blur-sm">
-        <div className="glass-frosted rounded-lg border border-white/10 bg-white/5 px-3 py-2.5">
-          <p className="text-center text-[10px] font-medium text-white/50">
-            {SITE_CONFIG.name}
-          </p>
-          <p className="text-center text-[9px] font-medium uppercase tracking-wider text-primary/70">
-            Portal Admin
-          </p>
+      {/* Footer info */}
+      <div className="relative z-10 border-t border-white/10 px-4 py-3.5">
+        <div className="rounded-lg bg-white/5 px-3 py-2 text-center">
+          <p className="text-[10px] text-white/50">{SITE_CONFIG.name}</p>
+          <p className="text-[9px] uppercase tracking-wider text-amber-300/80 font-semibold mt-0.5">Versi Produksi 2026</p>
         </div>
       </div>
     </aside>

@@ -1,5 +1,6 @@
 "use server";
 
+import { getSafeAuthorId } from "@/lib/auth-helpers";
 import { revalidatePath } from "next/cache";
 
 import { auth } from "@/auth";
@@ -47,7 +48,7 @@ export async function saveTransactionAction(
         transactionAt: new Date(parsed.data.transactionAt),
         description: parsed.data.description,
         attachmentUrl: parsed.data.attachmentUrl || null,
-        createdById: session.user.id,
+        createdById: getSafeAuthorId(session.user.id),
       },
     });
 
